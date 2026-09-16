@@ -1,0 +1,21 @@
+# ── deps / build ─────────────────────────────
+node_modules/
+.next/
+out/
+netlify/functions/
+.netlify/
+
+# ── environment — هرگز commit نشود ───────────
+.env
+.env.*
+!.env.example
+
+# ── backups / local artifacts ────────────────
+backups/
+*.log
+.DS_Store
+Thumbs.db
+
+# ── visual-phase artifacts ──
+qa-shots/
+public/images/gen/

@@ -1,0 +1,32 @@
+# ─────────────────────────────────────────────────────────────
+# Netlify — پیکربندی استقرار هلسا
+# ─────────────────────────────────────────────────────────────
+# ⚠️ مهم (اصلاح شمارهٔ ۶ ممیزی): تگ <meta name="netlify-deploy"> که در
+# هدر صفحات دیده می‌شد در سورس پروژه نیست و از قابلیت «Snippet injection»
+# نتفلای (جریان onboarding) می‌آید. حذفش:
+#   Netlify UI → Site settings → Snippet injection → حذف ردیف netlify-deploy
+# این فایل جایگزین پیکربندی دستی می‌شود تا بیلد قابل‌تکرار باشد.
+
+[build]
+  command = "npm ci && npx drizzle-kit push --force || true && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # ⚠️ برای هر استقرار مقدار همین محیط را بگذارید (قانون canonical/og:url):
+  #   دموی staging  → آدرس همان دمو (مثل https://xyz.netlify.app)
+  #   تولید        → https://helsairanian.ir
+  # پراکسی هم روی هر هاستی که با این مقدار یکی نباشد X-Robots-Tag: noindex می‌فرستد.
+  # NEXT_PUBLIC_SITE_URL = ""   # ← در Site settings → Environment تنظیم کنید
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# هدرهای امنیتی اصلی از next.config.ts هم می‌آیند؛ این‌ها لایهٔ CDN هستند.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
