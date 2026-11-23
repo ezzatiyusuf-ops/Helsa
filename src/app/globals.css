@@ -37,6 +37,11 @@
   --color-brown-600: #6b4f3a;
   --color-brown-700: #54402f;
 
+  /* ink-950 — عمیق‌ترین جوهر برای پوشش‌های روی تصویر (چیپ/اورلی هیرو، گالری، کارت‌ها).
+     در هر دو تم تیره می‌ماند چون همیشه روی عکس/ویدیو می‌نشیند (RFC خوانایی §۶۹).
+     پیش از این توکن تعریف نشده بود و همهٔ bg-ink-950/* بی‌اثر بودند. */
+  --color-ink-950: #171613;
+
   /* semantic (theme-aware) */
   --color-canvas: #fffdf9;
   --color-surface: #ffffff;
@@ -93,6 +98,12 @@ body {
 ::selection { background: var(--color-brand-600); color: var(--color-inverse); }
 
 *:focus-visible { outline: 2px solid var(--color-brand-600); outline-offset: 3px; border-radius: 4px; }
+
+/* a11y (بریف G5): در تم تیره، متن/آیکون brand-600 باید روشن‌تر شود تا کنتراست AA متن (۴.۵:۱) برقرار شود؛
+   خودِ توکن قدمی تیره می‌ماند چون پس‌زمینهٔ دکمه‌هاست (متن سفز روی آن ✓ 4.71:1). */
+:root[data-theme="dark"] .text-brand-600 { color: var(--color-brand-500); }
+:root[data-theme="dark"] .text-brand-700 { color: var(--color-brand-500); }
+
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--color-surface2); }
@@ -198,6 +209,7 @@ input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; marg
   --color-ink-700: #c8d0c9;
   --color-ink-500: #9daaa1;
   --color-ink-300: #7d8b82;
+  --color-ink-950: #0d0f0c; /* اورلی تصویری — در تم تیره هم تیره (متمایز از ramp متنِ ink) */
 
   /* HELSA green, lifted for contrast on dark surfaces */
   --color-brand-50: #16281e;
@@ -206,7 +218,7 @@ input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; marg
   --color-brand-300: #2c503c;
   --color-brand-400: #35624a;
   --color-brand-500: #2f9d68;
-  --color-brand-600: #27915d;
+  --color-brand-600: #1e7a50;
   --color-brand-700: #1e7a50;
   --color-brand-800: #249060;
 

@@ -77,7 +77,7 @@ export function InvoicePrint({ order }: { order: OrderRecord }) {
             <div className="flex items-start justify-between border-b border-black/10 pb-5">
               <div>
                 <p className="text-xl font-black text-brand-700">هلسا</p>
-                <p className="text-[10px] font-bold text-[#a8861d] mt-0.5">محصولات ارگانیک</p>
+                <p className="text-[10px] font-bold text-[#a8861d] mt-0.5">محصولات طبیعی</p>
                 <p className="mt-2 text-[11px] text-black/60">{SITE.businessName}</p>
                 <p className="mt-1 text-[11px] text-black/60 leading-5">{SITE.address}</p>
                 <p className="text-[11px] text-black/60" dir="ltr">{SITE.landline} · {SITE.mobile}</p>

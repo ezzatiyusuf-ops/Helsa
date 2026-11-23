@@ -62,9 +62,9 @@ export function TrayDetailClient({ tray, related }: { tray: MazehTray; related: 
           <h1 className="mt-4 text-3xl md:text-[42px] font-black text-heading leading-[1.4]">{tray.name}</h1>
           <p className="mt-4 text-sm md:text-[15px] leading-8 text-muted">{tray.shortDescription}</p>
           <div className="mt-5 flex flex-wrap gap-2 text-[11px]">
-            <span className="rounded-full bg-surface2 border border-line px-3 py-1.5 text-body flex items-center gap-1.5"><Users className="size-3.5 text-gold-600" aria-hidden /> {faDigits(tray.servesMin)} تا {faDigits(tray.servesMax)} نفر</span>
-            <span className="rounded-full bg-surface2 border border-line px-3 py-1.5 text-body flex items-center gap-1.5"><Ruler className="size-3.5 text-gold-600" aria-hidden /> اندازه {tray.size}</span>
-            <span className="rounded-full bg-surface2 border border-line px-3 py-1.5 text-body flex items-center gap-1.5"><Snowflake className="size-3.5 text-gold-600" aria-hidden /> ارسال زنجیره سرد</span>
+            <span className="rounded-full bg-surface2 border border-line px-3 py-1.5 text-body flex items-center gap-1.5"><Users className="size-3.5 text-gold-700" aria-hidden /> {faDigits(tray.servesMin)} تا {faDigits(tray.servesMax)} نفر</span>
+            <span className="rounded-full bg-surface2 border border-line px-3 py-1.5 text-body flex items-center gap-1.5"><Ruler className="size-3.5 text-gold-700" aria-hidden /> اندازه {tray.size}</span>
+            <span className="rounded-full bg-surface2 border border-line px-3 py-1.5 text-body flex items-center gap-1.5"><Snowflake className="size-3.5 text-gold-700" aria-hidden /> خودرو یخچال‌دار (تهران)</span>
           </div>
           <div className="mt-7 rounded-2xl bg-surface border border-line/70 p-6">
             <Price price={tray.basePrice} oldPrice={tray.oldPrice} size="lg" />
@@ -140,7 +140,7 @@ export function TrayDetailClient({ tray, related }: { tray: MazehTray; related: 
             <h2 className="text-base font-black text-heading">تازگی و نگهداری</h2>
             <p className="flex gap-2"><Snowflake className="size-4 text-brand-600 shrink-0 mt-0.5" aria-hidden /> {tray.storage}</p>
             <p className="flex gap-2"><Clock3 className="size-4 text-brand-600 shrink-0 mt-0.5" aria-hidden /> {tray.freshness}</p>
-            <p className="flex gap-2"><Truck className="size-4 text-brand-600 shrink-0 mt-0.5" aria-hidden /> تحویل در تهران با خودرو یخچال‌دار و هماهنگی ساعت؛ شهرستان با بسته‌بندی زنجیره سرد.</p>
+            <p className="flex gap-2"><Truck className="size-4 text-brand-600 shrink-0 mt-0.5" aria-hidden /> تحویل فقط در تهران، ۲۴ تا ۴۸ ساعت پیش از زمان مورد نظر شما، با خودرو یخچال‌دار و هماهنگی ساعت.</p>
           </div>
           <div className="rounded-2xl bg-surface border border-line p-6">
             <h2 className="text-base font-black text-heading mb-3">مناسب مناسبت‌ها</h2>

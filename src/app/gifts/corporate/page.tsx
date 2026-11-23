@@ -115,7 +115,7 @@ export default async function CorporateGiftsPage({ searchParams }: { searchParam
                 href={`/gifts/corporate?cat=${c.id}`}
                 className={`flex h-full flex-col justify-between rounded-2xl border p-4 transition-colors ${activeCategory?.id === c.id ? "border-brand-600 bg-brand-50" : "border-line/70 bg-surface hover:border-brand-300"}`}
               >
-                <Sparkles className="size-5 text-gold-600" aria-hidden />
+                <Sparkles className="size-5 text-gold-700" aria-hidden />
                 <span className="mt-3 text-xs font-black text-heading leading-5">{c.label}</span>
               </Link>
             </Reveal>

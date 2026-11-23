@@ -163,21 +163,8 @@ export const useStore = create<CartState>()(
   ),
 );
 
-export function cartSubtotal(items: CartItem[]): number {
-  return items.reduce((sum, i) => sum + i.price * i.qty, 0);
-}
-
-export function couponDiscount(subtotal: number, coupon: Coupon | null): number {
-  if (!coupon) return 0;
-  if (subtotal < coupon.minimumPurchase) return 0;
-  const raw = coupon.type === "percent" ? (subtotal * coupon.value) / 100 : coupon.value;
-  return Math.min(Math.round(raw), coupon.maximumDiscount ?? raw);
-}
-
-export function shippingFee(subtotal: number, itemCount: number): number {
-  if (itemCount === 0) return 0;
-  return subtotal >= SITE.freeShippingThreshold ? 0 : SITE.shippingFee;
-}
+// توابع پولی به منبع واحد منتقل شدند (src/lib/money.ts) — برای سازگاری importهای موجود re-export می‌شوند
+export { cartSubtotal, couponDiscount, shippingFee } from "@/lib/money";
 
 /* ——— order status track (visual timeline) ——— */
 export const ORDER_LIFECYCLE = ["pending", "paid", "preparing", "shipped", "transit", "delivered"] as const;

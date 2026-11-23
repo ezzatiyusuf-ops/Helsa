@@ -4,7 +4,7 @@ import { createRemoteJWKSet, jwtVerify } from "jose";
 import { OAUTH_STATE_COOKIE, SESSION_COOKIE, sessionCookieOptions } from "@/lib/session";
 import { upsertOAuthCustomer } from "@/lib/auth-service";
 import { isAdminEmail } from "@/lib/admin";
-import { makeClientSecret } from "../route";
+import { makeClientSecret } from "../client-secret";
 import { resolveOrigin, safeNextPath } from "@/lib/security";
 
 const appleJWKS = createRemoteJWKSet(new URL("https://appleid.apple.com/auth/keys"));

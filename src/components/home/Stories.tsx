@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import type { InstagramStory } from "@/services/instagram";
 import { faDigits } from "@/lib/format";
+import { SmartImage } from "@/components/ui/SmartImage";
 
 /**
  * استوری‌های هلسا — نوار دایره‌های استوری + ویوئر تمام‌صفحه.
@@ -20,29 +21,25 @@ export function Stories({ stories, className = "" }: { stories: InstagramStory[]
 
   return (
     <div className={className}>
-      <div
+      <ul
         className="flex gap-3.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        role="list"
         aria-label="استوری‌های هلسا"
       >
         {stories.map((s, i) => (
+          <li key={s.id} className="shrink-0">
           <button
-            key={s.id}
-            role="listitem"
             onClick={() => open(i)}
             aria-label={`استوری ${faDigits(i + 1)}${s.title ? `: ${s.title}` : " هلسا"}`}
             className="group flex w-16 shrink-0 flex-col items-center gap-1.5 outline-none"
           >
             <span className="relative grid size-16 place-items-center rounded-full bg-gradient-to-tr from-gold-500 via-brand-600 to-gold-400 p-[2.5px] transition-transform group-hover:scale-105 group-focus-visible:ring-2 group-focus-visible:ring-brand-400">
               <span className="grid size-full place-items-center overflow-hidden rounded-full border-2 border-surface bg-surface">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                { }
+                <SmartImage
                   src={s.imageUrl}
-                  alt={s.title ?? "استوری هلسا"}
+                  alt=""
+                  sizes="96px"
                   className="size-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                  draggable={false}
                 />
               </span>
             </span>
@@ -50,8 +47,9 @@ export function Stories({ stories, className = "" }: { stories: InstagramStory[]
               {s.title ?? "هلسا"}
             </span>
           </button>
+          </li>
         ))}
-      </div>
+      </ul>
 
       {openAt !== null && <StoryViewer stories={stories} startIndex={openAt} onClose={close} />}
     </div>
@@ -135,12 +133,11 @@ function StoryViewer({
 
       {/* قاب استوری — تپ راست = بعدی، تپ چپ = قبلی */}
       <div className="relative h-[min(82vh,42rem)] w-[min(92vw,23rem)] overflow-hidden rounded-2xl border border-inverse/10 bg-brand-900 shadow-lift">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <SmartImage
           src={story.imageUrl}
           alt={story.title ?? "استوری هلسا"}
+          sizes="(min-width: 640px) 23rem, 92vw"
           className="pointer-events-none size-full object-cover"
-          draggable={false}
         />
         {story.title && (
           <p className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-brand-950/85 to-transparent p-4 pt-10 text-sm font-black text-inverse">

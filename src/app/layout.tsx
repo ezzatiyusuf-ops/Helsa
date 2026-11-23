@@ -8,10 +8,13 @@ import { SITE } from "@/config/site";
 import { Shell } from "@/components/layout/Shell";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { organizationSchema, webSiteSchema, localBusinessSchema, siteUrl } from "@/lib/seo";
+import { allowIndexing, organizationSchema, webSiteSchema, localBusinessSchema, siteUrl } from "@/lib/seo";
 import { ImageFallbackGuard } from "@/components/ui/ImageFallbackGuard";
+import { MotionProvider } from "@/components/ui/MotionProvider";
 
 export const metadata: Metadata = {
+  // noindex on non-production environments (brief 1.5) — indexing is opt-in via ALLOW_INDEXING=1
+  robots: allowIndexing ? { index: true, follow: true } : { index: false, follow: false, nocache: true },
   metadataBase: new URL(siteUrl),
   title: {
     default: `${SITE.storeName} | ${SITE.brandName} — ${SITE.slogan}`,
@@ -28,7 +31,6 @@ export const metadata: Metadata = {
     images: [{ url: "/images/og-default.jpg", width: 1200, height: 630, alt: SITE.storeName }],
   },
   twitter: { card: "summary_large_image", title: SITE.storeName, description: SITE.description },
-  robots: { index: true, follow: true },
   // Google Search Console verification — set NEXT_PUBLIC_GSC_VERIFICATION in env (or remove if verifying via DNS)
   ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
     ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
@@ -91,7 +93,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         )}
         <ImageFallbackGuard />
         <ThemeProvider>
-          <Shell>{children}</Shell>
+          <Shell><MotionProvider>{children}</MotionProvider></Shell>
         </ThemeProvider>
       </body>
     </html>

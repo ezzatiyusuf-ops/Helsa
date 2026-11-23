@@ -1,9 +1,16 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/config/site";
+import { allowIndexing } from "@/lib/seo";
 
-/** Public pages are indexable; private / transactional paths are not. */
+/** Evaluated per request so the production env (ALLOW_INDEXING=1) takes effect at runtime. */
+export const dynamic = "force-dynamic";
+
+/** Public pages are indexable only in production; private / transactional paths never are. */
 export default function robots(): MetadataRoute.Robots {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXTAUTH_URL ?? SITE.url;
+  if (!allowIndexing) {
+    return { rules: [{ userAgent: "*", disallow: "/" }] };
+  }
   return {
     rules: [
       {

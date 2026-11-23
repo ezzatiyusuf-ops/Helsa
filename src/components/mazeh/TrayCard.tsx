@@ -11,6 +11,7 @@ import { useLang, IconForward } from "@/lib/i18n";
 import { Badge, Price, QtyPicker } from "@/components/ui/primitives";
 import { faDigits } from "@/lib/format";
 import { trayVisual } from "@/lib/trayVisuals";
+import { SmartImage } from "@/components/ui/SmartImage";
 
 /**
  * Tray card — identical visual system to ProductCard:
@@ -20,6 +21,8 @@ export function TrayCard({ tray }: { tray: MazehTray }) {
   const { addItem, toggleWishlist, wishlist, user } = useStore();
   const toast = useToast();
   const { t } = useLang();
+  // Single source of truth for availability — same rule as GoldenTrayCard & tray detail
+  const available = tray.active !== false && (tray.stock ?? 0) > 0;
   const name = tray.name;
   const image = trayVisual(tray.slug, tray.image);
   const [quick, setQuick] = useState(false);
@@ -59,11 +62,11 @@ export function TrayCard({ tray }: { tray: MazehTray }) {
 
   return (
     <>
-      <article className="group flex h-full flex-col rounded-2xl border border-line/70 bg-surface p-3 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift">
-        <div className="relative overflow-hidden rounded-xl border border-line-soft bg-surface2 aspect-[4/5] shadow-soft">
+      <article className="group flex h-full flex-col rounded-[20px] border border-line/70 bg-surface p-3 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lift">
+        <div className="relative overflow-hidden rounded-[14px] border border-line-soft bg-surface2 aspect-[4/5] shadow-soft">
           <Link href={`/mazeh-trays/${tray.slug}`} aria-label={name} className="block size-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={image} alt={name} loading="lazy" decoding="async" className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+            { }
+            <SmartImage src={image} alt={name} sizes="(min-width:1024px) 25vw, 50vw" className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
           </Link>
 
           <div className="absolute top-3 start-3 flex flex-col items-start gap-1.5">
@@ -87,13 +90,13 @@ export function TrayCard({ tray }: { tray: MazehTray }) {
           </button>
 
           <span className="absolute bottom-3 start-3 inline-flex items-center gap-1.5 rounded-full bg-surface/90 px-3 py-1.5 text-[10.5px] font-bold text-body">
-            <Users className="size-3.5 text-gold-600" aria-hidden />
+            <Users className="size-3.5 text-gold-700" aria-hidden />
             برای {faDigits(tray.servesMin)} تا {faDigits(tray.servesMax)} نفر
           </span>
         </div>
 
         <div className="flex flex-1 flex-col px-0.5 pt-4">
-          <span className="text-[10.5px] font-bold text-gold-600">سینی مزه هلسا · {tray.size}</span>
+          <span className="text-[10.5px] font-bold text-gold-700">سینی مزه هلسا · {tray.size}</span>
           <Link href={`/mazeh-trays/${tray.slug}`} className="mt-1.5">
             <h3 className="text-[13.5px] font-extrabold leading-6 text-heading line-clamp-2-fa transition-colors hover:text-brand-600">
               {name}
@@ -107,9 +110,9 @@ export function TrayCard({ tray }: { tray: MazehTray }) {
 
           <div className="mt-3 flex items-end justify-between gap-2">
             <Price price={tray.basePrice} oldPrice={tray.oldPrice} size="sm" />
-            <span className={`inline-flex items-center gap-1.5 text-[10.5px] font-bold ${tray.active ? "text-muted" : "text-accent-600"}`}>
-              <span className={`size-1.5 rounded-full ${tray.active ? "bg-brand-500" : "bg-accent-500"}`} aria-hidden />
-              {tray.active ? "موجود برای سفارش" : "ناموجود"}
+            <span className={`inline-flex items-center gap-1.5 text-[10.5px] font-bold ${available ? "text-muted" : "text-accent-600"}`}>
+              <span className={`size-1.5 rounded-full ${available ? "bg-brand-500" : "bg-accent-500"}`} aria-hidden />
+              {available ? "موجود برای سفارش" : "ناموجود"}
             </span>
           </div>
 
@@ -123,7 +126,8 @@ export function TrayCard({ tray }: { tray: MazehTray }) {
             </button>
             <button
               onClick={() => onAdd()}
-              className="inline-flex h-11 lg:h-10 items-center justify-center gap-1.5 rounded-full bg-brand-700 px-2 text-[11.5px] font-bold text-inverse transition-colors hover:bg-brand-800"
+              disabled={!available}
+              className="inline-flex h-11 lg:h-10 items-center justify-center gap-1.5 rounded-full bg-brand-700 px-2 text-[11.5px] font-bold text-inverse transition-colors hover:bg-brand-800 disabled:opacity-40"
             >
               {added ? <Check className="size-3.5 shrink-0" aria-hidden /> : <ShoppingBag className="size-3.5 shrink-0" aria-hidden />}
               {added ? "افزوده شد" : t("card.add")}
@@ -168,15 +172,15 @@ function TrayQuickView({ tray, image, onClose, onAdd }: { tray: MazehTray; image
         </button>
         <div className="grid sm:grid-cols-2">
           <div className="relative aspect-[4/3] sm:aspect-auto">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={image} alt={tray.name} className="size-full object-cover sm:rounded-s-2xl" />
+            { }
+            <SmartImage src={image} alt={tray.name} sizes="(min-width:640px) 45vw, 100vw" className="size-full object-cover sm:rounded-s-2xl" />
           </div>
           <div className="p-6 sm:p-7">
-            <span className="text-[11px] font-bold text-gold-600">سینی مزه هلسا · {tray.size}</span>
+            <span className="text-[11px] font-bold text-gold-700">سینی مزه هلسا · {tray.size}</span>
             <h2 className="mt-1.5 text-lg font-black leading-8 text-heading">{name}</h2>
             <p className="mt-2 text-xs leading-6 text-body line-clamp-3">{tray.shortDescription}</p>
             <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-surface2 border border-line px-3 py-1.5 text-[10.5px] font-bold text-body">
-              <Users className="size-3.5 text-gold-600" aria-hidden /> برای {faDigits(tray.servesMin)} تا {faDigits(tray.servesMax)} نفر
+              <Users className="size-3.5 text-gold-700" aria-hidden /> برای {faDigits(tray.servesMin)} تا {faDigits(tray.servesMax)} نفر
             </p>
             <div className="mt-4">
               <p className="text-[11px] font-bold text-heading">داخل این سینی</p>

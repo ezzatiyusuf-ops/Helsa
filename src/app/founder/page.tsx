@@ -23,11 +23,10 @@ export const metadata: Metadata = {
   },
 };
 
+// only channels with a real handle (brief 3.4) — unverified channels stay hidden
 const SOCIALS = [
   { icon: InstagramIcon, label: "اینستاگرام", href: SITE.instagramUrl },
-  { icon: Send, label: "تلگرام", href: `https://t.me/${SITE.messengers.telegram}` },
-  { icon: LinkedinIcon, label: "لینکدین", href: "https://linkedin.com/company/helsa" },
-  { icon: YoutubeIcon, label: "یوتیوب", href: "https://youtube.com/@HelsaNuts" },
+  { icon: Send, label: "تلگرام", href: SITE.telegramUrl },
 ];
 
 export default function FounderPage() {
@@ -75,7 +74,7 @@ export default function FounderPage() {
               <span className="text-heading">بنیان‌گذار</span>
             </nav>
             <Reveal delay={0.06}>
-              <p className="mt-5 text-[11px] font-bold tracking-[0.22em] text-gold-600">از یک باور، یک برند</p>
+              <p className="mt-5 text-[11px] font-bold tracking-[0.22em] text-gold-700">از یک باور، یک برند</p>
               <h1 className="mt-4 text-2xl md:text-4xl font-black leading-[1.5] text-heading">
                 «هر عدد خرما، امضای یک انسان است.»
               </h1>
@@ -135,7 +134,7 @@ export default function FounderPage() {
           </Reveal>
           <Reveal delay={0.08}>
             <div className="h-full rounded-[1.5rem] border border-gold-300/60 bg-gradient-to-b from-gold-50 to-surface p-7 shadow-soft">
-              <span className="grid size-12 place-items-center rounded-2xl bg-gold-500/15 text-gold-600"><Eye className="size-5" aria-hidden /></span>
+              <span className="grid size-12 place-items-center rounded-2xl bg-gold-500/15 text-gold-700"><Eye className="size-5" aria-hidden /></span>
               <h2 className="mt-5 text-lg font-black text-heading">دیدگاه</h2>
               <p className="mt-3 text-[13px] leading-8 text-muted">
                 هلسا در افق ده‌ساله‌اش، مرجع سلامت و غذای سالمِ خاورمیانه است؛ جایی که محتوای آموزشی،
@@ -159,7 +158,7 @@ export default function FounderPage() {
                   <SmartImage src={a.image} alt={a.title} sizes="(min-width:768px) 33vw, 100vw" className="size-full object-cover" />
                 </div>
                 <div className="flex flex-1 flex-col p-5">
-                  <p className="text-[10.5px] font-bold text-gold-600">{a.category}</p>
+                  <p className="text-[10.5px] font-bold text-gold-700">{a.category}</p>
                   <h3 className="mt-2 text-[13.5px] font-extrabold leading-7 line-clamp-2-fa group-hover:text-brand-700 transition-colors">{a.title}</h3>
                 </div>
               </Link>

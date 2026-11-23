@@ -60,31 +60,31 @@ export function FirstPurchaseBanner() {
   };
 
   return (
-    <div className="mt-6 overflow-hidden rounded-[1.5rem] border border-gold-300/70 bg-gradient-to-l from-gold-50 via-surface to-brand-50/60 p-5 shadow-soft md:p-6" aria-label="هدیه اولین خرید">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3.5">
-          <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-gold-500/15 text-gold-600">
-            <Gift className="size-5" aria-hidden />
+    <div className="mt-5" aria-label="هدیه اولین خرید">
+      {/* نوار پروموی لاغر (۴۰px) — طبق بریف صفحهٔ محصولات: بدون بنر بزرگ */}
+      <div className="flex min-h-10 flex-wrap items-center justify-between gap-x-4 gap-y-1.5 rounded-full border border-gold-300/60 bg-gradient-to-l from-gold-50 via-surface to-brand-50/60 px-4 py-1.5 shadow-soft">
+        <div className="flex items-center gap-2.5">
+          <span className="grid size-7 shrink-0 place-items-center rounded-full bg-gold-500/15 text-gold-700">
+            <Gift className="size-3.5" aria-hidden />
           </span>
-          <div>
-            <p className="text-[14px] font-black text-heading">اولین خرید هلسا؟</p>
-            <p className="mt-0.5 text-[12px] font-bold text-muted">۲۰۰ هزار تومان هدیه خرید دریافت کنید</p>
-          </div>
+          <p className="text-[12px] font-black text-heading">
+            اولین خرید هلسا؟ <span className="font-bold text-muted">۲۰۰ هزار تومان هدیه خرید دریافت کنید (خرید بالای ۱ میلیون تومان)</span>
+          </p>
         </div>
         {state !== "done" && (
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-11 items-center rounded-full bg-brand-700 px-6 text-[12.5px] font-bold text-inverse transition-colors hover:bg-brand-800"
+            className="inline-flex h-8 items-center rounded-full bg-brand-700 px-5 text-[11.5px] font-black text-inverse transition-colors hover:bg-brand-800"
             aria-expanded={open}
           >
-            دریافت هدیه اولین خرید
+            دریافت هدیه
           </button>
         )}
       </div>
 
       {(open || state === "done" || state === "error") && (
-        <div className="mt-4 border-t border-gold-200/70 pt-4">
+        <div className="mt-2.5 rounded-2xl border border-gold-200/70 bg-surface p-4">
           {state === "done" ? (
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="flex items-center gap-2 text-[12px] font-bold text-brand-800">

@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -14,7 +14,28 @@
     "db:generate": "drizzle-kit generate",
     "images:regen": "node scripts/regen-image-variants.mjs",
     "env:recovery": "bash scripts/env-recovery.sh",
-    "test:unit": "node --import tsx --test tests/unit.test.ts"
+    "test:unit": "node --import tsx --test tests/unit.test.ts",
+    "preview": "opennextjs-cloudflare preview",
+    "deploy": "NEXT_OUTPUT_STANDALONE=1 opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf:build": "NEXT_OUTPUT_STANDALONE=1 opennextjs-cloudflare build",
+    "cf:typegen": "wrangler types",
+    "test": "npm run typecheck && npm run lint && npm run test:unit && npm run test:upsell",
+    "cf:build:local": "NEXT_OUTPUT_STANDALONE=1 npm run build && opennextjs-cloudflare build --skipNextBuild",
+    "catalog:export": "node scripts/export-fallback-catalog.mjs",
+    "qa:e2e": "python3 scripts/qa-e2e.py",
+    "qa:authz": "python3 scripts/authz-sweep.py",
+    "qa:tokens": "node scripts/qa-mint-tokens.mjs",
+    "images:check": "node scripts/prune-image-variants.mjs --check",
+    "images:prune": "node scripts/prune-image-variants.mjs --fix",
+    "db:migrate:prod": "bash scripts/migrate-production.sh",
+    "preflight": "node scripts/preflight-env.mjs",
+    "preflight:prod": "node scripts/preflight-env.mjs --production",
+    "deploy:check": "bash scripts/deploy-check.sh",
+    "deploy:check:full": "bash scripts/deploy-check.sh --full",
+    "build:prod": "node scripts/preflight-env.mjs --production && next build --webpack",
+    "test:upsell": "node --import tsx --test tests/upsell.test.ts",
+    "qa:upsell": "node scripts/qa-upsell-e2e.mjs",
+    "test:catalog": "node --import tsx --test tests/catalog-view.test.ts"
   },
   "dependencies": {
     "dotenv": "17.3.1",
@@ -22,7 +43,7 @@
     "framer-motion": "^13.1.1",
     "jose": "^6.2.10",
     "lucide-react": "^1.38.0",
-    "next": "16.2.6",
+    "next": "^16.4.2",
     "pg": "8.20.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
@@ -32,19 +53,23 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.15.13",
+    "@opennextjs/cloudflare": "1.20.6",
     "@tailwindcss/postcss": "4.1.17",
     "@types/node": "22.19.15",
     "@types/pg": "8.18.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "drizzle-kit": "0.31.10",
+    "drizzle-kit": "^0.31.11",
     "eslint": "9.39.4",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "^16.4.2",
     "playwright": "^1.63.0",
-    "postcss": "8.5.8",
+    "postcss": "^8.5.30",
     "sharp": "^0.35.4",
     "tailwindcss": "4.1.17",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "wrangler": "^4.151.1"
+  },
+  "engines": {
+    "node": ">=20.9 <23"
   }
 }

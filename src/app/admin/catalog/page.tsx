@@ -69,6 +69,9 @@ const TOKENS: Array<{ name: string; hex: string; use: string }> = [
   { name: "heading", hex: "#1f2937", use: "متن تیتر" },
 ];
 
+/** مقدار نمایشی Countdown — یک‌بار در بارگذاری ماژول (خارج از رندرِ کامپوننت) */
+const COUNTDOWN_DEMO_UNTIL = new Date(Date.now() + 3 * 86400000).toISOString();
+
 export default function AdminCatalogPage() {
   const toast = useToast();
   const [qty, setQty] = useState(2);
@@ -90,7 +93,7 @@ export default function AdminCatalogPage() {
       <div className="rounded-2xl border border-line bg-gradient-to-l from-brand-50 to-surface p-6 md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-[11px] font-bold tracking-[0.2em] text-gold-600">کتابخانهٔ طراحی هلسا</p>
+            <p className="text-[11px] font-bold tracking-[0.2em] text-gold-700">کتابخانهٔ طراحی هلسا</p>
             <h1 className="mt-2 text-2xl font-black text-heading">کاتالوگ رسمی کامپوننت‌ها</h1>
             <p className="mt-2 max-w-2xl text-sm leading-7 text-muted">
               نمونهٔ زندهٔ تمام اجزای رابط کاربری فروشگاه — همان کد تولیدی از <code dir="ltr">src/components/ui</code>،
@@ -119,7 +122,7 @@ export default function AdminCatalogPage() {
             </div>
           ))}
         </div>
-        <CodeNote>{`LOGO_GREEN = "${LOGO_GREEN}" · tailwind: bg-brand-700 text-gold-600 border-line …`}</CodeNote>
+        <CodeNote>{`LOGO_GREEN = "${LOGO_GREEN}" · tailwind: bg-brand-700 text-gold-700 border-line …`}</CodeNote>
       </Section>
 
       {/* ── دکمه‌ها ── */}
@@ -166,7 +169,7 @@ export default function AdminCatalogPage() {
             <QtyPicker value={qty} onChange={setQty} max={10} />
             <p className="mt-3 text-xs text-muted">مقدار فعلی: {qty}</p>
             <p className="mb-3 mt-6 text-xs font-bold text-muted">Countdown — تا ۳ روز دیگر</p>
-            <Countdown until={new Date(Date.now() + 3 * 86400000).toISOString()} />
+            <Countdown until={COUNTDOWN_DEMO_UNTIL} />
           </div>
         </div>
         <CodeNote>{`<Badge tone="gold">…</Badge> · <Stars rating={4.5} reviews={128} /> · <Price price={485000} oldPrice={620000} size="lg" />`}</CodeNote>

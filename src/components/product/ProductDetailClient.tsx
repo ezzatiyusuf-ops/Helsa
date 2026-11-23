@@ -17,9 +17,9 @@ import { FieldLabel, TextArea, Select } from "@/components/ui/controls";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { FrequentlyBought } from "@/components/product/FrequentlyBought";
-import { isOrganic, isWholesaleReady, isLowStock, isMadeInIran, deliveryEstimate } from "@/lib/product-flags";
+import { isWholesaleReady, isLowStock, isMadeInIran, deliveryEstimate } from "@/lib/product-flags";
 import { toggleSaved, isSaved as isSavedSlug } from "@/lib/saved";
-import { faDigits, formatToman } from "@/lib/format";
+import { faDigits, formatToman, todayJalali } from "@/lib/format";
 import { toEnglishDigits } from "@/lib/nid";
 
 type ReviewItem = { id: string; name: string; date: string; rating: number; title: string; text: string };
@@ -49,7 +49,10 @@ export function ProductDetailClient({
 }) {
   const router = useRouter();
   const { addItem, toggleWishlist, wishlist, user } = useStore();
-  useEffect(() => { trackEvent("product_view", { item_name: product.name, item_id: product.id, value: product.price }); }, []);
+  const productId = product.id;
+  const productName = product.name;
+  const productPrice = product.price;
+  useEffect(() => { trackEvent("view_item", { item_name: productName, item_id: productId, value: productPrice }); }, [productId, productName, productPrice]);
   const toast = useToast();
   const [qty, setQty] = useState(1);
   const [variantId, setVariantId] = useState<number | null>(product.variants?.[0]?.id ?? null);
@@ -59,13 +62,16 @@ export function ProductDetailClient({
   const inWish = wishlist.includes(product.id);
   const gallery = product.gallery.length ? product.gallery : [product.image];
   const badge = product.badge && ALLOWED_BADGES.includes(product.badge) ? product.badge : null;
-  const organic = isOrganic(product);
   const wholesale = isWholesaleReady(product);
   const lowStock = isLowStock(product);
   const iran = isMadeInIran(product);
   const delivery = deliveryEstimate();
 
   const feature = (label: string) => product.features.find((f) => f.label === label)?.value;
+  // Batch expiry — block purchase when the (real) batch date has passed
+  const enDigits = (s: string) => s.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
+  const expiryValue = feature("تاریخ انقضا");
+  const expired = expiryValue ? enDigits(expiryValue).replace(/\s/g, "") < todayJalali() : false;
   const variant = product.variants?.find((item) => item.id === variantId);
   const currentPrice = variant?.price ?? product.price;
   const currentOldPrice = variant?.compareAtPrice ?? product.oldPrice;
@@ -142,7 +148,7 @@ export function ProductDetailClient({
 
         {/* ——— purchase panel ——— */}
         <div className="lg:col-span-5 lg:sticky lg:top-24">
-          <div className="flex items-center gap-2 text-[11px] font-bold tracking-[0.18em] text-gold-600">
+          <div className="flex items-center gap-2 text-[11px] font-bold tracking-[0.18em] text-gold-700">
             <span>{categoryName || product.category}</span>
             <span className="size-1 rounded-full bg-gold-500/60" aria-hidden />
             <span className="text-muted tracking-normal">هلسا مارکت</span>
@@ -153,23 +159,17 @@ export function ProductDetailClient({
           {/* concise, entity-rich summary (AEO/GEO answer block) */}
           <p className="mt-4 text-[13.5px] leading-8 text-muted">
             {product.name} با وزن {currentWeight}
-            {product.origin ? ` و خاستگاه ${product.origin}` : ""}
-            {organic ? "، کاملاً طبیعی و بدون افزودنی" : ""} از {categoryName || "منتخب‌های"} هلسا ایرانیان؛
+            {product.origin ? ` و خاستگاه ${product.origin}` : ""} از {categoryName || "منتخب‌های"} هلسا ایرانیان؛
             ارسال به سراسر ایران با بسته‌بندی حفظ تازگی.
           </p>
 
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
-            <Stars rating={product.rating} reviews={product.reviews} />
+            {product.reviews > 0 && <Stars rating={product.rating} reviews={product.reviews} />}
             <span className="text-[11px] text-muted">کد کالا: <b dir="ltr" className="font-bold text-body">{product.sku}</b></span>
           </div>
 
           {/* provenance & fulfilment badges */}
           <div className="mt-5 flex flex-wrap gap-2">
-            {organic && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 text-[10.5px] font-bold text-brand-700">
-                <Leaf className="size-3.5" aria-hidden /> ۱۰۰٪ طبیعی
-              </span>
-            )}
             {iran && (
               <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1.5 text-[10.5px] font-bold text-body">
                 <MapPin className="size-3.5 text-brand-600" aria-hidden /> تولید ایران
@@ -217,11 +217,16 @@ export function ProductDetailClient({
               </div>
             )}
 
+            {expired && (
+              <p role="alert" className="mt-4 rounded-xl border border-accent-300 bg-accent-50 px-4 py-3 text-xs font-bold leading-6 text-accent-700">
+                تاریخ انقضای این محموله ({expiryValue}) گذشته است و فعلاً قابل خرید نیست.
+              </p>
+            )}
             <div className="mt-5 flex items-center gap-3">
               <QtyPicker value={qty} onChange={setQty} max={Math.max(currentStock, 1)} />
               <button
                 onClick={() => onAdd(false)}
-                disabled={currentStock <= 0}
+                disabled={currentStock <= 0 || expired}
                 className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-brand-700 text-sm font-bold text-inverse shadow-soft transition-all hover:bg-brand-800 hover:shadow-lift active:scale-[0.98] disabled:opacity-40"
               >
                 <ShoppingBag className="size-4" aria-hidden /> افزودن به سبد خرید
@@ -233,7 +238,7 @@ export function ProductDetailClient({
               disabled={currentStock <= 0}
               className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-brand-700/40 text-sm font-bold text-heading transition-all hover:border-brand-700 hover:bg-brand-50 active:scale-[0.99] disabled:opacity-40"
             >
-              <Zap className="size-4 text-gold-600" aria-hidden /> خرید فوری
+              <Zap className="size-4 text-gold-700" aria-hidden /> خرید فوری
             </button>
 
             <Link
@@ -254,7 +259,6 @@ export function ProductDetailClient({
               </button>
               <button
                 onClick={onSave}
-                aria-label="ذخیره برای بعد"
                 aria-pressed={saved}
                 className={`flex h-10 items-center justify-center gap-1.5 rounded-full border text-[11px] font-bold transition-colors ${saved ? "border-gold-500 bg-gold-500 text-inverse" : "border-line text-body hover:border-gold-500 hover:text-gold-700"}`}
               >
@@ -275,14 +279,14 @@ export function ProductDetailClient({
             <Clock3 className="mt-0.5 size-4 shrink-0 text-brand-600" aria-hidden />
             <p>
               <b className="text-body">زمان تحویل تخمینی:</b> تهران {delivery.tehran}؛ سایر شهرها {delivery.cities}.
-              <span className="text-faint"> برای محصولات حساس، زنجیره سرد رعایت می‌شود.</span>
+              <span className="text-faint"> با بسته‌بندی چندلایهٔ حفظ تازگی.</span>
             </p>
           </div>
 
           <ul className="mt-6 space-y-2.5 border-t border-line/80 pt-5 text-[11.5px] text-muted">
             <li className="flex items-center gap-2.5"><Truck className="size-4 shrink-0 text-brand-600" aria-hidden /> ارسال مطمئن با بسته‌بندی محافظ</li>
             <li className="flex items-center gap-2.5"><ShieldCheck className="size-4 shrink-0 text-brand-600" aria-hidden /> ضمانت اصالت و مهر سلامت هلسا</li>
-            <li className="flex items-center gap-2.5"><Snowflake className="size-4 shrink-0 text-brand-600" aria-hidden /> زنجیره سرد برای محصولات حساس</li>
+            <li className="flex items-center gap-2.5"><Snowflake className="size-4 shrink-0 text-brand-600" aria-hidden /> نگهداری و ارسال متناسب با شرایط هر محصول</li>
           </ul>
         </div>
       </div>
@@ -308,17 +312,17 @@ export function ProductDetailClient({
             <p>
               {product.name} یکی از منتخب‌های {categoryName || "هلسا"} است که با کنترل کیفی چندمرحله‌ای — از برداشت تا بسته‌بندی نهایی — همراهی می‌شود.
             </p>
-            <dl className="grid gap-3 pt-2 sm:grid-cols-2">
-              {product.features.filter((f) => !["شرایط نگهداری", "تاریخ تولید", "تاریخ انقضا", "مواد اولیه", "نوع بسته‌بندی"].includes(f.label)).map((f) => (
-                <div key={f.label} className="flex items-start gap-3 rounded-xl border border-line/70 bg-surface px-4 py-3">
+            <ul className="grid gap-3 pt-2 sm:grid-cols-2">
+              {product.features.filter((f) => !["شرایط نگهداری", "تاریخ تولید", "تاریخ انقضا", "مواد اولیه", "نوع بسته‌بندی"].includes(f.label) && f.value && String(f.value).trim()).map((f) => (
+                <li key={f.label} className="flex items-start gap-3 rounded-xl border border-line/70 bg-surface px-4 py-3">
                   <Check className="mt-0.5 size-4 shrink-0 text-brand-600" aria-hidden />
                   <div>
-                    <dt className="text-[10.5px] text-muted">{f.label}</dt>
-                    <dd className="mt-0.5 text-[13px] font-bold text-heading">{f.value}</dd>
+                    <p className="text-[10.5px] text-muted">{f.label}</p>
+                    <p className="mt-0.5 text-[13px] font-bold text-heading">{f.value}</p>
                   </div>
-                </div>
+                </li>
               ))}
-            </dl>
+            </ul>
           </div>
         </AccSection>
 
@@ -344,10 +348,12 @@ export function ProductDetailClient({
 
         <AccSection id="ingredients" open={open === "ingredients"} onToggle={toggleAcc} icon={<Leaf className="size-4" aria-hidden />} title="ترکیبات">
           <div className="space-y-6">
-            <p className="text-sm leading-8 text-body">
-              <Leaf className="me-1.5 -mt-0.5 inline size-4 text-brand-600" aria-hidden />
-              مواد اولیه: <b className="text-heading">{feature("مواد اولیه") ?? product.ingredients ?? "طبیعی و منتخب"}</b>؛ بدون افزودنی غیرضروری.
-            </p>
+            {(feature("مواد اولیه") ?? product.ingredients) ? (
+              <p className="text-sm leading-8 text-body">
+                <Leaf className="me-1.5 -mt-0.5 inline size-4 text-brand-600" aria-hidden />
+                مواد اولیه: <b className="text-heading">{feature("مواد اولیه") ?? product.ingredients}</b>
+              </p>
+            ) : null}
             {product.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {product.tags.map((t) => (
@@ -390,10 +396,10 @@ export function ProductDetailClient({
           <dl className="grid gap-3 sm:grid-cols-2">
             {[
               { icon: Thermometer, label: "شرایط نگهداری", value: product.storage },
-              { icon: Package, label: "نوع بسته‌بندی", value: feature("نوع بسته‌بندی") ?? "—" },
-              { icon: CalendarDays, label: "تاریخ تولید", value: feature("تاریخ تولید") ?? "—" },
-              { icon: CalendarDays, label: "تاریخ انقضا", value: feature("تاریخ انقضا") ?? "—" },
-            ].map((row) => (
+              { icon: Package, label: "نوع بسته‌بندی", value: feature("نوع بسته‌بندی") },
+              { icon: CalendarDays, label: "تاریخ تولید", value: feature("تاریخ تولید") },
+              { icon: CalendarDays, label: "تاریخ انقضا", value: feature("تاریخ انقضا") },
+            ].filter((row) => row.value && String(row.value).trim()).map((row) => (
               <div key={row.label} className="flex items-start gap-3 rounded-xl border border-line/70 bg-surface px-4 py-3.5">
                 <row.icon className="mt-0.5 size-4 shrink-0 text-brand-600" aria-hidden />
                 <div>
@@ -682,13 +688,15 @@ function ReviewsPanel({ product }: { product: Product }) {
 
   return (
     <div className="max-w-3xl">
-      <div className="mb-6 flex items-center gap-4">
-        <p className="text-2xl font-black text-heading">{faDigits(Math.round(product.rating * 10) / 10)}</p>
-        <div>
-          <Stars rating={product.rating} reviews={product.reviews} />
-          <p className="mt-1 text-[11px] text-muted">امتیاز از {faDigits(product.reviews)} نظر</p>
+      {product.reviews > 0 && (
+        <div className="mb-6 flex items-center gap-4">
+          <p className="text-2xl font-black text-heading">{faDigits(Math.round(product.rating * 10) / 10)}</p>
+          <div>
+            <Stars rating={product.rating} reviews={product.reviews} />
+            <p className="mt-1 text-[11px] text-muted">امتیاز از {faDigits(product.reviews)} نظر</p>
+          </div>
         </div>
-      </div>
+      )}
       {reviews.length === 0 && (
         <div className="mb-8 rounded-2xl border border-dashed border-line bg-surface2 p-6 text-center">
           <p className="text-sm font-black text-heading">اولین نظر تأییدشدهٔ این صفحه را شما بنویسید</p>

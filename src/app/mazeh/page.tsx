@@ -36,7 +36,7 @@ export default function MazehPage() {
           </div>
         </Reveal>
         <Reveal delay={0.1}>
-          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-600">مزه هلسا</span>
+          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-700">مزه هلسا</span>
           <h2 className="mt-4 text-3xl md:text-[40px] font-black leading-[1.4] text-heading">
             شیرین و شور،
             <br />
@@ -90,7 +90,7 @@ export default function MazehPage() {
       {/* CTA */}
       <section className="container-x py-20 md:py-24 text-center" aria-label="دعوت به کشف">
         <Reveal>
-          <p className="text-[11px] font-bold tracking-[0.2em] text-gold-600">آماده چشیدن هستید؟</p>
+          <p className="text-[11px] font-bold tracking-[0.2em] text-gold-700">آماده چشیدن هستید؟</p>
           <h2 className="mt-4 text-3xl md:text-[36px] font-black leading-[1.4] text-heading">سینی مزه‌تان را انتخاب یا بسازید</h2>
           <div className="mt-8 flex justify-center flex-wrap gap-3">
             <LinkButton href="/mazeh-trays" variant="primary" size="lg">مشاهده سینی‌های آماده</LinkButton>

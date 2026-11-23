@@ -6,6 +6,7 @@ import { useStore } from "@/lib/store";
 import { useToast } from "@/components/ui/Toast";
 import { formatToman, faDigits } from "@/lib/format";
 import { trackEvent } from "@/lib/analytics";
+import { SmartImage } from "@/components/ui/SmartImage";
 
 interface Suggestion {
   id: number;
@@ -50,8 +51,8 @@ export function EmptyCartSuggestions() {
         {items.slice(0, 6).map((s) => (
           <li key={s.slug} className="flex flex-col gap-2 rounded-2xl border border-line/70 bg-surface p-3.5 shadow-soft">
             <Link href={`/products/${s.slug}`} onClick={() => trackEvent("cross_sell_click", { item_name: s.name, item_id: s.id, surface: "empty_cart" })} className="group flex items-center gap-3">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={s.image} alt={s.name} loading="lazy" decoding="async" className="size-16 shrink-0 rounded-xl object-cover" />
+              { }
+              <SmartImage src={s.image} alt={s.name} sizes="64px" className="size-16 shrink-0 rounded-xl object-cover" />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-[12.5px] font-bold text-heading group-hover:text-brand-700">{s.name}</span>
                 <span className="mt-1 flex items-center gap-1 text-[10.5px] text-muted">

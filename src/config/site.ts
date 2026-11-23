@@ -2,6 +2,8 @@
  * HELSA IRANIAN — global brand & store configuration.
  * All contact details, phones and nav live here (never hard-coded in UI).
  */
+import { SHIPPING } from "./shipping";
+
 const fa = (v: string) => v.replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)]);
 
 const LANDLINE = "02156130858";
@@ -24,6 +26,7 @@ export const SITE = {
   email: "Helsairanianfood@gmail.com",
   instagram: "@Helsa.Nuts",
   instagramUrl: "https://instagram.com/Helsa.Nuts",
+  telegramUrl: `https://t.me/${"HelsaNuts"}`,
   phones: [fa("021-56130858"), fa("0937-9105133")],
   landline: LANDLINE,
   mobile: MOBILE,
@@ -38,7 +41,12 @@ export const SITE = {
     { day: "جمعه و تعطیلات رسمی", hours: "تعطیل" },
   ],
   supportHours: `${fa("9")} تا ${fa("18")}`,
-  copyrightYear: fa("1404"),
+  // Current Jalali year, computed at build/deploy time (brief 2.1 — no hardcoded year)
+  copyrightYear: fa(
+    new Intl.DateTimeFormat("en-US-u-ca-persian", { year: "numeric" })
+      .formatToParts(new Date())
+      .find((p) => p.type === "year")?.value ?? "1405",
+  ),
   messengers: {
     whatsapp: "09379105133",
     telegram: "HelsaNuts",
@@ -47,8 +55,9 @@ export const SITE = {
   description:
     "هلسا مارکت؛ فروشگاه آنلاین خرما، شکلات دست‌ساز خرما، قند خرما، آجیل، خشکبار، عسل، زعفران و سینی‌های مزه هلسا. چون شما لایق بهترین‌ها هستید ...",
 
-  freeShippingThreshold: 2_000_000,
-  shippingFee: 85_000,
+  // single source of truth: config/shipping.ts (brief 2.2)
+  freeShippingThreshold: SHIPPING.freeThreshold,
+  shippingFee: SHIPPING.flatFee,
 };
 
 export type NavItem = {
@@ -123,6 +132,8 @@ export const FOOTER_LINKS = {
     { label: "راهنمای محصولات", href: "/guides" },
     { label: "تماس با ما", href: "/contact" },
     { label: "وبلاگ هلسا", href: "/blog" },
+    { label: "پادکست هلسا", href: "/podcast" },
+    { label: "ویدیاکست هلسا", href: "/videocast" },
   ],
   shop: [
     { label: "همه محصولات", href: "/products" },
@@ -144,3 +155,19 @@ export const FOOTER_LINKS = {
     { label: "حریم خصوصی", href: "/privacy" },
   ],
 } as const;
+
+/**
+ * Social channels (brief 3.4) — render ONLY channels with a real, filled-in handle.
+ * linkedin/youtube stay hidden until the owner provides a verified handle.
+ */
+import { InstagramIcon, TelegramIcon, LinkedinIcon, YoutubeIcon } from "@/components/ui/icons";
+import { MessageCircle } from "lucide-react";
+
+export const SOCIAL_CHANNELS: { id: string; label: string; href: string; Icon: React.ComponentType<{ className?: string }> }[] = [
+  { id: "instagram", label: "اینستاگرام", href: SITE.instagramUrl, Icon: InstagramIcon },
+  { id: "telegram", label: "تلگرام", href: SITE.telegramUrl, Icon: TelegramIcon },
+  { id: "whatsapp", label: "واتس‌اپ", href: SITE.whatsappUrl, Icon: MessageCircle },
+  // awaiting verified handles from the owner — leave empty to keep them hidden
+  { id: "linkedin", label: "لینکدین", href: "", Icon: LinkedinIcon },
+  { id: "youtube", label: "یوتیوب", href: "", Icon: YoutubeIcon },
+];

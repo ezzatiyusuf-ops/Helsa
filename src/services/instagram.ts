@@ -9,6 +9,7 @@
  */
 import { asc, desc, eq, and } from "drizzle-orm";
 import { db, isDatabaseConfigured } from "@/db";
+import { FALLBACK_INSTAGRAM_POSTS, FALLBACK_INSTAGRAM_STORIES } from "@/data/instagram";
 import { instagramPosts, siteSettings } from "@/db/schema";
 
 const GRAPH = "https://graph.instagram.com/v23.0";
@@ -241,7 +242,8 @@ async function fetchLiveStories(creds: NonNullable<Creds>): Promise<InstagramSto
 /* ————————————— CURATED: پنل ادمین ————————————— */
 
 async function getCuratedPosts(limit: number): Promise<InstagramPost[]> {
-  if (!isDatabaseConfigured) return [];
+  // §دیتای آفلاین: بدون DB هم پست‌های واقعیِ منتخب (export‌شده از همین DB) نمایش داده می‌شوند
+  if (!isDatabaseConfigured) return FALLBACK_INSTAGRAM_POSTS.slice(0, limit).map((p) => ({ ...p }));
   try {
     const rows = await db
       .select()
@@ -260,13 +262,14 @@ async function getCuratedPosts(limit: number): Promise<InstagramPost[]> {
       postedAt: r.postedAt.toISOString(),
     }));
   } catch {
-    // DB در دسترس نیست (مثلاً بیلد بدون دیتابیس یا قطعی موقت) — محتوای خالی، بدون کرش
-    return [];
+    // DB در دسترس نیست (مثلاً بیلد بدون دیتابیس یا قطعی موقت) — fallback آفلاین
+    return FALLBACK_INSTAGRAM_POSTS.slice(0, limit).map((p) => ({ ...p }));
   }
 }
 
 async function getCuratedStories(): Promise<InstagramStory[]> {
-  if (!isDatabaseConfigured) return [];
+  // §دیتای آفلاین: بدون DB هم استوری‌های واقعیِ منتخب نمایش داده می‌شوند
+  if (!isDatabaseConfigured) return FALLBACK_INSTAGRAM_STORIES.map((st) => ({ ...st }));
   try {
     const rows = await db
       .select()
@@ -283,8 +286,8 @@ async function getCuratedStories(): Promise<InstagramStory[]> {
       postedAt: r.postedAt.toISOString(),
     }));
   } catch {
-    // DB در دسترس نیست — استوری خالی، بدون کرش
-    return [];
+    // DB در دسترس نیست — fallback آفلاین
+    return FALLBACK_INSTAGRAM_STORIES.map((st) => ({ ...st }));
   }
 }
 

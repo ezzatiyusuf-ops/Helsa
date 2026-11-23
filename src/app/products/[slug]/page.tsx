@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
-import { getCategories, getProducts, getProductBySlug } from "@/services/catalog";
+import { getCategories, getProducts, getProductBySlug, wasCatalogDbHealthy } from "@/services/catalog";
 import { BLOG_POSTS } from "@/data/content";
 import { ProductDetailClient, type FaqItem } from "@/components/product/ProductDetailClient";
 import { isOrganic, deliveryEstimate } from "@/lib/product-flags";
+import { firstActiveVariant } from "@/lib/variants";
 import { formatToman } from "@/lib/format";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { productSchema, breadcrumbSchema, faqSchema } from "@/lib/seo";
@@ -21,6 +22,10 @@ export const dynamicParams = true; // اسلاگ‌های خارج از build: �
 
 export async function generateStaticParams() {
   const products = await getProducts();
+  // اگر DB در بیلد در دسترس نبود (fallback به seed)، پیش‌رندر نمی‌کنیم:
+  // صفحات در لحظه و با دادهٔ واقعی رندر می‌شوند (dynamicParams=true) و هیچ
+  // نسخهٔ کهنه/seed‌ای در خروجی استاتیک بیک نمی‌شود.
+  if (!wasCatalogDbHealthy()) return [];
   return products.filter((p) => p.isActive).map((p) => ({ slug: p.slug }));
 }
 
@@ -29,9 +34,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const product = await getProductBySlug(slug);
   if (!product) notFound();
   const title = product.seoTitle?.trim() || `خرید ${product.name} | قیمت و مشخصات`;
+  // F-02/F-03: منبع واحد قیمت/وزنِ نمایش = واریانت پیش‌فرضِ فعال (همان چیزی که صفحه نشان می‌دهد)
+  const metaVariant = firstActiveVariant(product);
   const description =
     product.seoDescription?.trim() ||
-    `${product.name} ${product.weight} اصل هلسا با قیمت ${formatToman(product.price)}؛ ${product.shortDescription ?? product.description.slice(0, 90)} ارسال سریع به سراسر ایران.`.slice(0, 158);
+    `${product.name} ${metaVariant?.name ?? product.weight} اصل هلسا با قیمت ${formatToman(metaVariant?.price ?? product.price)}؛ ${product.shortDescription ?? product.description.slice(0, 90)} ارسال سریع به سراسر ایران.`.slice(0, 158);
   return {
     title,
     description,
@@ -64,11 +71,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   // GEO: concise, honest FAQ derived from real product data (mirrored as FAQPage schema)
   const delivery = deliveryEstimate();
+  // F-02/F-03: واریانت پیش‌فرضِ فعال — قیمت/وزنِ نمایش‌داده‌شده در صفحه (انتخاب اولیهٔ کاربر)
+  const baseVariant = firstActiveVariant(product);
+  const displayPrice = baseVariant?.price ?? product.price;
+  const displayWeight = baseVariant?.name ?? product.weight;
   const organic = isOrganic(product);
   const faq: FaqItem[] = [
     {
       q: `قیمت ${product.name} چقدر است؟`,
-      a: `قیمت ${product.name} ${product.weight} در هلسا ${formatToman(product.price)} است و به‌صورت روزانه بر اساس بازار به‌روزرسانی می‌شود.`,
+      a: `قیمت ${product.name} ${displayWeight} در هلسا ${formatToman(displayPrice)} است و به‌صورت روزانه بر اساس بازار به‌روزرسانی می‌شود.${(product.variants?.length ?? 0) > 1 ? ` بسته‌های دیگر: ${product.variants!.filter((v) => v.isActive !== false).map((v) => `${v.name} ${formatToman(v.price)}`).join(" · ")}.` : ""}`,
     },
     {
       q: `ارسال ${product.name} چقدر طول می‌کشد؟`,
@@ -78,7 +89,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       ? [{ q: `${product.name} را چگونه نگهداری کنیم؟`, a: product.storage }]
       : []),
     ...(organic
-      ? [{ q: `${product.name} طبیعی و بدون افزودنی است؟`, a: `بله؛ ${product.name} ${product.ingredients ? `با ${product.ingredients} و ` : ""}بدون افزودنی غیرضروری تولید می‌شود و از کنترل کیفی چندمرحله‌ای هلسا می‌گذرد.` }]
+      ? [{ q: `کنترل کیفی ${product.name} چگونه انجام می‌شود؟`, a: `${product.name} پیش از عرضه از کنترل کیفی چندمرحله‌ای هلسا می‌گذرد و مشخصات کامل آن در همین صفحه درج شده است.` }]
       : []),
     {
       q: `خرید عمده ${product.name} امکان‌پذیر است؟`,
@@ -103,9 +114,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     description: product.description,
     image: product.image,
     sku: product.sku,
-    price: product.price,
-    stock: product.stock,
-    weight: product.weight,
+    price: displayPrice,
+    stock: Math.min(product.stock, baseVariant?.stock ?? product.stock),
+    weight: displayWeight,
     rating: product.rating,
     reviews: product.reviews,
   });

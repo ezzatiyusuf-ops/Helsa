@@ -46,6 +46,7 @@ export interface Product {
   shortDescription?: string;
   price: number;
   oldPrice: number | null;
+  discountStartsAt?: string | null;
   discount: number;
   weight: string;
   image: string;
@@ -126,6 +127,7 @@ export interface Coupon {
   startDate: string;
   endDate: string;
   usageLimit: number;
+  usedCount?: number;
   active: boolean;
   label: string;
 }

@@ -83,7 +83,8 @@ export default function CheckoutPage() {
   const subtotal = cartSubtotal(items);
   const discount = couponDiscount(subtotal, coupon);
   const ship = SHIPPING_METHODS.find((s) => s.id === shipMethod)!;
-  const shipping = subtotal - discount >= SITE.freeShippingThreshold ? 0 : ship.fee; // منبع واحد: SITE.freeShippingThreshold
+  // سبد خالی = هیچ هزینه‌ای نباید نمایش یا محاسبه شود (F-01: قبلاً ۸۵٬۰۰۰ ارسال + جمع ناصفر نشان داده می‌شد)
+  const shipping = items.length === 0 ? 0 : subtotal - discount >= SITE.freeShippingThreshold ? 0 : ship.fee; // منبع واحد: SITE.freeShippingThreshold
   const total = subtotal - discount + shipping;
   const selectedAddress = manual ?? addresses.find((a) => a.id === savedId) ?? null;
   // اگر روش انتخابی واجد شرط نبود، اولین روشِ مجاز مؤثر است (state مشتق‌شده — بدون effect)
@@ -287,6 +288,26 @@ export default function CheckoutPage() {
   );
 
   const panel = "rounded-2xl border border-line bg-surface p-6 md:p-8";
+
+  // ═══ حالت سبد خالی (F-01) — بدون آیتم، صفحهٔ ثبت سفارش معنا ندارد:
+  // جمع صفر، ارسال صفر، هیچ مسیری به پرداخت. سرور هم از قبل items>=1 را اجباری می‌کند (zod min(1)).
+  if (items.length === 0) {
+    return (
+      <>
+        <PageHeader title="ثبت سفارش" desc="سبد خرید شما خالی است" crumbs={[{ label: "خانه", href: "/" }, { label: "ثبت سفارش", href: "/checkout" }]} />
+        <div className="container-x py-20 flex flex-col items-center gap-5 text-center">
+          <div className="grid size-16 place-items-center rounded-full bg-surface2">
+            <ShoppingBag className="size-7 text-muted" aria-hidden />
+          </div>
+          <div className="space-y-1.5">
+            <h2 className="text-lg font-black text-heading">سبد خرید شما خالی است</h2>
+            <p className="max-w-sm text-sm leading-6 text-muted">برای ثبت سفارش، ابتدا محصولی به سبد خرید اضافه کنید. هزینهٔ ارسال فقط برای سبدهای دارای کالا محاسبه می‌شود.</p>
+          </div>
+          <LinkButton href="/products">رفتن به فروشگاه</LinkButton>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -550,7 +571,7 @@ export default function CheckoutPage() {
             {/* coupon field kept visible on summary steps */}
             {(step === 1 || step === 6) && (
               <div className="mt-6 pt-6 border-t border-line-soft">
-                <p className="text-xs font-bold text-heading flex items-center gap-1.5 mb-2"><TicketPercent className="size-4 text-gold-600" aria-hidden /> کد تخفیف دارید؟</p>
+                <p className="text-xs font-bold text-heading flex items-center gap-1.5 mb-2"><TicketPercent className="size-4 text-gold-700" aria-hidden /> کد تخفیف دارید؟</p>
                 <div className="flex gap-2">
                   <Input value={codeInput} onChange={(e) => setCodeInput(e.target.value.toUpperCase())} placeholder="HELSA10" dir="ltr" className="font-bold tracking-widest" />
                   <Button variant="outline" size="md" onClick={applyCoupon} disabled={checking}>{checking ? "..." : "اعمال"}</Button>

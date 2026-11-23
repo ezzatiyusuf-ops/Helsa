@@ -3,7 +3,7 @@ import { adminErrorResponse, requireAdminApi } from "@/lib/admin";
 import { assertSameOrigin, clientKey, csrfRejectedResponse, rateLimit, rateLimitedResponse } from "@/lib/security";
 import { createInstagramPost, instagramLiveEnabled, listInstagramPostsAdmin } from "@/services/instagram";
 
-export const postSchema = z.object({
+const postSchema = z.object({
   imageUrl: z.string().trim().min(3).max(500)
     .refine((v) => v.startsWith("/") || v.startsWith("https://"), "مسیر تصویر باید با / یا https:// شروع شود"),
   caption: z.string().trim().max(600).default(""),

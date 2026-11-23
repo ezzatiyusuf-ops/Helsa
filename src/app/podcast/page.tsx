@@ -131,7 +131,7 @@ export default function PodcastPage() {
         <Reveal>
           <Link href="/videocast" className="group flex items-center justify-between gap-4 rounded-[1.5rem] border border-line/70 bg-surface p-6 shadow-soft transition-shadow hover:shadow-lift">
             <div>
-              <p className="text-[11px] font-bold tracking-[0.18em] text-gold-600">نسخهٔ تصویری</p>
+              <p className="text-[11px] font-bold tracking-[0.18em] text-gold-700">نسخهٔ تصویری</p>
               <p className="mt-1.5 text-[15px] font-black text-heading group-hover:text-brand-700 transition-colors">{SHOW.videocast.title} — {SHOW.videocast.subtitle}</p>
             </div>
             <ArrowLeft className="size-5 shrink-0 text-brand-600 transition-transform group-hover:-translate-x-1" aria-hidden />

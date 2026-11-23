@@ -1,0 +1,1465 @@
+{
+ "apply": true,
+ "images": 64,
+ "skipped": [
+  {
+   "path": "/images/opt/japanese-seeds.jpg",
+   "reason": "فایل غایب"
+  },
+  {
+   "path": "/images/opt/mixed-seeds.jpg",
+   "reason": "فایل غایب"
+  }
+ ],
+ "bg_spread_before": 217.8,
+ "bg_spread_after": 189.7,
+ "bg_stdev_before": 55.0,
+ "bg_stdev_after": 56.9,
+ "clamped_for_review": [
+  "/images/opt/piaram-dates.jpg",
+  "/images/opt/mazafati-dates.jpg",
+  "/images/opt/kabkab-dates.jpg",
+  "/images/opt/medjool-dates.jpg",
+  "/images/opt/handmade-date-chocolate.jpg",
+  "/images/opt/date-sugar.jpg",
+  "/images/opt/date-powder.jpg",
+  "/images/opt/chocolate-coated-dates.jpg",
+  "/images/opt/premium-mixed-nuts.jpg",
+  "/images/opt/four-nut-mix.jpg",
+  "/images/opt/party-nuts.jpg",
+  "/images/opt/special-yalda-nuts.jpg",
+  "/images/opt/tree-almonds.jpg",
+  "/images/opt/dried-figs.jpg",
+  "/images/opt/dried-apricots.jpg",
+  "/images/opt/dried-plums.jpg",
+  "/images/opt/dried-fruit-mix.jpg",
+  "/images/opt/lahijan-black-tea.jpg",
+  "/images/opt/herbal-tea-borage.jpg",
+  "/images/opt/bidmeshk-distillate.jpg",
+  "/images/opt/sumac-flakes.jpg",
+  "/images/opt/saffron-rock-candy.jpg",
+  "/images/opt/saffron-negin.jpg",
+  "/images/chocolate-craft.jpg",
+  "/images/tray-vip.jpg",
+  "/images/tray-classic.jpg",
+  "/images/opt/herbal-tea.jpg",
+  "/images/opt/fruit-tea.jpg",
+  "/images/opt/date-bar.jpg",
+  "/images/opt/tiramisu-cake.jpg",
+  "/images/opt/belgian-chocolate-mousse.jpg",
+  "/images/opt/quince-jam.jpg"
+ ],
+ "aspects_before": {
+  "1.0": 31,
+  "1.5": 33
+ },
+ "rows": [
+  {
+   "source": "/images/opt/piaram-dates.jpg",
+   "detail": "/images/studio/piaram-dates.webp",
+   "card": "/images/studio/piaram-dates-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 65.2,
+   "bg_rgb_before": [
+    77,
+    67,
+    52
+   ],
+   "gain_wanted": 3.099,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 94.9,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/mazafati-dates.jpg",
+   "detail": "/images/studio/mazafati-dates.webp",
+   "card": "/images/studio/mazafati-dates-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 92.4,
+   "bg_rgb_before": [
+    115,
+    87,
+    75
+   ],
+   "gain_wanted": 2.185,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 129.8,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/kabkab-dates.jpg",
+   "detail": "/images/studio/kabkab-dates.webp",
+   "card": "/images/studio/kabkab-dates-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 75.4,
+   "bg_rgb_before": [
+    87,
+    66,
+    73
+   ],
+   "gain_wanted": 2.68,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 109.4,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/dates-zahedi.jpg",
+   "detail": "/images/studio/dates-zahedi.webp",
+   "card": "/images/studio/dates-zahedi-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 175.2,
+   "bg_rgb_before": [
+    196,
+    176,
+    153
+   ],
+   "gain_wanted": 1.153,
+   "gain_applied": 1.153,
+   "clamped": false,
+   "bg_after": 212.2,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/medjool-dates.jpg",
+   "detail": "/images/studio/medjool-dates.webp",
+   "card": "/images/studio/medjool-dates-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 20.2,
+   "bg_rgb_before": [
+    20,
+    23,
+    17
+   ],
+   "gain_wanted": 9.978,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 29.4,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/handmade-date-chocolate.jpg",
+   "detail": "/images/studio/handmade-date-chocolate.webp",
+   "card": "/images/studio/handmade-date-chocolate-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 86.5,
+   "bg_rgb_before": [
+    93,
+    82,
+    85
+   ],
+   "gain_wanted": 2.334,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 120.1,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/date-chocolate-walnut.jpg",
+   "detail": "/images/studio/date-chocolate-walnut.webp",
+   "card": "/images/studio/date-chocolate-walnut-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 178.4,
+   "bg_rgb_before": [
+    181,
+    177,
+    178
+   ],
+   "gain_wanted": 1.132,
+   "gain_applied": 1.132,
+   "clamped": false,
+   "bg_after": 210.7,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/date-sugar.jpg",
+   "detail": "/images/studio/date-sugar.webp",
+   "card": "/images/studio/date-sugar-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 44.6,
+   "bg_rgb_before": [
+    65,
+    42,
+    26
+   ],
+   "gain_wanted": 4.524,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 65.0,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/natural-gon-honey.jpg",
+   "detail": "/images/studio/natural-gon-honey.webp",
+   "card": "/images/studio/natural-gon-honey-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 162.3,
+   "bg_rgb_before": [
+    136,
+    167,
+    184
+   ],
+   "gain_wanted": 1.245,
+   "gain_applied": 1.245,
+   "clamped": false,
+   "bg_after": 208.3,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/date-powder.jpg",
+   "detail": "/images/studio/date-powder.webp",
+   "card": "/images/studio/date-powder-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 69.8,
+   "bg_rgb_before": [
+    109,
+    73,
+    28
+   ],
+   "gain_wanted": 2.893,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 99.8,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/chocolate-coated-dates.jpg",
+   "detail": "/images/studio/chocolate-coated-dates.webp",
+   "card": "/images/studio/chocolate-coated-dates-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 37.7,
+   "bg_rgb_before": [
+    51,
+    39,
+    23
+   ],
+   "gain_wanted": 5.354,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 54.6,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/premium-mixed-nuts.jpg",
+   "detail": "/images/studio/premium-mixed-nuts.webp",
+   "card": "/images/studio/premium-mixed-nuts-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 41.9,
+   "bg_rgb_before": [
+    42,
+    42,
+    42
+   ],
+   "gain_wanted": 4.824,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 61.0,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/four-nut-mix.jpg",
+   "detail": "/images/studio/four-nut-mix.webp",
+   "card": "/images/studio/four-nut-mix-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 85.2,
+   "bg_rgb_before": [
+    93,
+    85,
+    78
+   ],
+   "gain_wanted": 2.371,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 124.0,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/party-nuts.jpg",
+   "detail": "/images/studio/party-nuts.webp",
+   "card": "/images/studio/party-nuts-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 88.6,
+   "bg_rgb_before": [
+    128,
+    87,
+    51
+   ],
+   "gain_wanted": 2.28,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 121.6,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/economic-nuts.jpg",
+   "detail": "/images/studio/economic-nuts.webp",
+   "card": "/images/studio/economic-nuts-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 168.2,
+   "bg_rgb_before": [
+    186,
+    174,
+    145
+   ],
+   "gain_wanted": 1.201,
+   "gain_applied": 1.201,
+   "clamped": false,
+   "bg_after": 215.1,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/special-yalda-nuts.jpg",
+   "detail": "/images/studio/special-yalda-nuts.webp",
+   "card": "/images/studio/special-yalda-nuts-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 67.2,
+   "bg_rgb_before": [
+    87,
+    66,
+    48
+   ],
+   "gain_wanted": 3.007,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 95.4,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/akbari-pistachios.jpg",
+   "detail": "/images/studio/akbari-pistachios.webp",
+   "card": "/images/studio/akbari-pistachios-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 197.6,
+   "bg_rgb_before": [
+    206,
+    196,
+    190
+   ],
+   "gain_wanted": 1.022,
+   "gain_applied": 1.022,
+   "clamped": false,
+   "bg_after": 194.5,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/tree-almonds.jpg",
+   "detail": "/images/studio/tree-almonds.webp",
+   "card": "/images/studio/tree-almonds-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 86.1,
+   "bg_rgb_before": [
+    140,
+    75,
+    43
+   ],
+   "gain_wanted": 2.345,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 121.7,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/walnut-kernels.jpg",
+   "detail": "/images/studio/walnut-kernels.webp",
+   "card": "/images/studio/walnut-kernels-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 158.9,
+   "bg_rgb_before": [
+    183,
+    159,
+    135
+   ],
+   "gain_wanted": 1.271,
+   "gain_applied": 1.271,
+   "clamped": false,
+   "bg_after": 205.0,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/golden-raisins.jpg",
+   "detail": "/images/studio/golden-raisins.webp",
+   "card": "/images/studio/golden-raisins-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 166.4,
+   "bg_rgb_before": [
+    176,
+    163,
+    160
+   ],
+   "gain_wanted": 1.214,
+   "gain_applied": 1.214,
+   "clamped": false,
+   "bg_after": 218.7,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/dried-figs.jpg",
+   "detail": "/images/studio/dried-figs.webp",
+   "card": "/images/studio/dried-figs-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 52.1,
+   "bg_rgb_before": [
+    91,
+    46,
+    19
+   ],
+   "gain_wanted": 3.875,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 73.9,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/dried-mulberries.jpg",
+   "detail": "/images/studio/dried-mulberries.webp",
+   "card": "/images/studio/dried-mulberries-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 237.7,
+   "bg_rgb_before": [
+    237,
+    237,
+    239
+   ],
+   "gain_wanted": 0.85,
+   "gain_applied": 0.85,
+   "clamped": false,
+   "bg_after": 181.8,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/dried-apricots.jpg",
+   "detail": "/images/studio/dried-apricots.webp",
+   "card": "/images/studio/dried-apricots-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 120.4,
+   "bg_rgb_before": [
+    180,
+    117,
+    65
+   ],
+   "gain_wanted": 1.678,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 144.3,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/dried-plums.jpg",
+   "detail": "/images/studio/dried-plums.webp",
+   "card": "/images/studio/dried-plums-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 64.4,
+   "bg_rgb_before": [
+    81,
+    63,
+    49
+   ],
+   "gain_wanted": 3.137,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 92.7,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/dried-fruit-mix.jpg",
+   "detail": "/images/studio/dried-fruit-mix.webp",
+   "card": "/images/studio/dried-fruit-mix-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 105.9,
+   "bg_rgb_before": [
+    129,
+    104,
+    84
+   ],
+   "gain_wanted": 1.907,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 152.5,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/saffron-threads.jpg",
+   "detail": "/images/studio/saffron-threads.webp",
+   "card": "/images/studio/saffron-threads-card.webp",
+   "original_size": [
+    1536,
+    1024
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 197.6,
+   "bg_rgb_before": [
+    213,
+    199,
+    181
+   ],
+   "gain_wanted": 1.022,
+   "gain_applied": 1.022,
+   "clamped": false,
+   "bg_after": 192.4,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/tahini.jpg",
+   "detail": "/images/studio/tahini.webp",
+   "card": "/images/studio/tahini-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 167.1,
+   "bg_rgb_before": [
+    184,
+    167,
+    150
+   ],
+   "gain_wanted": 1.209,
+   "gain_applied": 1.209,
+   "clamped": false,
+   "bg_after": 211.9,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/lahijan-black-tea.jpg",
+   "detail": "/images/studio/lahijan-black-tea.webp",
+   "card": "/images/studio/lahijan-black-tea-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 19.9,
+   "bg_rgb_before": [
+    31,
+    18,
+    11
+   ],
+   "gain_wanted": 10.127,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 29.0,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/herbal-tea-borage.jpg",
+   "detail": "/images/studio/herbal-tea-borage.webp",
+   "card": "/images/studio/herbal-tea-borage-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 82.9,
+   "bg_rgb_before": [
+    87,
+    85,
+    78
+   ],
+   "gain_wanted": 2.435,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 120.8,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/bidmeshk-distillate.jpg",
+   "detail": "/images/studio/bidmeshk-distillate.webp",
+   "card": "/images/studio/bidmeshk-distillate-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 106.7,
+   "bg_rgb_before": [
+    143,
+    103,
+    74
+   ],
+   "gain_wanted": 1.893,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 140.3,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/sumac-flakes.jpg",
+   "detail": "/images/studio/sumac-flakes.webp",
+   "card": "/images/studio/sumac-flakes-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 148.1,
+   "bg_rgb_before": [
+    172,
+    144,
+    128
+   ],
+   "gain_wanted": 1.364,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 194.2,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/pumpkin-seeds.jpg",
+   "detail": "/images/studio/pumpkin-seeds.webp",
+   "card": "/images/studio/pumpkin-seeds-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 175.6,
+   "bg_rgb_before": [
+    195,
+    175,
+    156
+   ],
+   "gain_wanted": 1.15,
+   "gain_applied": 1.15,
+   "clamped": false,
+   "bg_after": 208.3,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/sunflower-seeds.jpg",
+   "detail": "/images/studio/sunflower-seeds.webp",
+   "card": "/images/studio/sunflower-seeds-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 184.3,
+   "bg_rgb_before": [
+    201,
+    184,
+    168
+   ],
+   "gain_wanted": 1.096,
+   "gain_applied": 1.096,
+   "clamped": false,
+   "bg_after": 204.9,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/watermelon-seeds.jpg",
+   "detail": "/images/studio/watermelon-seeds.webp",
+   "card": "/images/studio/watermelon-seeds-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 178.0,
+   "bg_rgb_before": [
+    203,
+    178,
+    153
+   ],
+   "gain_wanted": 1.135,
+   "gain_applied": 1.135,
+   "clamped": false,
+   "bg_after": 208.7,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/saffron-rock-candy.jpg",
+   "detail": "/images/studio/saffron-rock-candy.webp",
+   "card": "/images/studio/saffron-rock-candy-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 151.4,
+   "bg_rgb_before": [
+    191,
+    148,
+    115
+   ],
+   "gain_wanted": 1.335,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 184.9,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/rock-candy.jpg",
+   "detail": "/images/studio/rock-candy.webp",
+   "card": "/images/studio/rock-candy-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 186.6,
+   "bg_rgb_before": [
+    216,
+    187,
+    157
+   ],
+   "gain_wanted": 1.083,
+   "gain_applied": 1.083,
+   "clamped": false,
+   "bg_after": 203.7,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/candy.jpg",
+   "detail": "/images/studio/candy.webp",
+   "card": "/images/studio/candy-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 162.1,
+   "bg_rgb_before": [
+    183,
+    165,
+    138
+   ],
+   "gain_wanted": 1.246,
+   "gain_applied": 1.246,
+   "clamped": false,
+   "bg_after": 211.6,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/saffron-candy.jpg",
+   "detail": "/images/studio/saffron-candy.webp",
+   "card": "/images/studio/saffron-candy-card.webp",
+   "original_size": [
+    1536,
+    1024
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 194.6,
+   "bg_rgb_before": [
+    207,
+    194,
+    183
+   ],
+   "gain_wanted": 1.038,
+   "gain_applied": 1.038,
+   "clamped": false,
+   "bg_after": 195.4,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/saffron-negin.jpg",
+   "detail": "/images/studio/saffron-negin.webp",
+   "card": "/images/studio/saffron-negin-card.webp",
+   "original_size": [
+    1200,
+    800
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 55.3,
+   "bg_rgb_before": [
+    65,
+    56,
+    45
+   ],
+   "gain_wanted": 3.655,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 77.5,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/distillate.jpg",
+   "detail": "/images/studio/distillate.webp",
+   "card": "/images/studio/distillate-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 158.8,
+   "bg_rgb_before": [
+    187,
+    155,
+    135
+   ],
+   "gain_wanted": 1.272,
+   "gain_applied": 1.272,
+   "clamped": false,
+   "bg_after": 209.6,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/chocolate-craft.jpg",
+   "detail": "/images/studio/chocolate-craft.webp",
+   "card": "/images/studio/chocolate-craft-card.webp",
+   "original_size": [
+    1536,
+    1024
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 34.2,
+   "bg_rgb_before": [
+    42,
+    39,
+    22
+   ],
+   "gain_wanted": 5.902,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 48.6,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/tray-vip.jpg",
+   "detail": "/images/studio/tray-vip.webp",
+   "card": "/images/studio/tray-vip-card.webp",
+   "original_size": [
+    1536,
+    1024
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 25.8,
+   "bg_rgb_before": [
+    31,
+    28,
+    18
+   ],
+   "gain_wanted": 7.835,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 35.2,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/saffron-noghl.jpg",
+   "detail": "/images/studio/saffron-noghl.webp",
+   "card": "/images/studio/saffron-noghl-card.webp",
+   "original_size": [
+    1536,
+    1024
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 182.8,
+   "bg_rgb_before": [
+    194,
+    184,
+    171
+   ],
+   "gain_wanted": 1.105,
+   "gain_applied": 1.105,
+   "clamped": false,
+   "bg_after": 205.1,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/red-beans.jpg",
+   "detail": "/images/studio/red-beans.webp",
+   "card": "/images/studio/red-beans-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 181.6,
+   "bg_rgb_before": [
+    207,
+    180,
+    158
+   ],
+   "gain_wanted": 1.112,
+   "gain_applied": 1.112,
+   "clamped": false,
+   "bg_after": 206.4,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/pinto-beans.jpg",
+   "detail": "/images/studio/pinto-beans.webp",
+   "card": "/images/studio/pinto-beans-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 161.7,
+   "bg_rgb_before": [
+    185,
+    162,
+    138
+   ],
+   "gain_wanted": 1.249,
+   "gain_applied": 1.249,
+   "clamped": false,
+   "bg_after": 206.6,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/mung-beans.jpg",
+   "detail": "/images/studio/mung-beans.webp",
+   "card": "/images/studio/mung-beans-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 193.1,
+   "bg_rgb_before": [
+    217,
+    196,
+    166
+   ],
+   "gain_wanted": 1.046,
+   "gain_applied": 1.046,
+   "clamped": false,
+   "bg_after": 197.0,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/tray-classic.jpg",
+   "detail": "/images/studio/tray-classic.webp",
+   "card": "/images/studio/tray-classic-card.webp",
+   "original_size": [
+    1536,
+    1024
+   ],
+   "original_aspect": 1.5,
+   "bg_before": 132.5,
+   "bg_rgb_before": [
+    150,
+    138,
+    109
+   ],
+   "gain_wanted": 1.524,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 182.1,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/halva-arde.jpg",
+   "detail": "/images/studio/halva-arde.webp",
+   "card": "/images/studio/halva-arde-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 165.0,
+   "bg_rgb_before": [
+    187,
+    166,
+    142
+   ],
+   "gain_wanted": 1.224,
+   "gain_applied": 1.224,
+   "clamped": false,
+   "bg_after": 210.7,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/herbal-tea.jpg",
+   "detail": "/images/studio/herbal-tea.webp",
+   "card": "/images/studio/herbal-tea-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 136.7,
+   "bg_rgb_before": [
+    166,
+    136,
+    108
+   ],
+   "gain_wanted": 1.478,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 187.0,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/fruit-tea.jpg",
+   "detail": "/images/studio/fruit-tea.webp",
+   "card": "/images/studio/fruit-tea-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 133.5,
+   "bg_rgb_before": [
+    170,
+    130,
+    101
+   ],
+   "gain_wanted": 1.514,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 178.3,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/rosebuds.jpg",
+   "detail": "/images/studio/rosebuds.webp",
+   "card": "/images/studio/rosebuds-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 187.6,
+   "bg_rgb_before": [
+    205,
+    187,
+    171
+   ],
+   "gain_wanted": 1.077,
+   "gain_applied": 1.077,
+   "clamped": false,
+   "bg_after": 201.3,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/date-bar.jpg",
+   "detail": "/images/studio/date-bar.webp",
+   "card": "/images/studio/date-bar-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 139.5,
+   "bg_rgb_before": [
+    171,
+    139,
+    108
+   ],
+   "gain_wanted": 1.449,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 186.6,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/tiramisu-cake.jpg",
+   "detail": "/images/studio/tiramisu-cake.webp",
+   "card": "/images/studio/tiramisu-cake-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 144.7,
+   "bg_rgb_before": [
+    162,
+    144,
+    128
+   ],
+   "gain_wanted": 1.396,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 195.5,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/new-york-cheesecake.jpg",
+   "detail": "/images/studio/new-york-cheesecake.webp",
+   "card": "/images/studio/new-york-cheesecake-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 169.2,
+   "bg_rgb_before": [
+    188,
+    169,
+    151
+   ],
+   "gain_wanted": 1.194,
+   "gain_applied": 1.194,
+   "clamped": false,
+   "bg_after": 211.6,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/belgian-chocolate-mousse.jpg",
+   "detail": "/images/studio/belgian-chocolate-mousse.webp",
+   "card": "/images/studio/belgian-chocolate-mousse-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 139.5,
+   "bg_rgb_before": [
+    171,
+    135,
+    113
+   ],
+   "gain_wanted": 1.448,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 187.3,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/chocolate-roulade.jpg",
+   "detail": "/images/studio/chocolate-roulade.webp",
+   "card": "/images/studio/chocolate-roulade-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 184.8,
+   "bg_rgb_before": [
+    209,
+    186,
+    160
+   ],
+   "gain_wanted": 1.093,
+   "gain_applied": 1.093,
+   "clamped": false,
+   "bg_after": 205.3,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/fudge-brownie.jpg",
+   "detail": "/images/studio/fudge-brownie.webp",
+   "card": "/images/studio/fudge-brownie-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 185.4,
+   "bg_rgb_before": [
+    203,
+    186,
+    168
+   ],
+   "gain_wanted": 1.089,
+   "gain_applied": 1.089,
+   "clamped": false,
+   "bg_after": 202.1,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/vanilla-panna-cotta.jpg",
+   "detail": "/images/studio/vanilla-panna-cotta.webp",
+   "card": "/images/studio/vanilla-panna-cotta-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 182.4,
+   "bg_rgb_before": [
+    204,
+    184,
+    160
+   ],
+   "gain_wanted": 1.107,
+   "gain_applied": 1.107,
+   "clamped": false,
+   "bg_after": 204.4,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/quince-jam.jpg",
+   "detail": "/images/studio/quince-jam.webp",
+   "card": "/images/studio/quince-jam-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 139.9,
+   "bg_rgb_before": [
+    165,
+    140,
+    114
+   ],
+   "gain_wanted": 1.443,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 190.9,
+   "action": "graded",
+   "needs_manual_review": true
+  },
+  {
+   "source": "/images/opt/carrot-jam.jpg",
+   "detail": "/images/studio/carrot-jam.webp",
+   "card": "/images/studio/carrot-jam-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 167.3,
+   "bg_rgb_before": [
+    198,
+    170,
+    135
+   ],
+   "gain_wanted": 1.207,
+   "gain_applied": 1.207,
+   "clamped": false,
+   "bg_after": 205.3,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/balang-jam.jpg",
+   "detail": "/images/studio/balang-jam.webp",
+   "card": "/images/studio/balang-jam-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 158.3,
+   "bg_rgb_before": [
+    197,
+    163,
+    115
+   ],
+   "gain_wanted": 1.276,
+   "gain_applied": 1.276,
+   "clamped": false,
+   "bg_after": 204.7,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/sour-cherry-jam.jpg",
+   "detail": "/images/studio/sour-cherry-jam.webp",
+   "card": "/images/studio/sour-cherry-jam-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 165.7,
+   "bg_rgb_before": [
+    191,
+    162,
+    144
+   ],
+   "gain_wanted": 1.219,
+   "gain_applied": 1.219,
+   "clamped": false,
+   "bg_after": 200.9,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/watermelon-rind-jam.jpg",
+   "detail": "/images/studio/watermelon-rind-jam.webp",
+   "card": "/images/studio/watermelon-rind-jam-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 155.8,
+   "bg_rgb_before": [
+    190,
+    160,
+    118
+   ],
+   "gain_wanted": 1.296,
+   "gain_applied": 1.296,
+   "clamped": false,
+   "bg_after": 202.8,
+   "action": "graded",
+   "needs_manual_review": false
+  },
+  {
+   "source": "/images/opt/rose-petal-jam.jpg",
+   "detail": "/images/studio/rose-petal-jam.webp",
+   "card": "/images/studio/rose-petal-jam-card.webp",
+   "original_size": [
+    1254,
+    1254
+   ],
+   "original_aspect": 1.0,
+   "bg_before": 199.0,
+   "bg_rgb_before": [
+    215,
+    193,
+    189
+   ],
+   "gain_wanted": 1.015,
+   "gain_applied": 1.015,
+   "clamped": false,
+   "action": "none",
+   "needs_manual_review": false
+  }
+ ]
+}

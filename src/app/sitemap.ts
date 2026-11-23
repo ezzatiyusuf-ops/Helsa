@@ -1,12 +1,19 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/config/site";
 import { getCampaigns } from "@/services/catalog";
+import { allowIndexing } from "@/lib/seo";
 
 /** Static/landing pages sitemap. Next.js merges multiple sitemap.ts files
  *  into a sitemap index automatically served at /sitemap.xml. */
 export const dynamic = "force-dynamic";
 
+/** Indexing is production-only (brief 1.5) — empty sitemap elsewhere. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  if (!allowIndexing) return [];
+  return buildSitemap();
+}
+
+async function buildSitemap(): Promise<MetadataRoute.Sitemap> {
   // صفحات جشنواره از دادهٔ واقعی (وضعیت ENDED هم ایندکس‌شدنی است — محتوای آرشیوی معتبر)
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? SITE.url;
   const pages: [string, number][] = [

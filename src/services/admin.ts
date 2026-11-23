@@ -1,6 +1,7 @@
 import "server-only";
 import { and, asc, desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
 import { db } from "@/db";
+import { maskNationalId } from "@/lib/nid";
 import {
   products,
   categories,
@@ -15,8 +16,11 @@ import {
   accountingTransactions,
   adminAuditLogs,
   giftPackages,
+  campaigns,
+  contactMessages,
 } from "@/db/schema";
-import type { AdminPrincipal } from "@/lib/admin";
+import { AdminRuleError, type AdminPrincipal } from "@/lib/admin";
+import { campaignAdminSchema } from "@/lib/admin-validation";
 import type { z } from "zod";
 import type { productAdminSchema, categoryAdminSchema, trayAdminSchema, inventorySchema, orderStatusSchema, accountingSchema } from "@/lib/admin-validation";
 
@@ -42,7 +46,7 @@ export async function getAdminDashboard() {
   const startDay = new Date(); startDay.setHours(0, 0, 0, 0);
   const startMonth = new Date(startDay.getFullYear(), startDay.getMonth(), 1);
 
-  const [today, month, orderStats, stockStats, customerCount, inventoryValue, accounting] = await Promise.all([
+  const [today, month, orderStats, stockStats, customerCount, inventoryValue, accounting, productStats, contactMessageCount, activeCampaignCount] = await Promise.all([
     db.select({ value: sql<number>`coalesce(sum(${orders.total}),0)::int` }).from(orders).where(and(eq(orders.paymentStatus, "paid"), sql`${orders.createdAt} >= ${startDay}`)),
     db.select({ value: sql<number>`coalesce(sum(${orders.total}),0)::int` }).from(orders).where(and(eq(orders.paymentStatus, "paid"), sql`${orders.createdAt} >= ${startMonth}`)),
     db.select({ total: sql<number>`count(*)::int`, pending: sql<number>`count(*) filter (where ${orders.status} = 'pending')::int` }).from(orders),
@@ -54,9 +58,19 @@ export async function getAdminDashboard() {
       expenses: sql<number>`coalesce(sum(${accountingTransactions.amount}) filter (where ${accountingTransactions.type} in ('EXPENSE','PURCHASE')),0)::bigint`,
       refunds: sql<number>`coalesce(sum(${accountingTransactions.amount}) filter (where ${accountingTransactions.type}='REFUND'),0)::bigint`,
     }).from(accountingTransactions),
+    db.select({
+      total: sql<number>`count(*)::int`,
+      active: sql<number>`count(*) filter (where ${products.isActive} and ${products.isVisible})::int`,
+    }).from(products),
+    db.select({ value: sql<number>`count(*)::int` }).from(contactMessages),
+    db.select({ value: sql<number>`count(*)::int` }).from(campaigns).where(eq(campaigns.active, true)),
   ]);
 
   return {
+    productsTotal: Number(productStats[0]?.total ?? 0),
+    productsActive: Number(productStats[0]?.active ?? 0),
+    contactMessages: Number(contactMessageCount[0]?.value ?? 0),
+    activeCampaigns: Number(activeCampaignCount[0]?.value ?? 0),
     salesToday: Number(today[0]?.value ?? 0),
     salesMonth: Number(month[0]?.value ?? 0),
     orders: Number(orderStats[0]?.total ?? 0),
@@ -91,21 +105,56 @@ export async function getAdminProduct(id: number) {
   return { ...rows[0], variants, images };
 }
 
+
+/** Storefront publish gate — a product cannot go live without mandatory label data. */
+function assertPublishable(input: {
+  isActive?: boolean; isVisible?: boolean; weight?: string; ingredients?: string; storage?: string;
+  packaging?: string; origin?: string; allergens?: string[]; prodDate?: string; expDate?: string;
+}) {
+  if (!(input.isActive && input.isVisible)) return; // drafts / hidden products may stay incomplete
+  const missing: string[] = [];
+  if (!input.weight?.trim()) missing.push("وزن");
+  if (!input.ingredients?.trim()) missing.push("مواد اولیه");
+  if (!input.storage?.trim()) missing.push("شرایط نگهداری");
+  if (!input.packaging?.trim()) missing.push("نوع بسته‌بندی");
+  if (!input.origin?.trim()) missing.push("محل تولید");
+  if (!input.allergens?.length) missing.push("آلرژن‌ها");
+  if (!input.prodDate?.trim()) missing.push("تاریخ تولید");
+  if (!input.expDate?.trim()) missing.push("تاریخ انقضا");
+  if (missing.length) throw new Error(`انتشار محصول در فروشگاه نیازمند تکمیل این فیلدهاست: ${missing.join("، ")}`);
+}
+
+/** Replace/add the two batch-date feature entries; empty input removes them. */
+function withDateFeatures(existing: unknown, prodDate: string, expDate: string): { label: string; value: string }[] {
+  const list: { label: string; value: string }[] = Array.isArray(existing)
+    ? (existing as { label?: string; value?: string }[]).filter(
+        (f): f is { label: string; value: string } => typeof f?.label === "string" && f.label !== "تاریخ تولید" && f.label !== "تاریخ انقضا",
+      )
+    : [];
+  if (prodDate.trim()) list.push({ label: "تاریخ تولید", value: prodDate.trim() });
+  if (expDate.trim()) list.push({ label: "تاریخ انقضا", value: expDate.trim() });
+  return list;
+}
+
 export async function createProduct(input: ProductInput, admin: AdminPrincipal) {
   return db.transaction(async (tx) => {
     const categoryRow = await tx.select({ id: categories.id }).from(categories).where(eq(categories.slug, input.category)).limit(1);
     if (!categoryRow[0]) throw new Error("دسته‌بندی انتخاب‌شده وجود ندارد.");
     const discount = input.oldPrice && input.oldPrice > input.price ? Math.round(((input.oldPrice - input.price) / input.oldPrice) * 100) : 0;
-    const { variants, ...productInput } = input;
+    assertPublishable(input);
+    const { variants, prodDate, expDate, ...productInput } = input;
     const dupe = await tx.select({ id: products.id }).from(products).where(eq(products.slug, input.slug)).limit(1);
     if (dupe[0]) throw new Error("PRODUCT_SLUG_EXISTS");
     const inserted = await tx.insert(products).values({
       ...productInput,
+      discountStartsAt: input.discountStartsAt ? new Date(`${input.discountStartsAt}T00:00:00`) : null,
       categoryId: categoryRow[0].id,
       discount,
       stockStatus: input.stock > 0 ? (input.stock <= input.lowStockThreshold ? "low_stock" : "in_stock") : "out_of_stock",
       imageStatus: "admin_selected",
       imageAlt: input.imageAlt,
+      allergens: input.allergens,
+      features: withDateFeatures([], prodDate, expDate),
       updatedAt: new Date(),
     }).returning();
     const product = inserted[0];
@@ -124,16 +173,19 @@ export async function updateProduct(id: number, input: ProductInput, admin: Admi
   return db.transaction(async (tx) => {
     const before = (await tx.select().from(products).where(eq(products.id, id)).limit(1))[0];
     if (!before) throw new Error("محصول یافت نشد.");
+    assertPublishable(input);
     const categoryRow = await tx.select({ id: categories.id }).from(categories).where(eq(categories.slug, input.category)).limit(1);
     if (!categoryRow[0]) throw new Error("دسته‌بندی انتخاب‌شده وجود ندارد.");
     const discount = input.oldPrice && input.oldPrice > input.price ? Math.round(((input.oldPrice - input.price) / input.oldPrice) * 100) : 0;
     const updated = (await tx.update(products).set({
       name: input.name, slug: input.slug, category: input.category, categoryId: categoryRow[0].id, sku: input.sku,
       shortDescription: input.shortDescription, description: input.description, price: input.price, oldPrice: input.oldPrice,
+      discountStartsAt: input.discountStartsAt ? new Date(`${input.discountStartsAt}T00:00:00`) : null,
       costPrice: input.costPrice, discount, stock: input.stock, stockStatus: input.stock > 0 ? (input.stock <= input.lowStockThreshold ? "low_stock" : "in_stock") : "out_of_stock",
       lowStockThreshold: input.lowStockThreshold, minOrderQty: input.minOrderQty, maxOrderQty: input.maxOrderQty,
       weight: input.weight, unit: input.unit, packaging: input.packaging, ingredients: input.ingredients, origin: input.origin,
       storage: input.storage, image: input.image, imageAlt: input.imageAlt, imageStatus: "admin_selected",
+      allergens: input.allergens, features: withDateFeatures(before.features, input.prodDate, input.expDate),
       isActive: input.isActive, isFeatured: input.isFeatured, isVisible: input.isVisible, seoTitle: input.seoTitle,
       seoDescription: input.seoDescription, badge: input.badge, updatedAt: new Date(), archivedAt: input.isActive ? null : before.archivedAt ?? new Date(),
     }).where(eq(products.id, id)).returning())[0];
@@ -249,6 +301,20 @@ export async function updateOrderStatus(id: number, input: OrderStatusInput, adm
   return db.transaction(async (tx) => {
     const before = (await tx.select().from(orders).where(eq(orders.id, id)).limit(1))[0];
     if (!before) throw new Error("سفارش یافت نشد.");
+    // قاعدهٔ گذار وضعیت — گذارهای بی‌معنا (مثل delivered → pending) سمت سرور مسدود می‌شوند.
+    const ALLOWED: Record<string, string[]> = {
+      pending: ["paid", "preparing", "cancelled"],
+      paid: ["preparing", "cancelled", "refunded"],
+      preparing: ["shipped", "cancelled", "refunded", "paid"],
+      shipped: ["transit", "delivered", "refunded", "preparing"],
+      transit: ["delivered", "refunded", "shipped"],
+      delivered: ["refunded"],
+      cancelled: ["pending", "refunded"],
+      refunded: [],
+    };
+    if (before.status !== input.status && !(ALLOWED[before.status] ?? []).includes(input.status)) {
+      throw new AdminRuleError(`گذار وضعیت «${before.status} → ${input.status}» مجاز نیست. گزینه‌های مجاز از «${before.status}»: ${(ALLOWED[before.status] ?? []).join("، ") || "هیچ — وضعیت نهایی"}`);
+    }
     const paymentStatus = input.paymentStatus ?? before.paymentStatus;
     const row = (await tx.update(orders).set({ status: input.status, paymentStatus, paymentReference: input.paymentReference, paidAt: paymentStatus === "paid" ? before.paidAt ?? new Date() : before.paidAt, updatedAt: new Date() }).where(eq(orders.id, id)).returning())[0];
 
@@ -307,10 +373,16 @@ export async function updateOrderStatus(id: number, input: OrderStatusInput, adm
 }
 
 export async function listCustomers(q?: string) {
-  const customerRows = await db.select().from(customers).where(q ? or(ilike(customers.name, `%${q}%`), ilike(customers.phone, `%${q}%`), ilike(customers.email, `%${q}%`)) : undefined).orderBy(desc(customers.createdAt));
+  // Privacy: passwordHash هرگز از سرور خارج نمی‌شود؛ کد ملی فقط به‌صورت ماسک‌شده برمی‌گردد.
+  const customerRows = await db.select({
+    id: customers.id, name: customers.name, phone: customers.phone, email: customers.email,
+    nationalId: customers.nationalId, nidVerifiedAt: customers.nidVerifiedAt,
+    identityProvider: customers.identityProvider, isActive: customers.isActive,
+    createdAt: customers.createdAt, updatedAt: customers.updatedAt,
+  }).from(customers).where(q ? or(ilike(customers.name, `%${q}%`), ilike(customers.phone, `%${q}%`), ilike(customers.email, `%${q}%`)) : undefined).orderBy(desc(customers.createdAt));
   const orderTotals = await db.select({ customerId: orders.customerId, orders: sql<number>`count(*)::int`, total: sql<number>`coalesce(sum(${orders.total}),0)::bigint` }).from(orders).where(sql`${orders.customerId} is not null`).groupBy(orders.customerId);
   const totals = new Map(orderTotals.map((r) => [r.customerId, r]));
-  return customerRows.map((c) => ({ ...c, orderCount: totals.get(c.id)?.orders ?? 0, totalPurchases: Number(totals.get(c.id)?.total ?? 0) }));
+  return customerRows.map((c) => ({ ...c, nationalId: c.nationalId ? maskNationalId(c.nationalId) : null, orderCount: totals.get(c.id)?.orders ?? 0, totalPurchases: Number(totals.get(c.id)?.total ?? 0) }));
 }
 
 export async function getAccounting(from?: Date, to?: Date) {
@@ -344,4 +416,34 @@ export async function adminSearch(q: string) {
     db.select({ id: customers.id, label: customers.name, meta: customers.phone }).from(customers).where(or(ilike(customers.name, like), ilike(customers.phone, like), ilike(customers.email, like))).limit(8),
   ]);
   return { products: productRows, categories: categoryRows, trays: trayRows, orders: orderRows, customers: customerRows };
+}
+
+/* ————————————————— کمپین‌ها (§ادمین بریف) ————————————————— */
+
+export type CampaignInput = z.infer<typeof campaignAdminSchema>;
+
+export async function listAdminCampaigns() {
+  return db.select().from(campaigns).orderBy(desc(campaigns.id));
+}
+
+export async function createCampaign(input: CampaignInput, admin: AdminPrincipal) {
+  const dupe = await db.select({ id: campaigns.id }).from(campaigns).where(eq(campaigns.slug, input.slug)).limit(1);
+  if (dupe[0]) throw new Error("CAMPAIGN_SLUG_EXISTS");
+  return db.transaction(async (tx) => {
+    const inserted = (await tx.insert(campaigns).values(input).returning())[0];
+    await tx.insert(adminAuditLogs).values({ adminEmail: admin.email, action: "CREATE", entityType: "CAMPAIGN", entityId: String(inserted.id), after: inserted as unknown as Record<string, unknown> });
+    return inserted;
+  });
+}
+
+export async function updateCampaign(id: number, input: CampaignInput, admin: AdminPrincipal) {
+  const dupe = await db.select({ id: campaigns.id }).from(campaigns).where(eq(campaigns.slug, input.slug)).limit(1);
+  if (dupe[0] && dupe[0].id !== id) throw new Error("CAMPAIGN_SLUG_EXISTS");
+  return db.transaction(async (tx) => {
+    const before = (await tx.select().from(campaigns).where(eq(campaigns.id, id)).limit(1))[0];
+    if (!before) throw new Error("کمپین یافت نشد.");
+    const updated = (await tx.update(campaigns).set(input).where(eq(campaigns.id, id)).returning())[0];
+    await tx.insert(adminAuditLogs).values({ adminEmail: admin.email, action: "UPDATE", entityType: "CAMPAIGN", entityId: String(id), before: before as unknown as Record<string, unknown>, after: updated as unknown as Record<string, unknown> });
+    return updated;
+  });
 }

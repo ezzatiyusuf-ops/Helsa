@@ -7,7 +7,9 @@ import { isDatabaseConfigured } from "@/db";
 import {
   BUILDER_SIZES,
   BUILDER_BASES,
+  BUILDER_CATEGORIES,
   BUILDER_DECOR,
+  BUILDER_DELIVERY_ESTIMATE,
   BUILDER_GIFT_WRAP,
   BUILDER_ARRANGEMENT_FEE,
   BUILDER_MESSAGE_FEE,
@@ -40,6 +42,28 @@ const schema = z.object({
   giftWrap: z.string().min(2).max(20),
   message: z.boolean().optional(),
 });
+
+/**
+ * GET /api/tray-builder/quote — public builder configuration (sizes, bases,
+ * categories, decor, wraps, fees, limits, delivery estimate). Read-only and
+ * rate-limited; consumed by the tray-builder UI and the Android client.
+ */
+export async function GET(req: Request) {
+  const limited = rateLimit(clientKey(req, "tray-builder-config"), 30, 60_000);
+  if (!limited.ok) return rateLimitedResponse(limited.retryAfterSec);
+  return NextResponse.json({
+    ok: true,
+    sizes: BUILDER_SIZES,
+    bases: BUILDER_BASES,
+    categories: BUILDER_CATEGORIES,
+    decor: BUILDER_DECOR,
+    giftWraps: BUILDER_GIFT_WRAP,
+    fees: { arrangement: BUILDER_ARRANGEMENT_FEE, message: BUILDER_MESSAGE_FEE, delivery: BUILDER_DELIVERY_FEE, taxRate: BUILDER_TAX_RATE },
+    limits: { guestMin: BUILDER_GUEST_MIN, guestMax: BUILDER_GUEST_MAX, minItems: BUILDER_MIN_ITEMS, maxPortions: BUILDER_MAX_PORTIONS, maxItemQty: BUILDER_MAX_ITEM_QTY },
+    deliveryEstimate: BUILDER_DELIVERY_ESTIMATE,
+  });
+}
+
 
 export async function POST(req: Request) {
   if (!assertSameOrigin(req)) return csrfRejectedResponse();

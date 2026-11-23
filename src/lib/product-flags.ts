@@ -1,4 +1,5 @@
 import type { Product } from "@/types";
+import { SHIPPING } from "@/config/shipping";
 
 /**
  * Shared product merchandising flags (organic / wholesale / delivery).
@@ -26,7 +27,7 @@ export function isLowStock(p: Product): boolean {
 
 /** Honest delivery promise shown on product pages (policy, not a per-order promise). */
 export function deliveryEstimate(): { tehran: string; cities: string } {
-  return { tehran: "۲۴ تا ۴۸ ساعته", cities: "۲ تا ۴ روز کاری" };
+  return { tehran: SHIPPING.tehranEta, cities: SHIPPING.citiesEta };
 }
 
 /** Made-in-Iran provenance — origin text mentions Iran or is a domestic category. */

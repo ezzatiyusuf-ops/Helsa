@@ -8,14 +8,14 @@ import { faDigits } from "@/lib/format";
 import { trackEvent } from "@/lib/analytics";
 
 /**
- * بخش خرید ویژه (§7) — نوارهای افقی با تب، همه از دادهٔ واقعی:
- * پرفروش‌ترین (بیشترین خرید ثبت‌شده = تعداد نظر واقعی) · پیشنهاد هلسا (فلگ واقعی merchandising)
- * · تخفیف‌دار (تخفیف واقعی کاتالوگ). کارت = ProductCard با افزودن سریع/علاقه/مشاهده سریع.
+ * Featured tabs (§7) — horizontal carousels driven by catalog data only:
+ * Helsa's pick (sorted by approved-review score; no sales claims while no
+ * sales data exists) · featured (real merchandising flag) · deals (real discount).
  */
 type TabId = "bestsellers" | "featured" | "deals";
 
 const TABS: { id: TabId; label: string }[] = [
-  { id: "bestsellers", label: "پرفروش‌ترین" },
+  { id: "bestsellers", label: "منتخب هلسا" },
   { id: "featured", label: "پیشنهاد هلسا" },
   { id: "deals", label: "تخفیف‌دار" },
 ];
@@ -39,10 +39,10 @@ export function FeaturedTabs({ products }: { products: Product[] }) {
       <Reveal>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-[11px] font-bold tracking-[0.2em] text-gold-600">فروشگاه هلسا</p>
-            <h2 className="mt-2 text-xl font-black text-heading md:text-2xl">محبوب‌ترین‌های هلسا</h2>
+            <p className="text-[11px] font-bold tracking-[0.2em] text-gold-700">فروشگاه هلسا</p>
+            <h2 className="mt-2 text-xl font-black text-heading md:text-2xl">محصولات ویژه هلسا</h2>
             <p className="mt-2 text-xs leading-6 text-muted">
-              انتخاب مشتریان و پیشنهادهای واقعی هلسا — قیمت و موجودی مستقیم از ویترین امروز.
+              انتخاب سلیقهٔ هلسا و پیشنهادهای امروز — قیمت و موجودی مستقیم از ویترین فروشگاه.
             </p>
           </div>
           {/* تب‌ها */}

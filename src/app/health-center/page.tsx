@@ -74,6 +74,9 @@ export default function HealthCenterPage() {
             هلسا فقط یک فروشگاه نیست؛ یک رسانهٔ آموزشی برای زندگی سالم است. اینجا از علم تغذیه و
             سلامت روان تا حکمت سفرهٔ ایرانی و داستان کشاورزی این سرزمین را — صادقانه و بدون اغراق — می‌خوانید.
           </p>
+          <p role="note" className="mt-4 rounded-2xl border border-inverse/20 bg-inverse/10 px-4 py-3 text-[11px] leading-6 text-inverse/80">
+            محتوای مرکز سلامت هلسا آموزشی است و جایگزین توصیهٔ پزشک یا متخصص تغذیه نیست. برای تشخیص، درمان یا تغییر رژیم غذایی با پزشک خود مشورت کنید.
+          </p>
         </div>
       </header>
 
@@ -131,7 +134,7 @@ export default function HealthCenterPage() {
                   <SmartImage src={featured.image} alt={featured.title} sizes="(min-width:1024px) 50vw, 100vw" className="size-full object-cover" />
                 </div>
                 <div className="flex flex-col justify-center p-7 md:p-10">
-                  <p className="text-[11px] font-bold tracking-[0.18em] text-gold-600">{featured.category}</p>
+                  <p className="text-[11px] font-bold tracking-[0.18em] text-gold-700">{featured.category}</p>
                   <h3 className="mt-3 text-lg md:text-2xl font-black leading-[1.6] text-heading group-hover:text-brand-700 transition-colors">{featured.title}</h3>
                   <p className="mt-3 text-[13px] leading-7 text-muted">{featured.excerpt}</p>
                   <p className="mt-5 text-[11px] text-muted">{faDate(featured.date)} · {faDigits(featured.readMinutes)} دقیقه مطالعه</p>
@@ -147,7 +150,7 @@ export default function HealthCenterPage() {
                     <SmartImage src={b.image} alt={b.title} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="size-full object-cover" />
                   </div>
                   <div className="flex flex-1 flex-col p-5">
-                    <p className="text-[10.5px] font-bold text-gold-600">{b.category}</p>
+                    <p className="text-[10.5px] font-bold text-gold-700">{b.category}</p>
                     <h3 className="mt-2 text-[13.5px] font-extrabold leading-7 line-clamp-2-fa group-hover:text-brand-700 transition-colors">{b.title}</h3>
                     <p className="mt-auto pt-3 text-[10.5px] text-muted">{faDigits(b.readMinutes)} دقیقه مطالعه</p>
                   </div>
@@ -162,7 +165,7 @@ export default function HealthCenterPage() {
       <section className="container-x py-14 md:py-16" aria-label="از دانش تا سفره">
         <Reveal>
           <div className="flex flex-col items-center gap-5 rounded-[1.75rem] border border-gold-300/60 bg-gradient-to-l from-gold-50 via-surface to-surface p-8 text-center shadow-soft md:flex-row md:text-start">
-            <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-gold-500/15 text-gold-600">
+            <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-gold-500/15 text-gold-700">
               <Sparkles className="size-6" aria-hidden />
             </span>
             <div className="flex-1">

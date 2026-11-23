@@ -69,7 +69,7 @@ export default async function MazehTraysPage({
       {/* ————— §6 هیرو پرمیوم ————— */}
       <section className="container-x pt-14 md:pt-20 pb-6 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center" aria-label="سینی مزه هلسا">
         <div>
-          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-600">زیربرند امضای هلسا</span>
+          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-700">زیربرند امضای هلسا</span>
           <h1 className="mt-4 text-4xl md:text-[52px] font-black leading-[1.35] text-heading">
             یک سینی،
             <br />
@@ -87,10 +87,10 @@ export default async function MazehTraysPage({
           </div>
           {/* نشان‌های اعتماد/ارزش نزد CTA */}
           <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-[11px] font-bold text-muted">
-            <li className="flex items-center gap-1.5"><Users className="size-3.5 text-gold-600" aria-hidden /> مناسب مهمانی</li>
-            <li className="flex items-center gap-1.5"><Leaf className="size-3.5 text-gold-600" aria-hidden /> انتخاب ترکیبات</li>
-            <li className="flex items-center gap-1.5"><Gift className="size-3.5 text-gold-600" aria-hidden /> بسته‌بندی شیک</li>
-            <li className="flex items-center gap-1.5"><Truck className="size-3.5 text-gold-600" aria-hidden /> ارسال مطمئن</li>
+            <li className="flex items-center gap-1.5"><Users className="size-3.5 text-gold-700" aria-hidden /> مناسب مهمانی</li>
+            <li className="flex items-center gap-1.5"><Leaf className="size-3.5 text-gold-700" aria-hidden /> انتخاب ترکیبات</li>
+            <li className="flex items-center gap-1.5"><Gift className="size-3.5 text-gold-700" aria-hidden /> بسته‌بندی شیک</li>
+            <li className="flex items-center gap-1.5"><Truck className="size-3.5 text-gold-700" aria-hidden /> ارسال مطمئن</li>
           </ul>
         </div>
         <div className="rounded-2xl overflow-hidden border border-line/70 img-zoom">
@@ -159,7 +159,7 @@ export default async function MazehTraysPage({
             {Object.entries(SECTION_LABELS).map(([code, label], i) => (
               <Reveal key={code} delay={i * 0.05}>
                 <div className="rounded-2xl border border-line/70 bg-surface p-5 text-center h-full">
-                  <span className="text-gold-600 font-black text-lg">{faDigits(i + 1)}</span>
+                  <span className="text-gold-700 font-black text-lg">{faDigits(i + 1)}</span>
                   <p className="mt-2 text-[11.5px] font-bold text-heading">{label}</p>
                 </div>
               </Reveal>
@@ -167,7 +167,7 @@ export default async function MazehTraysPage({
           </div>
           <Reveal className="mt-8">
             <p className="text-center text-xs text-muted flex items-center justify-center gap-2">
-              <ShieldAlert className="size-4 text-gold-600" aria-hidden />
+              <ShieldAlert className="size-4 text-gold-700" aria-hidden />
               اطلاعات آلرژن‌ها (مغزها، لبنیات، گلوتن و ...) در صفحه هر سینی به‌صورت شفاف درج شده است.
             </p>
           </Reveal>
@@ -232,7 +232,7 @@ export default async function MazehTraysPage({
           {[
             { icon: BadgeCheck, title: "انتخاب دقیق مواد", desc: "هر قلم از منبع معتبر، دست‌چین و کنترل‌شده." },
             { icon: PackageCheck, title: "بسته‌بندی پرمیوم", desc: "چیدمان روز، مدالیون امضا و بسته‌بندی شیک." },
-            { icon: Truck, title: "تحویل یخچال‌دار", desc: "ارسال با خودرو یخچال‌دار برای تازگی کامل." },
+            { icon: Truck, title: "تحویل یخچال‌دار", desc: "تحویل فقط در تهران، ۲۴ تا ۴۸ ساعت پیش از مراسم، با خودرو یخچال‌دار." },
             { icon: Headset, title: "پشتیبانی واقعی", desc: "پاسخ‌گویی واقعی، قبل و بعد از سفارش." },
           ].map((c, i) => (
             <li key={c.title}>
@@ -253,11 +253,11 @@ export default async function MazehTraysPage({
         <Reveal>
           <div className="rounded-[1.5rem] border border-line/70 bg-surface2/60 p-6 md:p-8">
             <h2 className="flex items-center gap-2 text-[15px] font-black text-heading">
-              <Clock3 className="size-4.5 text-gold-600" aria-hidden /> قبل از سفارش بدانید
+              <Clock3 className="size-4.5 text-gold-700" aria-hidden /> قبل از سفارش بدانید
             </h2>
             <ul className="mt-5 grid gap-4 text-[12px] leading-6 text-muted sm:grid-cols-2 lg:grid-cols-3">
               <li className="flex gap-2.5"><PackageCheck className="size-4 shrink-0 text-brand-600" aria-hidden /> هر سینی با چیدمان روز و مواد تازه آماده می‌شود.</li>
-              <li className="flex gap-2.5"><Truck className="size-4 shrink-0 text-brand-600" aria-hidden /> تحویل با خودرو یخچال‌دار انجام می‌شود.</li>
+              <li className="flex gap-2.5"><Truck className="size-4 shrink-0 text-brand-600" aria-hidden /> تحویل فقط در تهران، ۲۴ تا ۴۸ ساعت پیش از زمان مورد نظر، با خودرو یخچال‌دار.</li>
               <li className="flex gap-2.5"><ShieldAlert className="size-4 shrink-0 text-brand-600" aria-hidden /> آلرژن‌های هر سینی در صفحهٔ همان سینی درج شده است.</li>
               <li className="flex gap-2.5"><Gift className="size-4 shrink-0 text-brand-600" aria-hidden /> بسته‌بندی هدیه و کارت پیام در سازندهٔ سینی قابل انتخاب است.</li>
               <li className="flex gap-2.5"><Users className="size-4 shrink-0 text-brand-600" aria-hidden /> زمان آماده‌سازی بر اساس تعداد مهمان، هنگام ثبت سفارش هماهنگ می‌شود.</li>

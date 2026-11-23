@@ -79,7 +79,7 @@ export function CorporateInquiryClient() {
         <Reveal>
           <div className="rounded-2xl border border-line/70 bg-surface p-6 md:p-8">
             <h2 className="text-base font-black text-heading flex items-center gap-2">
-              <Building2 className="size-4 text-gold-600" aria-hidden /> فرم استعلام هدیه سازمانی
+              <Building2 className="size-4 text-gold-700" aria-hidden /> فرم استعلام هدیه سازمانی
             </h2>
 
             {done ? (

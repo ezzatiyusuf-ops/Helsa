@@ -23,6 +23,8 @@ export async function POST(req: Request) {
   if (!coupon || !coupon.active) return NextResponse.json({ ok: false, message: "کد تخفیف معتبر نیست" }, { status: 404 });
   const now = new Date().toISOString().slice(0, 10);
   if (now < coupon.startDate || now > coupon.endDate) return NextResponse.json({ ok: false, message: "کد تخفیف معتبر نیست" }, { status: 404 });
+  // fully-redeemed codes must fail here too, not only at order time
+  if ((coupon.usedCount ?? 0) >= coupon.usageLimit) return NextResponse.json({ ok: false, message: "کد تخفیف معتبر نیست" }, { status: 404 });
   if (subtotal < coupon.minimumPurchase) {
     return NextResponse.json({
       ok: false,

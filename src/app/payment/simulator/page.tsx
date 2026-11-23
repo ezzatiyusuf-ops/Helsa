@@ -60,7 +60,7 @@ function PaymentSimulatorPageInner() {
               <h1 className="text-base font-black text-heading">
                 {isInstallment ? "شبیه‌ساز اسنپ‌پی (اقساطی)" : "شبیه‌ساز درگاه پرداخت"}
               </h1>
-              <p className="text-[11px] font-bold text-gold-600">محیط توسعه — PAYMENTS_SANDBOX</p>
+              <p className="text-[11px] font-bold text-gold-700">محیط توسعه — PAYMENTS_SANDBOX</p>
             </div>
           </div>
 

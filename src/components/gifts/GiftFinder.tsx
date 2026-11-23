@@ -48,8 +48,10 @@ export function GiftFinder({
   const pickBud = (id: string) => { setBud(id); syncUrl(occ, rec, id); trackEvent("gift_budget_selected", { budget: id }); };
   const reset = () => { setOcc(""); setRec(""); setBud(""); syncUrl("", "", ""); };
 
-  const prefs = { occasion: occ || undefined, recipient: rec || undefined, budget: budgetValid || undefined };
-  const { primary, alternatives, filtered } = useMemo(() => recommendGifts(gifts, prefs), [gifts, occ, rec, budgetValid]);
+  const { primary, alternatives, filtered } = useMemo(
+    () => recommendGifts(gifts, { occasion: occ || undefined, recipient: rec || undefined, budget: budgetValid || undefined }),
+    [gifts, occ, rec, budgetValid],
+  );
 
   const chip = (active: boolean) =>
     `h-10 shrink-0 rounded-full px-4 text-[11.5px] font-bold transition-colors ${
@@ -111,7 +113,7 @@ export function GiftFinder({
         <div className="mt-10">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h3 className="flex items-center gap-2 text-[15px] font-black text-heading">
-              <Sparkles className="size-4 text-gold-600" aria-hidden />
+              <Sparkles className="size-4 text-gold-700" aria-hidden />
               {filtered ? "پیشنهاد هلسا برای شما" : "پیشنهاد هلسا"}
             </h3>
             {filtered && (

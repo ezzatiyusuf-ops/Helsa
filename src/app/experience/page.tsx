@@ -47,7 +47,7 @@ export default async function ExperiencePage() {
           <div className="relative lg:order-1 lg:col-span-5 flex items-center">
             <div className="w-full px-6 md:px-12 lg:ps-14 lg:pe-8 py-14 lg:py-20">
               <Reveal>
-                <p className="text-[11px] font-bold tracking-[0.25em] text-gold-600">تجربهٔ پذیرایی هلسا</p>
+                <p className="text-[11px] font-bold tracking-[0.25em] text-gold-700">تجربهٔ پذیرایی هلسا</p>
                 <h1 className="mt-4 text-[30px] md:text-[42px] font-black leading-[1.4] text-heading">
                   برای لحظه‌هایی که
                   <br />
@@ -72,7 +72,7 @@ export default async function ExperiencePage() {
               <Reveal delay={0.2}>
                 <ul className="mt-7 grid grid-cols-2 gap-x-5 gap-y-2.5 border-t border-line/80 pt-5 text-[11px] font-bold text-muted sm:grid-cols-4 lg:grid-cols-2">
                   <li className="flex items-center gap-1.5"><Leaf className="size-4 text-brand-600" aria-hidden /> مواد تازه و منتخب</li>
-                  <li className="flex items-center gap-1.5"><Crown className="size-4 text-gold-600" aria-hidden /> چیدمان لوکس</li>
+                  <li className="flex items-center gap-1.5"><Crown className="size-4 text-gold-700" aria-hidden /> چیدمان لوکس</li>
                   <li className="flex items-center gap-1.5"><ShieldCheck className="size-4 text-brand-600" aria-hidden /> پرداخت امن</li>
                   <li className="flex items-center gap-1.5"><Truck className="size-4 text-brand-600" aria-hidden /> ارسال سریع</li>
                 </ul>
@@ -99,7 +99,7 @@ export default async function ExperiencePage() {
         <div className="container-x">
           <div className="grid items-center gap-10 lg:grid-cols-12">
             <div className="lg:col-span-6">
-              <p className="text-[11px] font-bold tracking-[0.25em] text-gold-600">سینی مزه اختصاصی هلسا</p>
+              <p className="text-[11px] font-bold tracking-[0.25em] text-gold-700">سینی مزه اختصاصی هلسا</p>
               <h2 className="mt-3 text-xl font-black leading-9 text-heading md:text-2xl">
                 سینی‌ای که برای جمعِ خودتان طراحی می‌شود
               </h2>
@@ -111,7 +111,7 @@ export default async function ExperiencePage() {
                 {BUILDER_STEPS.map((step, i) => (
                   <li key={step} className="flex items-center gap-2">
                     <span className="inline-flex h-8 items-center gap-1.5 rounded-full border border-line bg-surface px-3.5 text-[11px] font-bold text-body">
-                      <span className="text-gold-600">{("۰۱۲۳۴۵۶۷"[i])}</span> {step}
+                      <span className="text-gold-700">{("۰۱۲۳۴۵۶۷"[i])}</span> {step}
                     </span>
                     {i < BUILDER_STEPS.length - 1 && <ChevronDown className="size-3.5 rotate-90 text-faint max-sm:hidden" aria-hidden />}
                   </li>
@@ -128,7 +128,7 @@ export default async function ExperiencePage() {
             <div className="lg:col-span-6">
               <Link href="/mazeh-trays/build" className="group relative block overflow-hidden rounded-[1.75rem] border border-line shadow-lift" aria-label="ساخت سینی مزه اختصاصی">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/opt/hero-cinematic-3.jpg" alt="سینی مزه چوبی هلسا با پنیر، آجیل، عسل و مربای سنتی" loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover img-zoom" />
+                <img src="/images/opt/hero-slide-mazeh.jpg" alt="چیدمان پنیر، آجیل و میوه روی تختهٔ چوبی برای پذیرایی" loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover img-zoom" />
                 <span className="absolute bottom-4 start-4 rounded-full border border-white/30 bg-ink-950/40 px-4 py-2 text-[11px] font-bold text-white backdrop-blur-md">
                   قیمت زنده از سرور · بدون حداقل سفارش پنهان
                 </span>

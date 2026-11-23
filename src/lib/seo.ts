@@ -96,8 +96,11 @@ export function productSchema(p: {
     offers: {
       "@type": "Offer",
       url: `${siteUrl}/products/${p.slug}`,
+      // قیمت‌ها در هلسا به «تومان» صحیح‌صحیح ذخیره می‌شوند؛ schema.org واحد پول را با
+      // کد ISO-4217 می‌پذیرد و کد رسمی ایران «IRR» (ریال) است — بنابراین فقط در
+      // لایهٔ دادهٔ ساختاریافته و به‌صورت صریح ×۱۰ تبدیل می‌شود (نه در هیچ محاسبهٔ دیگری).
       priceCurrency: "IRR",
-      price: p.price,
+      price: p.price * 10,
       availability: p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       seller: { "@id": `${siteUrl}/#organization` },
     },
@@ -137,7 +140,7 @@ export function traySchema(t: {
       "@type": "Offer",
       url: `${siteUrl}/mazeh-trays/${t.slug}`,
       priceCurrency: "IRR",
-      price: t.price,
+      price: t.price * 10, // تومان → ریال؛ فقط نمایش ساختاریافته (ISO 4217)
       availability: "https://schema.org/InStock",
       seller: { "@id": `${siteUrl}/#organization` },
     },
@@ -203,3 +206,7 @@ export function localBusinessSchema() {
     sameAs: [SITE.instagramUrl],
   };
 }
+
+/** Indexing gate (brief 1.5): search indexing is allowed ONLY in production,
+ *  controlled by env. Default is off (noindex) for staging/local/tunnels. */
+export const allowIndexing = process.env.ALLOW_INDEXING === "1";

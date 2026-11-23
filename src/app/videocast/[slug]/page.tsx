@@ -121,7 +121,7 @@ export default async function VideocastEpisodePage({ params }: { params: Promise
             <div className="grid gap-4 md:grid-cols-3">
               {related.map((b) => (
                 <Link key={b!.slug} href={`/blog/${b!.slug}`} className="group rounded-2xl border border-line/70 bg-surface p-5 shadow-soft transition-shadow hover:shadow-lift">
-                  <p className="text-[10.5px] font-bold text-gold-600">{b!.category}</p>
+                  <p className="text-[10.5px] font-bold text-gold-700">{b!.category}</p>
                   <p className="mt-2 text-[13px] font-extrabold leading-6 group-hover:text-brand-700 transition-colors">{b!.title}</p>
                 </Link>
               ))}

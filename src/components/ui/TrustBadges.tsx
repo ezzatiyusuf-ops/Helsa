@@ -40,6 +40,7 @@ export function TrustBadges({ tone = "dark" }: { tone?: "dark" | "light" }) {
           className="shrink-0"
           title="نماد اعتماد الکترونیکی — تأیید اعتبار"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element -- نشان الکترونیکی enamad خارجی است و next/image روی آن قابل اعمال نیست */}
           <img
             src={`https://trustseal.enamad.ir/logo.png?id=${enamadId}`}
             alt="نماد اعتماد الکترونیکی هلسا"
@@ -59,6 +60,7 @@ export function TrustBadges({ tone = "dark" }: { tone?: "dark" | "light" }) {
           className="shrink-0"
           title="نشان ساماندهی"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element -- نشان ساماندهی خارجی است */}
           <img
             src={`https://logo.samandehi.ir/logo.aspx?id=${samandehiId}&p=${samandehiP}`}
             alt="نشان ساماندهی هلسا"
@@ -71,6 +73,7 @@ export function TrustBadges({ tone = "dark" }: { tone?: "dark" | "light" }) {
       )}
       {hasGateway && (
         <Link href="/faq#payment" className={`flex shrink-0 flex-col items-center gap-1 ${textColor}`} title={`پرداخت امن از طریق ${gatewayName}`}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- لوگوی درگاه پرداخت خارجی است */}
           <img src={gatewayLogo} alt={`لوگوی درگاه ${gatewayName}`} height={40} style={{ height: 40, width: "auto" }} loading="lazy" />
           <span className="flex items-center gap-1 text-[9.5px] font-bold">
             <ShieldCheck className="size-3" aria-hidden /> درگاه رسمی {gatewayName}

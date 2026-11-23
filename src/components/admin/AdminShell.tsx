@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, FolderTree, Boxes, ShoppingBag, Users, Calculator, Settings, UtensilsCrossed, Store, Search, Gift, Truck, Palette } from "lucide-react";
+import { LayoutDashboard, Package, FolderTree, Boxes, ShoppingBag, Users, Calculator, Settings, UtensilsCrossed, Store, Search, Gift, Truck, Palette, Megaphone } from "lucide-react";
 import { HelsaLogo } from "@/components/ui/primitives";
 import { InstagramIcon } from "@/components/ui/icons";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
@@ -13,6 +13,7 @@ const NAV = [
   { href: "/admin/trays", label: "سینی‌ها", icon: UtensilsCrossed },
   { href: "/admin/inventory", label: "موجودی", icon: Boxes },
   { href: "/admin/orders", label: "سفارش‌ها", icon: ShoppingBag },
+  { href: "/admin/campaigns", label: "کمپین‌ها", icon: Megaphone },
   { href: "/admin/customers", label: "مشتریان", icon: Users },
   { href: "/admin/inquiries", label: "درخواست‌ها", icon: Gift },
   { href: "/admin/wholesale", label: "عمده B2B", icon: Truck },

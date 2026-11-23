@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Reveal, SectionHead } from "@/components/ui/primitives";
+import { SmartImage } from "@/components/ui/SmartImage";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/about" },
@@ -28,13 +29,13 @@ const CHAPTERS = [
   {
     icon: Wheat,
     title: "انتخاب مواد اولیه",
-    text: "خرید مستقیم از باغدار و نخل‌دار، بدون واسطه؛ با قیمت منصفانه برای تولیدکننده و تضمین تازگی برای شما. پرونده هر محموله، نام باغدار را دارد.",
+    text: "انتخاب محموله‌ها از تأمین‌کننده‌های شناخته‌شدهٔ هلسا؛ با اولویت تازگی و کیفیت در هر فصل برداشت.",
     image: "/images/opt/sourcing-groves.jpg",
   },
   {
     icon: Award,
     title: "کیفیت",
-    text: "آزمون رطوبت، آزمون میکروبی و آزمون چشایی؛ سه دری که هر محصول باید از آن‌ها بگذرد تا مهر سلامت هلسا بگیرد.",
+    text: "کنترل کیفی چندمرحله‌ای هلسا: بازرسی ظاهری محموله، ارزیابی چشایی و کنترل شرایط بسته‌بندی پیش از عرضه.",
     image: "/images/opt/mazafati-dates.jpg",
   },
   {
@@ -63,7 +64,7 @@ export default function AboutPage() {
       {/* opening statement */}
       <section id="story" className="container-x py-20 md:py-28 max-w-3xl" aria-label="داستان هلسا">
         <Reveal>
-          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-600">داستان هلسا</span>
+          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-700">داستان هلسا</span>
           <p className="mt-6 text-lg md:text-2xl font-black leading-[1.8] text-heading">
             هلسا ایرانیان با هدف ارائه محصولات باکیفیت، طبیعی و اصیل ایرانی شکل گرفته است؛ محصولاتی که ریشه در طبیعت و فرهنگ ایران دارند و با نگاهی مدرن انتخاب، آماده‌سازی و عرضه می‌شوند.
           </p>
@@ -85,8 +86,8 @@ export default function AboutPage() {
               <Reveal key={c.title} delay={0.05}>
                 <div className={`grid lg:grid-cols-2 gap-10 lg:gap-16 items-center ${i % 2 ? "lg:[&>div:first-child]:order-2" : ""}`}>
                   <div className="rounded-2xl overflow-hidden border border-line/70 img-zoom">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={c.image} alt={c.title} loading="lazy" className="w-full aspect-[4/3] object-cover" />
+                    { }
+                    <SmartImage src={c.image} alt={c.title} sizes="(min-width:1024px) 33vw, 100vw" className="w-full aspect-[4/3] object-cover" />
                   </div>
                   <div>
                     <span className="inline-flex size-11 rounded-full border border-brand-200 text-brand-700 items-center justify-center">
@@ -105,7 +106,7 @@ export default function AboutPage() {
       {/* mission */}
       <section className="container-x py-20 md:py-28 text-center max-w-2xl mx-auto" aria-label="ماموریت و چشم‌انداز">
         <Reveal>
-          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-600">ماموریت ما</span>
+          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-700">ماموریت ما</span>
           <h2 className="mt-5 text-3xl md:text-[38px] font-black leading-[1.45] text-heading">
             رساندن اصیل‌ترین طعم ایران
             <br />
@@ -122,7 +123,7 @@ export default function AboutPage() {
         <Reveal>
           <Link href="/founder" className="group flex items-center justify-between gap-4 rounded-[1.5rem] border border-line/70 bg-surface p-6 shadow-soft transition-shadow hover:shadow-lift">
             <div>
-              <p className="text-[11px] font-bold tracking-[0.18em] text-gold-600">چهرهٔ برند</p>
+              <p className="text-[11px] font-bold tracking-[0.18em] text-gold-700">چهرهٔ برند</p>
               <p className="mt-1.5 text-[15px] font-black text-heading group-hover:text-brand-700 transition-colors">داستان یوسف عزتی آذر، بنیان‌گذار هلسا</p>
               <p className="mt-1 text-[12px] text-muted">مأموریت، دیدگاه و نوشته‌های او دربارهٔ کشاورزی و غذای سالم</p>
             </div>

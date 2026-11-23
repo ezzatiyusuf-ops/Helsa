@@ -62,7 +62,7 @@ export default async function OffersPage() {
             { icon: ShieldCheck, title: "بدون هزینه پنهان", desc: "جمع کالا، تخفیف و ارسال پیش از ثبت سفارش نمایش داده می‌شود." },
           ].map((item) => (
             <div key={item.title} className="rounded-2xl border border-line bg-surface p-6 text-center">
-              <item.icon className="mx-auto size-5 text-gold-600" aria-hidden />
+              <item.icon className="mx-auto size-5 text-gold-700" aria-hidden />
               <h3 className="mt-3 text-sm font-black text-heading">{item.title}</h3>
               <p className="mt-2 text-[11px] leading-6 text-muted">{item.desc}</p>
             </div>

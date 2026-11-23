@@ -6,6 +6,7 @@ import { useStore } from "@/lib/store";
 import { useToast } from "@/components/ui/Toast";
 import { formatToman, faDigits } from "@/lib/format";
 import { trackEvent } from "@/lib/analytics";
+import { SmartImage } from "@/components/ui/SmartImage";
 
 interface ProductSuggestion {
   type: "product";
@@ -61,7 +62,7 @@ export function CartUpsell() {
 
   return (
     <section className="mt-8 rounded-2xl border border-gold-300/60 bg-gradient-to-l from-gold-50/80 via-surface to-surface p-5" aria-label="تکمیل سفارش">
-      <p className="text-[11px] font-black tracking-[0.18em] text-gold-600">برای کامل‌تر شدن سفارش شما</p>
+      <p className="text-[11px] font-black tracking-[0.18em] text-gold-700">برای کامل‌تر شدن سفارش شما</p>
       <h3 className="mt-1.5 text-sm font-black text-heading">این سفارش را کامل‌تر کنید</h3>
       <ul className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
         {suggestions.map((s) =>
@@ -72,8 +73,8 @@ export function CartUpsell() {
                 onClick={() => trackEvent("cross_sell_click", { item_name: s.name, item_id: s.id })}
                 className="group flex items-center gap-2.5"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={s.image} alt={s.name} loading="lazy" decoding="async" className="size-12 shrink-0 rounded-lg object-cover" />
+                { }
+                <SmartImage src={s.image} alt={s.name} sizes="48px" className="size-12 shrink-0 rounded-lg object-cover" />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[12px] font-bold text-heading group-hover:text-brand-700">{s.name}</span>
                   <span className="mt-0.5 flex items-center gap-1 text-[10.5px] text-muted">

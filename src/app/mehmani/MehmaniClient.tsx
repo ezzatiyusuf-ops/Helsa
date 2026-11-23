@@ -103,7 +103,7 @@ export default function MehmaniClient() {
             ].map((s, i) => (
               <Reveal key={s.t} delay={i * 0.07}>
                 <Link href={s.href} className="group block rounded-2xl bg-surface border border-line/70 p-7 h-full card-hover">
-                  <s.icon className="size-5 text-gold-600" aria-hidden />
+                  <s.icon className="size-5 text-gold-700" aria-hidden />
                   <h3 className="mt-4 text-sm font-black text-heading">{s.t}</h3>
                   <p className="mt-2 text-[11.5px] leading-6 text-muted">{s.d}</p>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-bold text-brand-700">
@@ -120,7 +120,7 @@ export default function MehmaniClient() {
       {/* party calculator */}
       <section className="container-x py-20 md:py-28 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center" aria-label="ماشین‌حساب پذیرایی">
         <Reveal>
-          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-600">ماشین‌حساب پذیرایی</span>
+          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-700">ماشین‌حساب پذیرایی</span>
           <h2 className="mt-4 text-3xl md:text-[36px] font-black leading-[1.4] text-heading">برای چند نفر پذیرایی دارید؟</h2>
           <p className="mt-5 text-sm leading-8 text-muted max-w-md">
             تعداد مهمان‌ها را انتخاب کنید؛ هلسا اندازه سینی، تعداد و برآورد هزینه را پیشنهاد می‌دهد.
@@ -155,7 +155,7 @@ export default function MehmaniClient() {
               <img src={trayVisual(tray.slug, tray.image)} alt={tray.name} className="w-full aspect-[16/8] object-cover" loading="lazy" />
             )}
             <div className="p-7">
-              <p className="text-[11px] font-bold text-gold-600">پیشنهاد هلسا برای {faDigits(guests)} مهمان</p>
+              <p className="text-[11px] font-bold text-gold-700">پیشنهاد هلسا برای {faDigits(guests)} مهمان</p>
               <h3 className="mt-2 text-lg font-black text-heading">{rec.title}</h3>
               <p className="mt-1.5 text-xs text-muted">{rec.note}</p>
               <dl className="mt-5 grid grid-cols-3 gap-3 text-center">

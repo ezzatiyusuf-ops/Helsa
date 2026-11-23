@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { ArrowLeft, CalendarDays, Gift, Sparkles, Store, Wand2, Building2, BadgeCheck, Truck, Headset, PackageCheck } from "lucide-react";
 import { getCampaigns, getProducts } from "@/services/catalog";
-import { getCampaignStatus, campaignStatusLabel, campaignDaysRemaining, campaignEndIso } from "@/lib/campaign-status";
+import Link from "next/link";
+import { getCampaignStatus, campaignStatusLabel, campaignDaysRemaining, campaignEndIso, campaignNow } from "@/lib/campaign-status";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Reveal, Countdown, SectionHead, LinkButton } from "@/components/ui/primitives";
 import { CampaignEventLink } from "@/components/campaigns/CampaignEventLink";
@@ -37,7 +38,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
   if (!campaign) notFound();
 
   const headerList = await headers();
-  const now = new Date(headerList.get("date") ?? Date.now());
+  const now = campaignNow(headerList.get("date"));
   const status = getCampaignStatus(campaign, now);
   const days = campaignDaysRemaining(campaign, now);
 
@@ -137,9 +138,9 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
         {campaignProducts.length === 0 ? (
           <p className="mt-6 rounded-2xl border border-dashed border-line bg-surface p-8 text-center text-[12.5px] leading-7 text-muted">
             در حال حاضر محصول فعالی در این دسته ثبت نشده است —{" "}
-            <a href="/products" className="font-bold text-brand-700 underline underline-offset-4">
+            <Link href="/products" className="font-bold text-brand-700 underline underline-offset-4">
               ویترین کامل هلسا
-            </a>{" "}
+            </Link>{" "}
             را ببینید.
           </p>
         ) : (
@@ -202,7 +203,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           </Reveal>
           <Reveal delay={0.08}>
             <div className="flex h-full flex-col items-start gap-4 rounded-2xl border border-gold-300/60 bg-surface p-7 shadow-soft">
-              <span className="grid size-12 place-items-center rounded-2xl bg-gold-500/15 text-gold-600"><Gift className="size-5" aria-hidden /></span>
+              <span className="grid size-12 place-items-center rounded-2xl bg-gold-500/15 text-gold-700"><Gift className="size-5" aria-hidden /></span>
               <div>
                 <h2 className="text-[16px] font-black text-heading">هدیه‌ای از دل همین جشنواره</h2>
                 <p className="mt-2 text-[12.5px] leading-7 text-muted">جعبه‌های هدیهٔ شخصی و سازمانی هلسا با بسته‌بندی شیک و پیام اختصاصی.</p>

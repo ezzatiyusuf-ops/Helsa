@@ -71,10 +71,25 @@ export default function CartPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length]);
 
+  // رهاشدن سبد (بریف G5): خروج از صفحهٔ سبد با کالای مانده — یک‌بار در هر نشست
+  useEffect(() => {
+    return () => {
+      try {
+        if (items.length > 0 && !sessionStorage.getItem("helsa-cart-abandoned")) {
+          trackEvent("cart_abandoned", { items: items.length, value: subtotal });
+          sessionStorage.setItem("helsa-cart-abandoned", "1");
+        }
+      } catch { /* analytics هرگز اپ را نمی‌شکند */ }
+    };
+  }, [items.length, subtotal]);
+
   // سلامت سبد در برابر سرور — قیمت به‌روز + موجودی واقعی (فقط با تغییر ترکیب سبد)
   useEffect(() => {
-    if (!items.length) { setChecks({}); return; }
     let cancelled = false;
+    // تأخیر یک تیک: خواندن سبد و setState خارج از رندر همزمان (React Compiler purity)
+    const timer = window.setTimeout(() => {
+    if (cancelled) return;
+    if (!items.length) { setChecks({}); return; }
     fetch("/api/cart/check", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -97,7 +112,8 @@ export default function CartPage() {
         if (priceChanged) toast.push(`${faDigits(priceChanged)} قلم از سبد شما با قیمت به‌روز سرور هم‌راستا شد.`, "info");
       })
       .catch(() => undefined); // خطای بررسی سبد جریان خرید را نمی‌بندد؛ ثبت سفارش بازهم سمت سرور اعتبارسنجی می‌کند
-    return () => { cancelled = true; };
+    }, 0);
+    return () => { cancelled = true; window.clearTimeout(timer); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartKeys]);
 
@@ -122,11 +138,11 @@ export default function CartPage() {
       const data = (await res.json()) as { ok: boolean; message: string; coupon?: typeof coupon };
       if (data.ok && data.coupon) {
         setCoupon(data.coupon);
-        trackEvent("coupon_apply", { coupon_code: code, success: true, value: data.coupon.value });
+        trackEvent("coupon_applied", { coupon_code: code, value: data.coupon.value });
         toast.push("کد تخفیف با موفقیت اعمال شد");
         setCode("");
       } else {
-        trackEvent("coupon_apply", { coupon_code: code, success: false });
+        trackEvent("coupon_rejected", { coupon_code: code });
         setCouponError(data.message || "کد تخفیف معتبر نیست.");
         toast.push(data.message || "کد تخفیف معتبر نیست.", "error");
       }
@@ -162,7 +178,7 @@ export default function CartPage() {
       if (data.ok && data.code) {
         setGiftDone(data.code);
         setCode(data.code); // آمادهٔ اعمال در کادر کد تخفیف
-        trackEvent("coupon_apply", { coupon_code: data.code, success: true, surface: "first_purchase_gift" });
+        trackEvent("coupon_applied", { coupon_code: data.code, surface: "first_purchase_gift" });
         toast.push("کد هدیهٔ اولین خرید صادر شد؛ روی «اعمال» بزنید.");
       } else {
         toast.push(data.message ?? "ثبت ممکن نشد؛ بعداً تلاش کنید.", "error");
@@ -354,12 +370,12 @@ export default function CartPage() {
         </div>
 
         <aside className="rounded-2xl border border-line/70 bg-surface p-7 shadow-soft lg:sticky lg:top-28">
-          <p className="text-[11px] font-bold tracking-[0.18em] text-gold-600">سفارش شما</p>
+          <p className="text-[11px] font-bold tracking-[0.18em] text-gold-700">سفارش شما</p>
           <h2 className="mt-2 text-base font-black text-heading">{t("checkout.summary")}</h2>
 
           <div className="mt-5">
             <label htmlFor="coupon" className="text-xs font-bold text-body flex items-center gap-1.5">
-              <TicketPercent className="size-4 text-gold-600" aria-hidden /> کد تخفیف
+              <TicketPercent className="size-4 text-gold-700" aria-hidden /> کد تخفیف
             </label>
             <div className="mt-2 flex gap-2">
               <input
@@ -393,7 +409,7 @@ export default function CartPage() {
             {!coupon && items.length > 0 && !giftDone && (
               <div className="mt-4 rounded-xl border border-gold-300/70 bg-gold-50/70 p-3.5">
                 <p className="flex items-center gap-1.5 text-[12px] font-black text-heading">
-                  <Gift className="size-4 text-gold-600" aria-hidden /> هدیه خرید اول شما
+                  <Gift className="size-4 text-gold-700" aria-hidden /> هدیه خرید اول شما
                 </p>
                 <p className="mt-1 text-[10.5px] leading-5 text-muted">
                   ۲۰۰٬۰۰۰ تومان کد تخفیف واقعی اولین خرید — با عضویت در خبرنامهٔ هلسا صادر می‌شود (یک‌بارمصرف، حداقل خرید ۱٬۰۰۰٬۰۰۰ تومان، اعتبار ۳۰ روز).

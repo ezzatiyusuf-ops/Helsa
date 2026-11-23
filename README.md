@@ -22,6 +22,7 @@
 | پایگاه داده | PostgreSQL + Drizzle ORM |
 | نشست | jose (JWT، کوکی HttpOnly) |
 | فونت | Vazirmatn |
+| میزبانی | Cloudflare Workers (OpenNext) — [docs/CLOUDFLARE.md](./docs/CLOUDFLARE.md) |
 
 ## قابلیت‌ها
 
@@ -99,11 +100,13 @@ npx tsx --env-file=.env scripts/seed.ts       # داده اولیه
 ## اسکریپت‌ها
 
 ```bash
-npm run dev         # سرور توسعه
-npm run build       # ساخت تولید
-npm start           # اجرای تولید
-npm run lint        # ESLint
-npm run typecheck   # TypeScript
+npm run dev             # سرور توسعه
+npm run build           # ساخت تولید (next build --webpack — پین مهم)
+npm start               # اجرای تولید محلی
+npm run lint            # ESLint
+npm run typecheck       # TypeScript
+npm run cf:build:local  # بیلد + باندل Cloudflare (کم‌حافظه)
+npm run deploy          # انتشار روی Cloudflare Workers
 ```
 
 ## مستندات
@@ -111,6 +114,13 @@ npm run typecheck   # TypeScript
 | سند | موضوع |
 | --- | --- |
 | [`HELSA-DEVELOPMENT-GUIDE.md`](./HELSA-DEVELOPMENT-GUIDE.md) | **راهنمای اصلی توسعه‌دهنده** |
+| [`docs/CLOUDFLARE.md`](./docs/CLOUDFLARE.md) | استقرار Cloudflare Workers/OpenNext |
+| [`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md) | استقرار گام‌به‌گام |
+| [`docs/ENVIRONMENT.md`](./docs/ENVIRONMENT.md) | مرجع متغیرهای محیطی |
+| [`docs/SECURITY.md`](./docs/SECURITY.md) | وضعیت امنیتی تست‌شده |
+| [`docs/TESTING.md`](./docs/TESTING.md) | باتری QA ۳۳۸/۳۳۸ + استرس انبار |
+| [`docs/SEO-AEO.md`](./docs/SEO-AEO.md) | سئو + بهینه‌سازی برای موتورهای AI |
+| [`docs/AI-SITE-DOCUMENTATION.md`](./docs/AI-SITE-DOCUMENTATION.md) | نقشه پروژه برای عامل AI |
 | [`docs/SETUP.md`](./docs/SETUP.md) | راه‌اندازی گام‌به‌گام |
 | [`docs/API.md`](./docs/API.md) | مستندات کامل API |
 | [`docs/DATABASE.md`](./docs/DATABASE.md) | اسکیما، روابط، مهاجرت |

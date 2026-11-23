@@ -8,7 +8,7 @@
  * دارای id/active/start/end است (فیلتر تاریخ اعمال می‌شود؛ منبع داده فعلاً کاتالوگ).
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { ArrowLeft, Check, ChevronLeft, ChevronRight, ShoppingBag, Star } from "lucide-react";
 import { LinkButton, Price } from "@/components/ui/primitives";
@@ -39,86 +39,97 @@ type HeroSlide = {
   active?: boolean;
 };
 
-/** ساخت اسلایدهای تجاری از دادهٔ واقعی — قواعد شفاف و قابل نگهداشت (آمادهٔ ادمین) */
+/** ساخت اسلایدهای هیرو — ویترین محصولیِ گردآوری‌شده (قابل نگهداشت، آمادهٔ کنترل ادمین).
+ *  تصویر هر اسلاید بنرِ اختصاصی ۱۶:۹ برند است (منبع: public/images/gen/hero-*؛ تولیدشده
+ *  با ارجاع به عکس واقعی همان محصول)؛ نام/قیمت/تخفیف/quickAdd همیشه از کاتالوگ واقعی
+ *  می‌آید — تک‌منبعی دادهٔ تجاری حفظ می‌شود و سبدِ مستقیم فقط برای محصول موجود. */
 function buildSlides(products: Product[]): HeroSlide[] {
-  const rated = [...products].filter((p) => p.stock > 0);
-  const bestseller = [...rated].sort((a, b) => b.rating * b.reviews - a.rating * a.reviews)[0];
-  const bestOffer = [...rated].filter((p) => p.discount > 0 && p.oldPrice && p.oldPrice > p.price).sort((a, b) => b.discount - a.discount)[0];
+  const bySlug = (slug: string) => products.find((x) => x.slug === slug);
+  const sellable = (x?: Product) => (x && x.stock > 0 ? x : undefined);
+  const firstSentence = (x: Product) => (x.shortDescription || x.description).split(/[؛.]/)[0].trim();
 
   const slides: HeroSlide[] = [];
 
-  if (bestseller) {
+  const piarom = bySlug("piaram-dates");
+  if (piarom) {
     slides.push({
-      id: "bestseller",
-      image: bestseller.image,
-      alt: bestseller.imageAlt || bestseller.name,
-      kicker: "پرفروش‌ترین هلسا",
-      title: bestseller.name,
-      titleLine2: "انتخاب محبوب مشتریان",
-      desc: (bestseller.shortDescription || bestseller.description).split(/[؛.]/)[0].trim(),
-      cta: { label: "مشاهده محصول", href: `/products/${bestseller.slug}` },
-      quickAdd: bestseller,
-      price: bestseller.price,
-      oldPrice: bestseller.oldPrice,
-      discount: bestseller.discount,
+      id: "piarom",
+      image: "/images/opt/hero-piarom.jpg",
+      alt: "خرما پیارم پرمیوم هلسا روی بشقاب سنگی تیره — چند خرما نصف‌شده با بافت کاراملی",
+      kicker: "پیشنهاد ویژهٔ هلسا",
+      title: piarom.name,
+      titleLine2: "پرمیوم‌ترین خرمای ایران",
+      desc: firstSentence(piarom),
+      cta: { label: "مشاهده محصول", href: `/products/${piarom.slug}` },
+      quickAdd: sellable(piarom),
+      price: piarom.price,
+      oldPrice: piarom.oldPrice,
+      discount: piarom.discount,
       active: true,
     });
   }
 
-  if (bestOffer) {
+  const mazafati = bySlug("mazafati-dates");
+  if (mazafati) {
     slides.push({
-      id: "offer",
-      image: bestOffer.image,
-      alt: bestOffer.imageAlt || bestOffer.name,
-      kicker: "پیشنهاد ویژهٔ این هفته",
-      title: bestOffer.name,
-      titleLine2: "با قیمت ویژه",
-      desc: (bestOffer.shortDescription || bestOffer.description).split(/[؛.]/)[0].trim(),
-      cta: { label: "خرید کنید", href: `/products/${bestOffer.slug}` },
-      cta2: { label: "همهٔ پیشنهادها", href: "/offers" },
-      quickAdd: bestOffer,
-      price: bestOffer.price,
-      oldPrice: bestOffer.oldPrice,
-      discount: bestOffer.discount,
+      id: "mazafati",
+      image: "/images/opt/hero-mazafati.jpg",
+      alt: "خرما مضافتی بم روی ظرف سرامیکی کرم — نرم و شیرین با درخشش طبیعی",
+      kicker: "خرمای ممتاز بم",
+      title: mazafati.name,
+      titleLine2: "نرم، آبدار و شیرین",
+      desc: firstSentence(mazafati),
+      cta: { label: "مشاهده محصول", href: `/products/${mazafati.slug}` },
+      quickAdd: sellable(mazafati),
+      price: mazafati.price,
+      oldPrice: mazafati.oldPrice,
+      discount: mazafati.discount,
+      active: true,
+    });
+  }
+
+  const choco = bySlug("handmade-date-chocolate");
+  if (choco) {
+    slides.push({
+      id: "date-chocolate",
+      image: "/images/opt/hero-date-chocolate.jpg",
+      alt: "شکلات دست‌ساز خرمای هلسا — دو تکه نصف‌شده با مغز خرما",
+      kicker: "دست‌سازِ هلسا",
+      title: choco.name,
+      titleLine2: "شکلات واقعی، خرمای واقعی",
+      desc: firstSentence(choco),
+      cta: { label: "مشاهده محصول", href: `/products/${choco.slug}` },
+      quickAdd: sellable(choco),
+      price: choco.price,
+      oldPrice: choco.oldPrice,
+      discount: choco.discount,
       active: true,
     });
   }
 
   slides.push(
     {
+      id: "nuts-dried-fruits",
+      image: "/images/opt/hero-nuts-dried-fruits.jpg",
+      alt: "چیدمان آجیل و خشکبار هلسا — مغز گردوی چهارپره، کشمش سبز طلایی و انجیر خشک استهبان روی سنگ کرم",
+      kicker: "آجیل و خشکبار هلسا",
+      title: "بهترین‌های آجیل و خشکبار",
+      titleLine2: "گردو، کشمش و انجیر",
+      desc: "مغز گردوی چهارپره، کشمش سبز طلایی و انجیر خشک استهبان — طبیعی و تازه، با بسته‌بندی شکیل.",
+      cta: { label: "مشاهدهٔ آجیل و خشکبار", href: "/products?cat=nuts-dried-fruits" },
+      cta2: { label: "همهٔ محصولات", href: "/products" },
+      active: true,
+    },
+    {
       id: "tray-builder",
-      image: "/images/opt/hero-cinematic-3.jpg",
-      alt: "سینی مزه چوبی هلسا با پنیر، آجیل، عسل و مربای سنتی برای پذیرایی",
+      image: "/images/opt/hero-mazeh-tray.jpg",
+      alt: "سینی پذیرایی هلسا با شکلات خرما، گردو، کشمش و انجیر روی سینی چوبی گردو",
       kicker: "سینی مزه‌های هلسا",
       title: "سینی مزه خودت را بساز",
       titleLine2: "مزه‌های مورد علاقه‌ات را انتخاب کن",
       desc: "اندازه، مزه‌ها و تزئینات به انتخاب شما — با قیمت زنده و دقیق، آمادهٔ پذیرایی.",
-      cta: { label: "ساخت سینی", href: "/mazeh-trays/build" },
+      cta: { label: "ساخت سینی", href: "/mazeh-trays/tray-builder" },
       cta2: { label: "سینی‌های آماده", href: "/mazeh-trays" },
-      active: true,
-    },
-    {
-      id: "corporate-gifts",
-      image: "/images/opt/corporate-gifts.jpg",
-      alt: "جعبه‌های هدیهٔ سازمانی پرمیوم هلسا با خرما، پسته و زعفران برای مشتریان و همکاران",
-      kicker: "هدایای سازمانی هلسا",
-      title: "هدیه‌ای که برند شما را",
-      titleLine2: "به یادماندنی می‌کند",
-      desc: "برای مشتریان، همکاران و شرکای تجاری — ترکیب و بسته‌بندی متناسب با بودجهٔ شما.",
-      cta: { label: "مشاهده هدایای سازمانی", href: "/gifts/corporate" },
-      cta2: { label: "درخواست پیش‌فاکتور", href: "/gifts/corporate/inquiry" },
-      active: true,
-    },
-    {
-      id: "wholesale",
-      image: "/images/opt/wholesale-b2b.jpg",
-      alt: "تأمین عمده محصولات پرمیوم هلسا برای کافه‌ها، رستوران‌ها و فروشگاه‌ها — کارتن‌های بسته‌بندی خرید عمده",
-      kicker: "خرید عمده هلسا",
-      title: "خرید عمده",
-      titleLine2: "با شرایط ویژه",
-      desc: "ویژهٔ رستوران‌ها، کافه‌ها، فروشگاه‌ها و سازمان‌ها؛ قیمت پلکانی، اسناد رسمی و تحویل منظم.",
-      cta: { label: "سفارش عمده", href: "/wholesale" },
-      cta2: { label: "ثبت درخواست", href: "/wholesale/register" },
       active: true,
     },
   );
@@ -131,6 +142,7 @@ export function Hero({ products }: { products: Product[] }) {
   const [paused, setPaused] = useState(false);
   const [added, setAdded] = useState(false);
   const touchX = useRef<number | null>(null);
+  const reduceMotion = useReducedMotion();
   const addItem = useStore((s) => s.addItem);
   const toast = useToast();
 
@@ -140,12 +152,12 @@ export function Hero({ products }: { products: Product[] }) {
 
   const go = useCallback((n: number) => setActive((a) => (n + total) % total), [total]);
 
-  // autoplay — فقط وقتی دیده می‌شود و pause نیست
+  // autoplay — فقط وقتی دیده می‌شود و pause نیست؛ با prefers-reduced-motion به‌کلی متوقف
   useEffect(() => {
-    if (paused || typeof document === "undefined" || document.hidden) return;
+    if (paused || reduceMotion || typeof document === "undefined" || document.hidden) return;
     const id = window.setInterval(() => setActive((a) => (a + 1) % total), AUTOPLAY_MS);
     return () => window.clearInterval(id);
-  }, [paused, total]);
+  }, [paused, reduceMotion, total]);
 
   useEffect(() => {
     const onVis = () => setPaused(document.hidden);
@@ -154,9 +166,10 @@ export function Hero({ products }: { products: Product[] }) {
   }, []);
 
   // impression آنالیتیکس (§14) — هر بار اسلاید فعال عوض شود
+  const slideId = slide?.id;
   useEffect(() => {
-    if (slide) trackEvent("hero_slide_view", { slide: slide.id });
-  }, [slide?.id]);
+    if (slideId) trackEvent("hero_slide_view", { slide: slideId });
+  }, [slideId]);
 
   const onQuickAdd = () => {
     if (!slide?.quickAdd) return;
@@ -209,10 +222,6 @@ export function Hero({ products }: { products: Product[] }) {
             touchX.current = null;
           }}
         >
-          {/* نشان اعتماد شناور — بدون افزایش ارتفاع سکشن */}
-          <span className="absolute bottom-4 start-4 z-10 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-ink-950/40 px-3.5 py-1.5 text-[10.5px] font-bold text-white backdrop-blur-md">
-            <Star className="size-3.5 text-gold-400" aria-hidden /> کیفیت ممتاز مواد اولیه
-          </span>
           {SLIDES.map((s, i) => (
             <motion.div
               key={s.id}
@@ -245,7 +254,7 @@ export function Hero({ products }: { products: Product[] }) {
 
           {/* slider controls — glass chips, bottom of image */}
           <div className="absolute bottom-4 inset-x-4 z-10 flex items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-ink-950/35 px-3 py-1.5 text-[10.5px] font-bold text-white backdrop-blur-md" aria-live="polite">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-ink-950/70 px-3 py-1.5 text-[11px] font-bold text-white backdrop-blur-md" aria-live="polite">
               {faDigits(active + 1)} / {faDigits(total)}
             </span>
             <div className="flex items-center gap-1.5">
@@ -253,7 +262,7 @@ export function Hero({ products }: { products: Product[] }) {
                 type="button"
                 onClick={() => go(active - 1)}
                 aria-label="اسلاید قبلی"
-                className="inline-flex size-9 items-center justify-center rounded-full border border-white/25 bg-ink-950/35 text-white backdrop-blur-md transition-colors hover:bg-ink-950/55 active:scale-95"
+                className="inline-flex size-9 items-center justify-center rounded-full border border-white/25 bg-ink-950/70 text-white backdrop-blur-md transition-colors hover:bg-ink-950/55 active:scale-95"
               >
                 <ChevronRight className="size-4" aria-hidden />
               </button>
@@ -261,7 +270,7 @@ export function Hero({ products }: { products: Product[] }) {
                 type="button"
                 onClick={() => go(active + 1)}
                 aria-label="اسلاید بعدی"
-                className="inline-flex size-9 items-center justify-center rounded-full border border-white/25 bg-ink-950/35 text-white backdrop-blur-md transition-colors hover:bg-ink-950/55 active:scale-95"
+                className="inline-flex size-9 items-center justify-center rounded-full border border-white/25 bg-ink-950/70 text-white backdrop-blur-md transition-colors hover:bg-ink-950/55 active:scale-95"
               >
                 <ChevronLeft className="size-4" aria-hidden />
               </button>
@@ -278,7 +287,7 @@ export function Hero({ products }: { products: Product[] }) {
                 <motion.p
                   initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.45, ease }}
-                  className="text-[11px] font-bold tracking-[0.25em] text-gold-600"
+                  className="text-[11px] font-bold tracking-[0.25em] text-gold-700"
                 >
                   {slide.kicker}
                 </motion.p>
@@ -353,8 +362,15 @@ export function Hero({ products }: { products: Product[] }) {
               </motion.div>
             </AnimatePresence>
 
+            {/* نشان اعتماد برند — در ستون محتوا (پس از CTA)؛ سلسله‌مراتب: عنوان ← مزیت ← CTA ← اعتماد ← ناوبری.
+                قبلاً به‌صورت شناور روی گوشهٔ پایینِ startِ عکس بود و دقیقاً روی شمارهٔ اسلاید می‌افتاد (برخورد §۶۹). */}
+            <p className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-full border border-brand-300/70 bg-surface px-3.5 py-1.5 text-[11.5px] font-bold text-brand-700">
+              <Star className="size-3.5 text-gold-500" aria-hidden />
+              کیفیت ممتاز مواد اولیه
+            </p>
+
             {/* pagination dots */}
-            <div className="mt-4 flex items-center gap-2" role="tablist" aria-label="انتخاب اسلاید">
+            <div className="mt-4 flex items-center gap-1" role="tablist" aria-label="انتخاب اسلاید">
               {SLIDES.map((s, i) => (
                 <button
                   key={s.id}
@@ -363,8 +379,12 @@ export function Hero({ products }: { products: Product[] }) {
                   aria-selected={i === active}
                   aria-label={`اسلاید ${faDigits(i + 1)}: ${s.titleLine2}`}
                   onClick={() => go(i)}
-                  className={`h-2 rounded-full transition-all duration-300 ${i === active ? "w-7 bg-brand-700" : "w-2 bg-line hover:bg-brand-300"}`}
-                />
+                  className="group grid size-6 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+                >
+                  <span
+                    className={`block h-2 rounded-full transition-all duration-300 ${i === active ? "w-7 bg-brand-700" : "w-2 bg-line group-hover:bg-brand-300"}`}
+                  />
+                </button>
               ))}
             </div>
 

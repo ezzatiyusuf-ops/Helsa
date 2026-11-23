@@ -1,0 +1,40 @@
+{
+ "apply": false,
+ "ingested": [
+  {
+   "file": "HLA-0001.jpg",
+   "sku": "HLA-0001",
+   "product": "خرما پیارم",
+   "slug": "piaram-dates",
+   "source_size": [
+    1200,
+    800
+   ],
+   "detail": "/images/studio/piaram-dates.webp",
+   "card": "/images/studio/piaram-dates-card.webp",
+   "bg_before": 65.2,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 94.9
+  }
+ ],
+ "unmapped": [],
+ "needs_review": [
+  {
+   "file": "HLA-0001.jpg",
+   "sku": "HLA-0001",
+   "product": "خرما پیارم",
+   "slug": "piaram-dates",
+   "source_size": [
+    1200,
+    800
+   ],
+   "detail": "/images/studio/piaram-dates.webp",
+   "card": "/images/studio/piaram-dates-card.webp",
+   "bg_before": 65.2,
+   "gain_applied": 1.3,
+   "clamped": true,
+   "bg_after": 94.9
+  }
+ ]
+}

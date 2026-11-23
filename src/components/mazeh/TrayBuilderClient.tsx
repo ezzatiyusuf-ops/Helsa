@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  ShieldAlert,
   Sparkles, Soup, Droplet, CircleDot, Wheat, Drumstick, Nut, Apple, Coffee, Leaf, Cake, Cherry,
   Gift, Save, RotateCcw, Plus, Minus, Trash2, Users, Check, Loader2, ShoppingBag,
   ChevronLeft, ChevronRight, Info, GripVertical, ArrowUp, ArrowDown, Copy, Star, Clock3,
@@ -221,6 +222,9 @@ export function TrayBuilderClient() {
     size: sizeId, base: baseId, guests, items, decor, giftWrap, message,
   }), [sizeId, baseId, guests, items, decor, giftWrap, message]);
 
+  // شروع ساخت سینی (بریف G5) — یک‌بار در هر بازدید
+  useEffect(() => { trackEvent("tray_builder_started", {}); }, []);
+
   // debounced server-side quote — the only trusted price
   useEffect(() => {
     if (quoteTimer.current) clearTimeout(quoteTimer.current);
@@ -357,7 +361,7 @@ export function TrayBuilderClient() {
         meta: [q.sizeLabel, `برای ${faDigits(guests)} نفر`, summary, wrap && wrap.id !== "none" ? `کادو: ${wrap.label}` : ""].filter(Boolean).join(" — ").slice(0, 180),
       }, 1);
       toast.push("سینی سفارشی با قیمت تأییدشده سرور به سبد اضافه شد");
-      trackEvent("maze_builder_complete", { guests, value: q.total });
+      trackEvent("tray_builder_completed", { guests, value: q.total });
     } catch {
       toast.push("متأسفانه مشکلی پیش آمد. دوباره تلاش کنید.", "error");
     } finally {
@@ -469,7 +473,7 @@ export function TrayBuilderClient() {
                 return (
                   <div key={cat.id}>
                     <h3 className="flex items-center gap-2 text-[13px] font-black text-heading">
-                      <Icon className="size-4 text-gold-600" aria-hidden />
+                      <Icon className="size-4 text-gold-700" aria-hidden />
                       {cat.label}
                       {chosenInCat > 0 && <span className="rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-black text-brand-800">{faDigits(chosenInCat)} انتخاب</span>}
                     </h3>
@@ -543,7 +547,7 @@ export function TrayBuilderClient() {
                         className={`rounded-2xl border p-4 text-start transition-all ${on ? "border-brand-600 bg-brand-50 shadow-soft" : "border-line/70 bg-surface hover:border-brand-300"}`}
                       >
                         <span className="flex items-center gap-2 text-[13px] font-black text-heading">
-                          {w.id !== "none" && <Gift className="size-3.5 text-gold-600" aria-hidden />}
+                          {w.id !== "none" && <Gift className="size-3.5 text-gold-700" aria-hidden />}
                           {w.label}
                         </span>
                         <span className="mt-1.5 block text-[11px] text-muted">{w.note}</span>
@@ -676,7 +680,7 @@ export function TrayBuilderClient() {
                               onClick={() => toggleFavDraft(i)}
                               aria-label={d.favorite ? `حذف ${d.name} از علاقه‌مندی‌ها` : `علاقه‌مندی: ${d.name}`}
                               aria-pressed={Boolean(d.favorite)}
-                              className={`grid size-8 shrink-0 place-items-center rounded-full border transition-colors ${d.favorite ? "border-gold-500 bg-gold-500 text-inverse" : "border-line bg-surface text-muted hover:border-gold-400 hover:text-gold-600"}`}
+                              className={`grid size-8 shrink-0 place-items-center rounded-full border transition-colors ${d.favorite ? "border-gold-500 bg-gold-500 text-inverse" : "border-line bg-surface text-muted hover:border-gold-400 hover:text-gold-700"}`}
                             >
                               <Star className={`size-3.5 ${d.favorite ? "fill-current" : ""}`} aria-hidden />
                             </button>
@@ -720,7 +724,7 @@ export function TrayBuilderClient() {
         {/* ————— sticky live summary ————— */}
         <aside className="lg:sticky lg:top-24" aria-label="خلاصه و قیمت زنده">
           <div className="rounded-2xl border border-line/70 bg-surface p-5 shadow-soft">
-            <p className="text-[11px] font-bold tracking-[0.18em] text-gold-600">خلاصه سینی</p>
+            <p className="text-[11px] font-bold tracking-[0.18em] text-gold-700">خلاصه سینی</p>
             <p className="mt-2 text-sm font-black text-heading">{size.label} · {base.label}</p>
             <p className="mt-1 text-[11px] text-muted">برای {faDigits(guests)} نفر · {faDigits(distinctItems)} قلم · {faDigits(portions)} پورشن</p>
 
@@ -739,6 +743,10 @@ export function TrayBuilderClient() {
               <p className="mt-3 flex items-start gap-1.5 rounded-xl border border-line/60 bg-surface2/60 px-3 py-2 text-[10px] leading-5 text-muted">
                 <Clock3 className="mt-0.5 size-3 shrink-0 text-brand-600" aria-hidden />
                 {BUILDER_DELIVERY_ESTIMATE}
+              </p>
+              <p className="mt-2 flex items-start gap-1.5 text-[10px] leading-5 text-muted">
+                <ShieldAlert className="mt-0.5 size-3 shrink-0 text-accent-600" aria-hidden />
+                آلرژن‌ها: سینی‌های مزه ممکن است حاوی مغزها، لبنیات و گلوتن باشند؛ ترکیب دقیق هر سینی پیش از تحویل اعلام می‌شود.
               </p>
             </div>
 

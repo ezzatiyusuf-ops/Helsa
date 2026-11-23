@@ -3,8 +3,9 @@ import type { Product } from "@/types";
 import Link from "next/link";
 import { getProducts, getCategories } from "@/services/catalog";
 import { ArrowLeft, Building2, Coffee, Gift, UtensilsCrossed, Percent, Hammer, Headset, Truck, ShieldCheck, BadgeCheck, Store } from "lucide-react";
-import { faDigits } from "@/lib/format";
+import { faDigits, normalizeFa } from "@/lib/format";
 import { ProductsExplorer } from "@/components/product/ProductsExplorer";
+import { FirstPurchaseBanner } from "@/components/product/FirstPurchaseBanner";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { collectionPageSchema, breadcrumbSchema } from "@/lib/seo";
 
@@ -53,7 +54,11 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   // پیشنهاد حالت خالی: ۴ محصول برتر بر اساس امتیاز×نظرِ واقعی
   const suggestions = [...products].sort((a, b) => b.rating * b.reviews - a.rating * a.reviews).slice(0, 4);
 
-  const count = active ? products.filter((p) => p.category === active.slug).length : products.length;
+  // شمارش هم‌ارز با گرید کلاینت (بریف 4.5): جستجو/فیلتر URL باید همان عدد گرید را نشان دهد
+  const matchesQuery = q
+    ? products.filter((p) => normalizeFa([p.name, p.description, p.sku, ...p.tags].join(" ")).includes(normalizeFa(q))).length
+    : 0;
+  const count = q ? matchesQuery : active ? products.filter((p) => p.category === active.slug).length : products.length;
 
   const SERVICE_CHIPS = [
     { icon: Hammer, label: "ساخت سینی اختصاصی", href: "/mazeh-trays/build" },
@@ -113,6 +118,9 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       <div className="container-x pb-16">
         {!active && (
           <>
+            {/* نوار پروموی لاغر — هدیهٔ واقعی اولین خرید (کوپن از بک‌اند صادر می‌شود) */}
+            <FirstPurchaseBanner />
+
             {/* چیپ‌های خدمات — قرص‌های افقی (به‌جای کارت‌های تبلیغاتی بزرگ) */}
             <nav aria-label="خدمات ویژهٔ هلسا" className="mt-5">
               <ul className="flex items-center gap-2.5 overflow-x-auto no-scrollbar py-0.5">
@@ -216,7 +224,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
             {[
               { icon: Hammer, title: "سینی اختصاصی شما", desc: "چیدمان دلخواهتان را بسازید", href: "/mazeh-trays/build" },
               { icon: Gift, title: "بسته‌بندی هدیه", desc: "جعبه‌ای که آدم را می‌خواهد بوبوید؟ نه — که یادش می‌ماند", href: "/gifts" },
-              { icon: BadgeCheck, title: "ضمانت تازگی", desc: "تازه‌رسیده یا بازگشت وجه", href: "/refund" },
+              { icon: BadgeCheck, title: "ضمانت تازگی", desc: "تا ۷ روز، با بسته‌بندی پلمپ — طبق شرایط مرجوعی", href: "/refund" },
               { icon: Headset, title: "مشاورهٔ خرید", desc: "کارشناسان پذیرایی پاسخ‌گویند", href: "/contact" },
             ].map((srv) => (
               <li key={srv.href}>

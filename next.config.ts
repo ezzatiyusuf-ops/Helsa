@@ -31,7 +31,9 @@ const securityHeaders = [
       "worker-src 'self'",
       "manifest-src 'self'",
       // iframe noscript کانتینر GTM
-      ...(gtmOn ? ["frame-src https://www.googletagmanager.com"] : []),
+      // نقشهٔ تماس (OpenStreetMap) همیشه در /contact هست؛ GTM فقط در صورت فعال‌بودن —
+      // دایرکتیو تکراری frame-src ممنوع: مرورگر دومی را نادیده می‌گیرد (خطای کنسول + شکست GTM در تولید)
+      `frame-src https://www.openstreetmap.org${gtmOn ? " https://www.googletagmanager.com" : ""}`,
     ].join("; "),
   },
   ...(isProd
@@ -39,7 +41,13 @@ const securityHeaders = [
     : []),
 ];
 
+// OpenNext (Cloudflare Workers) به خروجی standalone نیاز دارد؛ در توسعه/تست محلی
+// خروجی پیش‌فرض می‌ماند تا `next start` (بدون هشدار/رفتار نامشخص) کار کند.
+// فعال‌سازی: NEXT_OUTPUT_STANDALONE=1 (در اسکریپت‌های cf:build/deploy و محیط CI کلادفلر)
+const cloudflareBuild = process.env.NEXT_OUTPUT_STANDALONE === "1";
+
 const nextConfig: NextConfig = {
+  ...(cloudflareBuild ? { output: "standalone" as const } : {}),
   async rewrites() {
     return [
       // URL عمومی قدیمی حفظ می‌شود؛ پوشهٔ «build» در snapshot سندباکس حذف می‌شود (نام مستثنی)،
@@ -50,7 +58,7 @@ const nextConfig: NextConfig = {
   // Sandbox/live-preview hosts (e.g. https://{port}-{sandboxId}.e2b.app) must be
   // allowed to load Next dev resources (/_next/*, HMR), otherwise the page HTML
   // renders but client JS is blocked with 403 and animated content stays hidden.
-  allowedDevOrigins: ["*.e2b.app"],
+  allowedDevOrigins: ["*.e2b.app", "localhost", "127.0.0.1"],
   async headers() {
     return [
       {

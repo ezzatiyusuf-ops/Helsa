@@ -101,7 +101,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
           <Reveal className="mt-10">
             <section aria-label="دستورهای پیشنهادی">
               <h2 className="flex items-center gap-2.5 text-lg font-black text-heading">
-                <span className="grid size-9 place-items-center rounded-xl bg-gold-500/15 text-gold-600"><ChefHat className="size-4.5" aria-hidden /></span>
+                <span className="grid size-9 place-items-center rounded-xl bg-gold-500/15 text-gold-700"><ChefHat className="size-4.5" aria-hidden /></span>
                 دستورهای پیشنهادی هلسا
               </h2>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -159,7 +159,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
           <div className="grid gap-4 sm:grid-cols-3">
             {others.map((o) => (
               <Link key={o.slug} href={`/guides/${o.slug}`} className="group rounded-2xl border border-line/70 bg-surface p-5 shadow-soft transition-shadow hover:shadow-lift">
-                <p className="text-[10.5px] font-bold text-gold-600">{o.categoryLabel}</p>
+                <p className="text-[10.5px] font-bold text-gold-700">{o.categoryLabel}</p>
                 <p className="mt-2 text-[13px] font-extrabold leading-6 group-hover:text-brand-700 transition-colors">{o.title}</p>
               </Link>
             ))}

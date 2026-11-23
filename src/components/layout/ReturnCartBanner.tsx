@@ -9,7 +9,7 @@
  * - روی خود صفحات سبد/پرداخت معنا ندارد و مخفی است.
  * - رویداد GTM «cart_return_view» برای اندازه‌گیری.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowLeft, ShoppingCart, X } from "lucide-react";
@@ -20,19 +20,24 @@ import { trackEvent } from "@/lib/analytics";
 const DISMISS_KEY = "helsa-cart-return-dismissed";
 const HIDDEN_PREFIXES = ["/cart", "/checkout", "/payment", "/account", "/admin"];
 
+const subscribeNoop = () => () => undefined;
+
 export function ReturnCartBanner() {
   const items = useStore((s) => s.items);
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
+  // الگوی سمت‌کلاینتِ امن (SSR=false) بدون setState همزمان در effect
+  const mounted = useSyncExternalStore(subscribeNoop, () => true, () => false);
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    try {
-      if (sessionStorage.getItem(DISMISS_KEY) === "1") setDismissed(true);
-    } catch {
-      /* حالت خصوصی مرورگر — بنر نشان داده می‌شود */
-    }
+    const t = window.setTimeout(() => {
+      try {
+        if (sessionStorage.getItem(DISMISS_KEY) === "1") setDismissed(true);
+      } catch {
+        /* حالت خصوصی مرورگر — بنر نشان داده می‌شود */
+      }
+    }, 0);
+    return () => window.clearTimeout(t);
   }, []);
 
   const count = items.reduce((a, i) => a + i.qty, 0);

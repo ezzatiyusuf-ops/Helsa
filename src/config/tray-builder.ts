@@ -225,7 +225,7 @@ export const BUILDER_GIFT_WRAP: { id: string; label: string; price: number; note
 export const BUILDER_TAX_RATE = Math.max(0, Number.parseFloat(process.env.NEXT_PUBLIC_BUILDER_TAX_RATE ?? "0") || 0);
 
 /** Estimated delivery time shown beside the price (policy, not a promise). */
-export const BUILDER_DELIVERY_ESTIMATE = "تهران ۲۴ تا ۴۸ ساعته · سایر شهرها ۲ تا ۴ روز کاری";
+export const BUILDER_DELIVERY_ESTIMATE = "تحویل فقط در تهران، ۲۴ تا ۴۸ ساعت پیش از زمان مورد نظر، با خودرو یخچال‌دار و هماهنگی تلفنی.";
 
 export const BUILDER_ARRANGEMENT_FEE = 150_000; // چیدمان پایه هلسا
 export const BUILDER_MESSAGE_FEE = 30_000; // کارت پیام اختصاصی

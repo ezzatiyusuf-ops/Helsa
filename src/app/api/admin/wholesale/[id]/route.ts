@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdminApi, adminErrorResponse } from "@/lib/admin";
 import { reviewBusiness } from "@/services/wholesale";
+import { assertSameOrigin, clientKey, csrfRejectedResponse, rateLimit, rateLimitedResponse } from "@/lib/security";
 
 const schema = z.object({
   status: z.enum(["pending", "approved", "rejected", "suspended"]),
@@ -11,6 +12,9 @@ const schema = z.object({
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    if (!assertSameOrigin(req)) return csrfRejectedResponse();
+    const limited = rateLimit(clientKey(req, "admin-wholesale"), 60, 60_000);
+    if (!limited.ok) return rateLimitedResponse(limited.retryAfterSec);
     await requireAdminApi();
     const { id } = await params;
     const businessId = Number(id);

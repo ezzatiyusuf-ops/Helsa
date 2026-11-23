@@ -1,120 +1,123 @@
-# استقرار هلسا (DEPLOYMENT)
+# راهنمای استقرار (DEPLOYMENT)
 
-> فاز ۲۱ چک‌لیست کامل پایین همین سند است. برای امنیت تولید `docs/SECURITY.md` §۷ را هم بخوانید.
+> مسیر رسمی: **Cloudflare Workers + OpenNext**. جزئیات کامل معماری CF: `docs/CLOUDFLARE.md` · متغیرها: `docs/ENVIRONMENT.md` · تست: `docs/TESTING.md`.
 
-## پیش‌نیاز
+## ۱) پیش‌نیازها
 
-- Node.js ۲۰+
-- PostgreSQL در دسترس از سرور تولید (ترجیحاً با SSL)
-- دامنه با HTTPS
+- Node.js ≥ 20 (برای wrangler ≥ 22) — محلی این پروژه با Node 22 تست شده
+- PostgreSQL میزبانی‌شده (Supabase / Neon / Railway / …) با TLS
+- اکانت Cloudflare + wrangler لاگین (`npx wrangler login`)
 
-## گام ۱ — متغیرهای محیطی تولید
-
-حداقل موارد زیر را روی سرویس میزبان تنظیم کنید:
-
-```
-DATABASE_URL=postgresql://user:pass@host:5432/db?sslmode=require
-NEXT_PUBLIC_SITE_URL=https://helsairanian.ir
-AUTH_SECRET=<openssl rand -base64 48>
-```
-
-و در صورت نیاز:
-
-```
-GOOGLE_CLIENT_ID= / GOOGLE_CLIENT_SECRET=
-APPLE_CLIENT_ID= / APPLE_TEAM_ID= / APPLE_KEY_ID= / APPLE_PRIVATE_KEY=
-GATEWAY_PROVIDER= / GATEWAY_API_KEY=
-SMS_PROVIDER= / SMS_API_KEY=
-```
-
-> هرگز `.env` واقعی را در مخزن قرار ندهید؛ تنها `.env.example` نگهداری می‌شود.
-
-## گام ۲ — آماده‌سازی دیتابیس
+## ۲) پیکربندی
 
 ```bash
-npx drizzle-kit push
+cp .env.production.example .env     # مقادیر واقعی را بگذارید
+npx wrangler secret put DATABASE_URL
+npx wrangler secret put AUTH_SECRET
+# و بقیهٔ متغیرها طبق docs/ENVIRONMENT.md (Dashboard → Workers → Settings → Variables)
 ```
 
-برای اولین راه‌اندازی (فقط یک‌بار و اگر دیتابیس خالی است):
+## ۳) مایگریشن دیتابیس (از CI/محلی، نه از Worker)
 
 ```bash
-npx tsx --env-file=.env scripts/seed.ts
+npm run db:migrate       # drizzle-kit migrate — اتصال مستقیم
+npm run db:backup        # بکاپ پیش از هر تغییر (pg_dump)
 ```
 
-> روی دیتابیس تولیدی که داده واقعی دارد **seed را اجرا نکنید**.
-
-## گام ۳ — ساخت و اجرا
+## ۴) بیلد و راستی‌آزمایی
 
 ```bash
-npm ci
-npm run build
-npm start
+npm test                          # typecheck + lint + unit — باید سبز باشد
+npm run cf:build:local            # روی باکس کم‌حافظه (بیلد جدا + skipNextBuild)
+npx wrangler deploy --dry-run     # بررسی باندل بدون انتشار
 ```
 
-سرور روی پورت `3000` بالا می‌آید (با `PORT` قابل تغییر است).
+نتیجهٔ مرجع آخرین اجرا: بیلد ۱۸۴ پیش‌رندر محصول · باندل 14579.70 KiB / gzip 2980.31 KiB.
 
-## گام ۴ — بررسی پس از استقرار
+## ۵) انتشار
 
 ```bash
-curl https://YOUR-DOMAIN/api/health
-curl https://YOUR-DOMAIN/robots.txt
-curl https://YOUR-DOMAIN/sitemap.xml
+npm run deploy        # = cf:build + opennextjs-cloudflare deploy
 ```
 
-## بازگشت‌پذیری (Rollback)
+## ۶) پس از انتشار (Smoke test)
 
-- نسخه قبلی build را نگه دارید.
-- پیش از هر `drizzle-kit push` از دیتابیس snapshot بگیرید.
+1. `GET /api/health` → سالم
+2. چند صفحهٔ کلیدی: `/`، `/products`، یک صفحه محصول، `/cart`، `/login`
+3. `npx wrangler tail` — پایش لاگ زنده برای خطا
+4. سفارش آزمایشی COD یا پیش‌پرداخت در حالت sandbox
 
-## چک‌لیست تولید
+## استقرار محلی (توسعه)
 
-- [ ] `DATABASE_URL` تنظیم شده
-- [ ] `AUTH_SECRET` تنظیم شده
-- [ ] `NEXT_PUBLIC_SITE_URL` روی دامنه واقعی
-- [ ] Google OAuth (در صورت استفاده)
-- [ ] Apple OAuth (در صورت استفاده)
-- [ ] درگاه پرداخت پیکربندی و تست شده
-- [ ] HTTPS فعال
-- [ ] `/robots.txt` و `/sitemap.xml` بررسی شده
-- [ ] داده ساختاریافته با Rich Results Test تست شده
-- [ ] قیمت‌ها و موجودی بررسی شده
-- [ ] روش‌های ارسال پیکربندی شده
-- [ ] پیامک/ایمیل (در صورت استفاده) پیکربندی شده
-- [ ] پایش خطا (error monitoring) فعال
-- [ ] `npm run build` موفق
+```bash
+npm run dev                            # توسعه
+NODE_OPTIONS=--max-old-space-size=1100 npm run build   # بیلد محلی (بدون standalone)
+npm run start                          # next start — با standalone ناسازگار است
+```
 
-## چک‌لیست کامل استقرار — فاز ۲۱
+## بازیابی
 
-### زیرساخت
-- [ ] Node.js 20+ / PostgreSQL 15+ (sslmode=require) / HTTPS + HSTS در reverse proxy
-- [ ] `NODE_OPTIONS=--max-old-space-size=...` برای هاست‌های کم‌حافظه
+- بکاپ دیتابیس: `scripts/backup-db.sh` / بازیابی: `scripts/restore-db.sh` (فهرست بکاپ‌ها و رویه در `docs/backup-restore.md`)
+- بازیابی env: `npm run env:recovery`
+- Rollback: نسخهٔ قبلی Worker از Dashboard → Deployments → Rollback (یا deploy مجدد کامیت قبلی)
 
-### متغیرهای محیطی
-- [ ] `DATABASE_URL` (با SSL)
-- [ ] `AUTH_SECRET` / `SESSION_SECRET` — یکتا و قوی (`openssl rand -base64 48`)
-- [ ] `NEXT_PUBLIC_SITE_URL=https://دامنه‌واقعی` — روی canonical/sitemap/CSP اثر دارد
-- [ ] `ALLOW_DEV_OTP_HINT` **حذف شده**
-- [ ] OAuth/درگاه/پیامک در صورت استفاده
+## موارد باز (نیازمند مقادیر واقعی از مشتری)
 
-### دیتابیس
-- [ ] `drizzle-kit push` روی دیتابیس production + snapshot قبل از آن
-- [ ] seed های دمو (پرچم‌دار) حذف یا غیرفعال شده‌اند — به‌ویژه حساب دمو عمده `09121112233`
-- [ ] کاربر ادمین production با پسورد قوی ساخته شده
+زرین‌پال (کلید API) · کاوه‌نگار (SMS) · کدهای Enamad/Samandehi/درگاه · تأیید نهایی هزینهٔ ارسال ۸۵٬۰۰۰ تومانی · دامنهٔ نهایی DNS.
 
-### امنیت
-- [ ] `python3 scripts/stress-test-auth.py` روی استیجینگ → 14/14 PASS
-- [ ] CSP بدون `'unsafe-eval'` (production خودکار)
-- [ ] rate-limit: برای استقرار چند-نمونه، Redis اضافه شده یا rate-limit در LB
+---
 
-### سئو
-- [ ] هر ۵ sitemap در GSC ثبت و submit شده (`/sitemap.xml`, `/products/...`, `/mazeh-trays/...`, `/gifts/...`, `/blog/...`)
-- [ ] robots.txt با دامنه واقعی چک شده
-- [ ] Rich Results Test روی صفحه محصول + مقاله + صفحه اصلی بدون خطا
-- [ ] GA4/GTM فقط با گیت consent (فاز ۶) فعال شود
+# دروازهٔ انتشار — یک فرمان (نسخهٔ ۲۰۲۶-۱۰-۲۳)
 
-### پس از استقرار
-- [ ] `curl https://DOMAIN/api/health` → 200
-- [ ] ثبت‌نام → OTP → ورود → سفارش آزمایشی (روی درگاه sandbox)
-- [ ] ثبت‌نام کسب‌وکار → تأیید ادمین → سفارش عمده → تکرار سفارش
-- [ ] بنر consent بعد از اولین بازدید ظاهر می‌شود و `helsa-consent-v2` ذخیره می‌شود
-- [ ] پایش خطا/آپتایم فعال، بکاپ شبانه دیتابیس
+از این نسخه دو چیز جدید اضافه شده تا خطای انسانی در استقرار حذف شود:
+
+## ۱) `scripts/preflight-env.mjs` — گارد محیط (قبل از بیلد)
+
+```bash
+npm run preflight        # محیط محلی (نرم؛ از .env می‌خواند)
+npm run preflight:prod   # سخت‌گیرانه؛ روی CI/Render خودکار همین اجرا می‌شود
+```
+
+اگر `ALLOW_INDEXING=1` نباشد، **بیلد متوقف می‌شود**. دلیل: متادیتای `robots` در Next
+در زمان بیلد پخته می‌شود؛ بیلد بدون این متغیر کل سایت — از جمله صفحات محصول — را
+با `noindex` منتشر می‌کند و ست‌کردن متغیر در زمان اجرا هیچ کمکی نمی‌کند.
+همین بررسی برای `NEXT_PUBLIC_SITE_URL` (https و غیر‌محلی)، `DATABASE_URL`،
+`AUTH_SECRET` (≥۳۲ نویسه) و سه کلید کارت‌به‌کارت هم انجام می‌شود.
+کلیدهای اختیاری (SMS، ایمیل، نماد اعتماد، اثر انگشت اندروید…) فقط **هشدار** می‌دهند،
+چون نبودشان قابلیت را خاموش می‌کند نه سایت را.
+
+## ۲) `scripts/deploy-check.sh` — دروازهٔ پس از استقرار
+
+```bash
+npm run deploy:check                       # دامنهٔ پیش‌فرض helsairanian.ir
+npm run deploy:check:full                  # + axe-core و PWA (نیازمند Playwright)
+bash scripts/deploy-check.sh https://staging.example.com
+bash scripts/deploy-check.sh http://127.0.0.1:3000 --local
+```
+
+۲۹ بررسی در ۷ گروه، روی همان دامنه‌ای که کاربر می‌بیند:
+
+| گروه | نمونهٔ بررسی |
+| --- | --- |
+| سرویس/دیتابیس | `/` = ۲۰۰ · `/api/health` با `database.configured/reachable` |
+| ایندکس‌پذیری | `robots` روی خانه، `/products` و یک PDP **باید** `index` باشد (تلهٔ noindex) |
+| robots/sitemap | دامنهٔ واقعی در `Sitemap:` · تعداد آدرس‌ها با احتساب نقشه‌های فرزند |
+| امنیت | HSTS · nosniff · ضد iframe · referrer · CSP · Permissions-Policy |
+| صفحات ضروری | `/terms` `/privacy` `/refund` `/shipping` `/contact` `/faq` `/products` `/cart` |
+| App Links | `/.well-known/assetlinks.json` = ۲۰۰ با اثر انگشت یا ۴۰۴ صادقانه |
+| ممیزی | SEO · UI · کنتراست · حقوقی · (در `--full`: axe و PWA) |
+
+کد خروج `0` = GO و `1` = NO-GO، و گزارش در `helsa-audit/deploy-check-<UTC>.txt` ذخیره می‌شود.
+این اسکریپت را در CI بعد از مرحلهٔ deploy بگذارید تا استقرار خراب، سبز اعلام نشود.
+
+## ۳) `render.yaml`
+
+`buildCommand` حالا این است:
+
+```
+npm ci && node scripts/preflight-env.mjs --production && npm run build
+```
+
+و `ALLOW_INDEXING`/`NEXT_PUBLIC_SITE_URL`/`NODE_OPTIONS`/`FORCE_SECURE_COOKIES` صریحاً
+در بخش `envVars` آمده‌اند، به‌همراه `ANDROID_APP_SHA256`، `ENAMAD_ID`/`SAMANDEHI_ID`
+و کلیدهای درگاه بانکی با `sync: false` (دستی در داشبورد).

@@ -43,6 +43,9 @@ export class AdminAuthError extends Error {
   }
 }
 
+/** خطای قاعدهٔ کسب‌وکار ادمین — با پیام فارسی و کد ۴۰۰ به کلاینت برمی‌گردد */
+export class AdminRuleError extends Error {}
+
 export async function requireAdminApi(): Promise<AdminPrincipal> {
   if (!isAdminConfigured()) throw new AdminAuthError(403, "دسترسی مدیریت پیکربندی نشده است.");
   const admin = await getAdminPrincipal();
@@ -53,6 +56,10 @@ export async function requireAdminApi(): Promise<AdminPrincipal> {
 export function adminErrorResponse(error: unknown): Response {
   if (error instanceof AdminAuthError) {
     return Response.json({ ok: false, message: error.message }, { status: error.status });
+  }
+  // خطای قاعدهٔ کسب‌وکار (مثل گذار وضعیت نامعتبر سفارش) — پیام فارسی برای ادمین امن و مفید است
+  if (error instanceof AdminRuleError) {
+    return Response.json({ ok: false, message: error.message }, { status: 400 });
   }
   console.error("[HELSA admin]", error instanceof Error ? error.message : "unknown error");
   return Response.json({ ok: false, message: "خطایی رخ داد. دوباره تلاش کنید." }, { status: 500 });

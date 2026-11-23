@@ -11,7 +11,8 @@ import { CarouselRow } from "@/components/ui/CarouselRow";
 import { FlashOfferStrip } from "@/components/home/FlashOfferStrip";
 import { FeaturedTabs } from "@/components/home/FeaturedTabs";
 import { getTrays } from "@/services/catalog";
-import { Building2, Mic2, ArrowLeft as ArrowLeftIcon, BadgeCheck, PackageCheck, Truck, Headset } from "lucide-react";
+import { Building2, Mic2, ArrowLeft as ArrowLeftIcon, BadgeCheck, PackageCheck, Truck, Headset, Store, Grape } from "lucide-react";
+import { SmartImage } from "@/components/ui/SmartImage";
 
 /**
  * Homepage preserves the HELSA flagship language:
@@ -37,7 +38,12 @@ export async function HomepageLite({ products, categories }: { products: Product
     bestsellers.push(p);
     if (bestsellers.length >= 6) break;
   }
+  // Trust bar: every number comes from the live catalog (approved reviews only).
+  // With zero reviews the rating/count tiles are hidden — no fabricated social proof.
   const totalReviews = products.reduce((s, p) => s + (p.reviews || 0), 0);
+  const avgRating = totalReviews > 0
+    ? products.reduce((s, p) => s + (p.rating || 0) * (p.reviews || 0), 0) / totalReviews
+    : 0;
 
   // پیش‌بارگذاری تصاویر پرفروش‌ها (480w AVIF ~۱۰KB) — سکشن درست زیر تایید نمایش است؛
   // lazy باعث می‌شد دانلود فقط هنگام اسکرول شروع شود و کاربر «کندی» ببیند. الان روی اسکرول = فوری.
@@ -65,9 +71,9 @@ export async function HomepageLite({ products, categories }: { products: Product
 
       {/* خرید بر اساس حال‌وهوا (CRO) — ورودی‌های مناسبت‌محور به مقصدهای واقعی */}
       <section className="container-x py-14 md:py-18" aria-label="خرید بر اساس مناسبت">
-        <Reveal>
-          <SectionHead eyebrow="انتخاب هوشمند" title="امروز برای چه مناسبتی خرید می‌کنید؟" desc="مناسبت خود را انتخاب کنید؛ هلسا مسیر خرید را برایتان آماده کرده است." />
-        </Reveal>
+        {/* §بریف مناسبت: محتوای ۱۰۰٪ استاتیک — بدون Reveal تا پیش از هیدراسیون هم فوراً دیده شود
+            (ریشهٔ کندی قبلی: initial opacity:0 فریم‌موشن کارت‌ها را تا بعد از لود JS مخفی می‌کرد) */}
+        <SectionHead eyebrow="انتخاب هوشمند" title="امروز برای چه مناسبتی خرید می‌کنید؟" desc="مناسبت خود را انتخاب کنید؛ هلسا مسیر خرید را برایتان آماده کرده است." />
         <ul className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6 md:gap-4">
           {[
             { icon: "🍽️", label: "پذیرایی مهمان", href: "/mehmani" },
@@ -76,14 +82,12 @@ export async function HomepageLite({ products, categories }: { products: Product
             { icon: "👨‍👩‍👧", label: "دورهمی خانوادگی", href: "/products?cat=nuts" },
             { icon: "🏢", label: "جلسه کاری", href: "/wholesale" },
             { icon: "🌙", label: "شب یلدا", href: "/campaigns" },
-          ].map((m, i) => (
+          ].map((m) => (
             <li key={m.href}>
-              <Reveal delay={i * 40}>
-                <Link href={m.href} className="group flex h-full flex-col items-center gap-2.5 rounded-2xl border border-line/70 bg-surface p-5 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lift">
-                  <span className="text-3xl transition-transform duration-300 group-hover:scale-110" aria-hidden>{m.icon}</span>
-                  <span className="text-[12px] font-black text-heading group-hover:text-brand-700">{m.label}</span>
-                </Link>
-              </Reveal>
+              <Link href={m.href} className="group flex h-full flex-col items-center gap-2.5 rounded-2xl border border-line/70 bg-surface p-5 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lift">
+                <span className="text-3xl transition-transform duration-300 group-hover:scale-110" aria-hidden>{m.icon}</span>
+                <span className="text-[12px] font-black text-heading group-hover:text-brand-700">{m.label}</span>
+              </Link>
             </li>
           ))}
         </ul>
@@ -93,19 +97,22 @@ export async function HomepageLite({ products, categories }: { products: Product
       <section className="bg-surface2/70 border-y border-line/60 py-12 md:py-14" aria-label="اعتماد مشتریان هلسا">
         <div className="container-x">
           <Reveal>
-            <ul className="grid grid-cols-1 gap-6 text-center sm:grid-cols-3">
-              <li>
-                <p className="text-3xl font-black text-heading">۴.۷ <span className="text-lg text-gold-600">از ۵</span></p>
-                <p className="mt-1.5 text-xs font-bold text-muted">میانگین امتیاز {faDigits(products.length)} محصول هلسا</p>
-              </li>
-              <li className="sm:border-x sm:border-line/60">
-                <p className="text-3xl font-black text-heading">{faDigits(totalReviews)}</p>
-                <p className="mt-1.5 text-xs font-bold text-muted">نظر ثبت‌شدهٔ مشتریان روی محصولات</p>
-              </li>
-              <li>
-                <p className="text-3xl font-black text-heading">۱۸۴<span className="text-lg text-gold-600">+</span></p>
-                <p className="mt-1.5 text-xs font-bold text-muted">محصول طبیعی با ضمانت اصالت و تازگی</p>
-              </li>
+            <ul className={`grid grid-cols-1 gap-6 text-center sm:grid-cols-2 ${totalReviews > 0 ? "lg:grid-cols-4" : ""}`}>
+              {[
+                ...(totalReviews > 0
+                  ? [
+                      { v: `${faDigits(avgRating.toFixed(1))} از ۵`, l: `میانگین امتیاز از ${faDigits(totalReviews)} نظر تأییدشده` },
+                      { v: faDigits(totalReviews), l: "نظر تأییدشدهٔ مشتریان" },
+                    ]
+                  : []),
+                { v: `${faDigits(products.length)}+`, l: "محصول طبیعی با ضمانت اصالت و تازگی" },
+                { v: faDigits(categories.length), l: "دسته‌بندی محصولات هلسا" },
+              ].map((t, i, arr) => (
+                <li key={t.l} className={i > 0 && i < arr.length - 1 ? "sm:border-x sm:border-line/60" : ""}>
+                  <p className="text-3xl font-black text-heading">{t.v.includes("از ۵") ? <>{t.v.replace(" از ۵", "")} <span className="text-lg text-gold-700">از ۵</span></> : t.v}</p>
+                  <p className="mt-1.5 text-xs font-bold text-muted">{t.l}</p>
+                </li>
+              ))}
             </ul>
           </Reveal>
         </div>
@@ -115,18 +122,16 @@ export async function HomepageLite({ products, categories }: { products: Product
         <div className="container-x grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <Reveal>
             <div className="rounded-2xl overflow-hidden border border-line/70 img-zoom">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <SmartImage
                 src="/images/tray-classic.jpg"
                 alt="سینی مزه هلسا شامل پنیر، زیتون، خرما، پسته، گردو، انجیر خشک و عسل"
-                loading="lazy"
-                decoding="async"
+                sizes="(min-width:1024px) 50vw, 100vw"
                 className="w-full aspect-[4/3] object-cover"
               />
             </div>
           </Reveal>
           <Reveal delay={0.1}>
-            <span className="text-[11px] font-bold tracking-[0.2em] text-gold-600">مهمانی و مزه هلسا</span>
+            <span className="text-[11px] font-bold tracking-[0.2em] text-gold-700">مهمانی و مزه هلسا</span>
             <h2 className="mt-4 text-2xl md:text-[38px] font-black leading-[1.5] text-heading">
               یک سینی،
               <br />
@@ -173,12 +178,12 @@ export async function HomepageLite({ products, categories }: { products: Product
           <Reveal>
             <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-line/70 bg-surface shadow-soft transition-shadow hover:shadow-lift">
               <div className="relative aspect-[16/10] overflow-hidden img-zoom">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={chocolate.image} alt={chocolate.imageAlt || chocolate.name} loading="lazy" decoding="async" className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+                { }
+                <SmartImage src={chocolate.image} alt={chocolate.imageAlt || chocolate.name} sizes="(min-width:1024px) 50vw, 100vw" className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
                 {chocolate.discount > 0 && <span className="absolute top-4 start-4 rounded-full bg-accent-600 text-inverse px-3 py-1 text-[11px] font-black">{faDigits(chocolate.discount)}٪ تخفیف</span>}
               </div>
               <div className="flex flex-1 flex-col p-6 md:p-7">
-                <span className="text-[11px] font-bold tracking-[0.18em] text-gold-600">امضای کارگاه هلسا</span>
+                <span className="text-[11px] font-bold tracking-[0.18em] text-gold-700">امضای کارگاه هلسا</span>
                 <h3 className="mt-2.5 text-xl font-black leading-8 text-heading">شکلاتی که با خرما شروع می‌شود</h3>
                 <p className="mt-2.5 text-[13px] leading-7 text-muted">{chocolate.shortDescription || chocolate.description.slice(0, 120)}</p>
                 <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
@@ -191,8 +196,8 @@ export async function HomepageLite({ products, categories }: { products: Product
           <Reveal delay={0.08}>
             <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-line/70 bg-surface2/60 shadow-soft transition-shadow hover:shadow-lift">
               <div className="relative aspect-[16/10] overflow-hidden img-zoom">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={dateSugar.image} alt={dateSugar.imageAlt || dateSugar.name} loading="lazy" decoding="async" className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+                { }
+                <SmartImage src={dateSugar.image} alt={dateSugar.imageAlt || dateSugar.name} sizes="(min-width:1024px) 50vw, 100vw" className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
               </div>
               <div className="flex flex-1 flex-col p-6 md:p-7">
                 <span className="text-[11px] font-bold tracking-[0.18em] text-brand-600">شیرینی طبیعی</span>
@@ -212,27 +217,27 @@ export async function HomepageLite({ products, categories }: { products: Product
 
       {/* چرا هلسا (CRO) — چهار ارزش، متن کوتاه */}
       <section className="container-x py-14 md:py-16" aria-label="چرا هلسا">
-        <Reveal>
-          <SectionHead eyebrow="وعدهٔ هلسا" title="چرا هلسا؟" />
-        </Reveal>
-        <ul className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <SectionHead eyebrow="وعدهٔ هلسا" title="چرا هلسا؟" />
+        <ul className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
           {[
             { icon: "BadgeCheck", title: "کیفیت انتخاب‌شده", desc: "هر محصول از منبع معتبر، دست‌چین و کنترل‌شده." },
+            { icon: "Grape", title: "تنوع محصولات", desc: "از خرما و آجیل تا سینی مزه و هدایای سازمانی." },
+            { icon: "Store", title: "مناسب خرید عمده", desc: "قیمت پلکانی و شرایط ویژه برای کافه‌ها، رستوران‌ها و فروشگاه‌ها." },
             { icon: "PackageCheck", title: "بسته‌بندی حرفه‌ای", desc: "بسته‌بندی پرمیوم و شکیل، آمادهٔ هدیه." },
             { icon: "Truck", title: "ارسال سریع", desc: "ارسال به سراسر کشور با بسته‌بندی ایمن." },
             { icon: "Headset", title: "پشتیبانی واقعی", desc: "پاسخ‌گویی واقعی، قبل و بعد از خرید." },
-          ].map((c, i) => (
+          ].map((c) => (
             <li key={c.icon}>
-              <Reveal delay={i * 50}>
-                <div className="flex h-full flex-col items-center gap-3 rounded-2xl border border-line/70 bg-surface p-6 text-center shadow-soft transition-shadow hover:shadow-lift">
+              <div className="flex h-full flex-col items-center gap-3 rounded-2xl border border-line/70 bg-surface p-6 text-center shadow-soft transition-shadow hover:shadow-lift">
                   {c.icon === "BadgeCheck" && <BadgeCheck className="size-7 text-brand-600" aria-hidden />}
-                  {c.icon === "PackageCheck" && <PackageCheck className="size-7 text-gold-600" aria-hidden />}
+                  {c.icon === "Grape" && <Grape className="size-7 text-brand-600" aria-hidden />}
+                  {c.icon === "Store" && <Store className="size-7 text-gold-700" aria-hidden />}
+                  {c.icon === "PackageCheck" && <PackageCheck className="size-7 text-gold-700" aria-hidden />}
                   {c.icon === "Truck" && <Truck className="size-7 text-brand-600" aria-hidden />}
-                  {c.icon === "Headset" && <Headset className="size-7 text-gold-600" aria-hidden />}
+                  {c.icon === "Headset" && <Headset className="size-7 text-gold-700" aria-hidden />}
                   <h3 className="text-[13.5px] font-black text-heading">{c.title}</h3>
                   <p className="text-[11.5px] leading-6 text-muted">{c.desc}</p>
                 </div>
-              </Reveal>
             </li>
           ))}
         </ul>
@@ -247,8 +252,7 @@ export async function HomepageLite({ products, categories }: { products: Product
             <Reveal key={c.slug} delay={i * 0.06}>
               <Link href={`/products?cat=${c.slug}`} className="group block">
                 <span className="block rounded-2xl overflow-hidden aspect-[4/5] bg-surface2 border border-line/60">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={c.image} alt={c.imageAlt || `${c.name} هلسا`} loading="lazy" decoding="async" className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+                  <SmartImage src={c.image} alt={c.imageAlt || `${c.name} هلسا`} sizes="(min-width:768px) 22vw, 45vw" className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
                 </span>
                 <span className="mt-3 block text-[15px] font-black text-heading group-hover:text-brand-600 transition-colors">{c.name}</span>
                 <span className="mt-1 block text-xs leading-6 text-muted line-clamp-2-fa">{c.shortDescription || c.description}</span>
@@ -262,12 +266,12 @@ export async function HomepageLite({ products, categories }: { products: Product
         <div className="container-x grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <Reveal>
             <div className="rounded-2xl overflow-hidden border border-line/70 img-zoom">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/story-grove.jpg" alt="نخلستان خرما در نور طلوع" loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover" />
+              { }
+              <SmartImage src="/images/story-grove.jpg" alt="نخلستان خرما در نور طلوع" sizes="(min-width:1024px) 50vw, 100vw" className="w-full aspect-[4/3] object-cover" />
             </div>
           </Reveal>
           <Reveal delay={0.1}>
-            <span className="text-[11px] font-bold tracking-[0.2em] text-gold-600">داستان هلسا</span>
+            <span className="text-[11px] font-bold tracking-[0.2em] text-gold-700">داستان هلسا</span>
             <h2 className="mt-4 text-2xl md:text-[36px] font-black leading-[1.5] text-heading">
               طعم طبیعت ایران،
               <br />
@@ -308,7 +312,7 @@ export async function HomepageLite({ products, categories }: { products: Product
 
       <section className="container-x py-16 md:py-20 text-center" aria-label="شروع خرید از هلسا">
         <Reveal>
-          <Sparkles className="size-5 mx-auto text-gold-600" aria-hidden />
+          <Sparkles className="size-5 mx-auto text-gold-700" aria-hidden />
           <h2 className="mt-4 text-2xl md:text-[34px] font-black leading-[1.5] text-heading">انتخاب خود را از هلسا آغاز کنید</h2>
           <div className="mt-8 flex justify-center gap-3">
             <LinkButton href="/products" variant="primary" size="lg">مشاهده محصولات</LinkButton>

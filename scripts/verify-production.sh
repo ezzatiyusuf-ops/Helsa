@@ -76,6 +76,22 @@ if curl -s -o /dev/null --max-time 3 http://localhost:3000/; then
   CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/products/bogus-xyz-audit)
   [ "$CODE" = "404" ] && ok "404 واقعی روی اسلاج ناموجود" || warn "soft-404؟ استاتوس: $CODE"
   curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/health | grep -q 200 && ok "health endpoint سالم" || warn "health endpoint پاسخ نداد"
+  # ── تلهٔ ایندکس (فاز ۹): متادیتای robots روی صفحات استاتیک هنگام **بیلد** پخته می‌شود.
+  # اگر بیلد بدون ALLOW_INDEXING=1 گرفته شود، کل سایت — از جمله PDP — با noindex منتشر
+  # می‌شود حتی اگر در زمان اجرا این متغیر ست باشد. این بررسی همان تله را می‌گیرد.
+  if [ "${ALLOW_INDEXING:-}" = "1" ]; then
+    if curl -s http://localhost:3000/products/mazafati-dates | grep -q 'name="robots" content="noindex'; then
+      fail "ALLOW_INDEXING=1 است ولی PDP با noindex منتشر شده — بیلد باید با ALLOW_INDEXING=1 گرفته شود"
+    else
+      ok "PDP با index منتشر شده (بیلد و اجرا هم‌خوان با ALLOW_INDEXING=1)"
+    fi
+  else
+    curl -s http://localhost:3000/products/mazafati-dates | grep -q 'name="robots" content="noindex' \
+      && ok "ایندکس خاموش است (noindex روی PDP) — برای لانچ ALLOW_INDEXING=1 را در **بیلد** بگذارید" \
+      || warn "ALLOW_INDEXING تنظیم نشده ولی صفحه noindex نیست"
+  fi
+  if curl -s http://localhost:3000/robots.txt | grep -q "Disallow: /account"; then ok "robots.txt مسیرهای خصوصی را می‌بندد"; else warn "robots.txt مسیرهای خصوصی را نمی‌بندد (ALLOW_INDEXING=0؟)"; fi
+  if curl -s http://localhost:3000/sitemap.xml | grep -q "<loc>"; then ok "sitemap.xml آدرس دارد"; else warn "sitemap.xml خالی است (ALLOW_INDEXING=0 در بیلد)"; fi
   # GTM — سازگاری env ↔ CSP ↔ تزریق (اگر پیکربندی شده باشد)
   GTM_ID_VAL="$(get NEXT_PUBLIC_GTM_ID)"
   if [ -n "$GTM_ID_VAL" ]; then

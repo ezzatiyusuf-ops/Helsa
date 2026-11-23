@@ -48,7 +48,7 @@ export function Toc({ items }: { items: { id: string; text: string }[] }) {
   return (
     <nav aria-label="فهرست مطالب" className="hidden lg:block">
       <p className="flex items-center gap-2 text-[11px] font-black tracking-wide text-heading">
-        <ListTree className="size-4 text-gold-600" aria-hidden /> فهرست مطالب
+        <ListTree className="size-4 text-gold-700" aria-hidden /> فهرست مطالب
       </p>
       <ul className="mt-4 space-y-1 border-s border-line/80">
         {items.map((i) => (

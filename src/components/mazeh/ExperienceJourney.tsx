@@ -49,11 +49,14 @@ export function ExperienceJourney({ trays }: { trays: MazehTray[] }) {
 
   // بازیابی انتخاب از URL (?guests=&occ=) در اولین رندر — رفرش، سفر را حفظ می‌کند
   useEffect(() => {
-    const sp = new URLSearchParams(window.location.search);
-    const g = sp.get("guests") as GuestId | null;
-    const o = sp.get("occ");
-    if (g && GUESTS.some((x) => x.id === g)) setGuests(g);
-    if (o && OCCASIONS.some((x) => x.id === o)) setOcc(o);
+    const t = window.setTimeout(() => {
+      const sp = new URLSearchParams(window.location.search);
+      const g = sp.get("guests") as GuestId | null;
+      const o = sp.get("occ");
+      if (g && GUESTS.some((x) => x.id === g)) setGuests(g);
+      if (o && OCCASIONS.some((x) => x.id === o)) setOcc(o);
+    }, 0);
+    return () => window.clearTimeout(t);
   }, []);
 
   const syncUrl = (g: GuestId, o: string) => {

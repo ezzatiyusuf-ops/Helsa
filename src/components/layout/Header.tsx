@@ -67,6 +67,18 @@ const TRAY_TILES = [
   { label: "سینی نوروز", href: "/mazeh-trays?cat=norooz", image: "tray-norooz" },
 ];
 
+/**
+ * کاشی‌های بصری «مرکز سلامت و رسانه» — همان کیفیت منوی محصولات/هدایا (درخواست کاربر).
+ * تصاویر واقعی و منطبق با مقصد: هروهای خود صفحات سلامت، تصویر راهنمای واقعی دمنوش
+ * و تصویر مقالهٔ واقعی دانش کشاورزی (هیچ تصویر گمراه‌کننده‌ای استفاده نشده).
+ */
+const HEALTH_TILES = [
+  { label: "مرکز سلامت", desc: "تغذیه، سبک زندگی و دمنوش", href: "/health-center", image: "health-center-hero" },
+  { label: "سلامت روان", desc: "استرس، خواب و ذهن‌آگاهی", href: "/health-center/mental-health", image: "mental-health-hero" },
+  { label: "راهنمای محصولات", desc: "انتخاب، نگهداری و مصرف درست", href: "/guides", image: "herbal-tea" },
+  { label: "مجلهٔ هلسا", desc: "دانش، پشت‌صحنه و داستان‌ها", href: "/blog", image: "agriculture-knowledge" },
+];
+
 /** Image-based entries for the mobile drawer (spec §11) */
 
 const MOBILE_TILES = [
@@ -132,11 +144,11 @@ export function Header() {
         <div className="container-x flex items-center justify-between h-9">
           <div className="flex items-center gap-5">
             <a href={`tel:${SITE.landline}`} className="inline-flex items-center gap-1.5 hover:text-brand-700 transition-colors" dir="ltr">
-              <Phone className="size-3 text-gold-600" aria-hidden />
+              <Phone className="size-3 text-gold-700" aria-hidden />
               {SITE.landline}
             </a>
             <span className="inline-flex items-center gap-1.5">
-              <Clock className="size-3 text-gold-600" aria-hidden />
+              <Clock className="size-3 text-gold-700" aria-hidden />
               پشتیبانی {SITE.supportHours}
             </span>
           </div>
@@ -195,7 +207,7 @@ export function Header() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 6 }}
                       transition={{ duration: 0.25 }}
-                      className={`absolute top-full start-0 mt-2 rounded-2xl bg-surface shadow-lift border border-line/80 p-5 overflow-hidden ${item.label === "محصولات" || item.label === "هدایا" ? "w-[640px]" : item.href === "/experience" ? "w-[420px]" : "w-72"}`}
+                      className={`absolute top-full start-0 mt-2 rounded-2xl bg-surface shadow-lift border border-line/80 p-5 overflow-hidden ${item.label === "محصولات" || item.label === "هدایا" || item.label === "مرکز سلامت" ? "w-[640px]" : item.href === "/experience" ? "w-[420px]" : "w-72"}`}
                     >
                       {item.label === "محصولات" ? (
                         <div className="grid grid-cols-4 gap-4">
@@ -247,6 +259,30 @@ export function Header() {
                           <Link href="/mazeh-trays/build" className="col-span-3 mt-1 flex h-10 items-center justify-center rounded-full bg-brand-700 text-[11.5px] font-bold text-inverse transition-colors hover:bg-brand-800">
                             سینی مزه خودت را بساز
                           </Link>
+                        </div>
+                      ) : item.label === "مرکز سلامت" ? (
+                        /* کاشی‌های بصری مرکز سلامت — هم‌الگوی محصولات/هدایا و هم‌محتوا با منوی موبایل (درخواست کاربر) */
+                        <div>
+                          <div className="grid grid-cols-4 gap-4">
+                            {HEALTH_TILES.map((t) => (
+                              <Link key={t.label} href={t.href} className="group block">
+                                <span className="block rounded-xl overflow-hidden aspect-[4/3] bg-surface2 shadow-soft transition-shadow duration-500 group-hover:shadow-lift">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img src={tileImg(t.image)} alt={t.label} loading="lazy" className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+                                </span>
+                                <span className="mt-2.5 block text-[12.5px] font-bold text-heading group-hover:text-brand-600 transition-colors">{t.label}</span>
+                                <span className="block text-[10.5px] text-muted mt-0.5 leading-4">{t.desc}</span>
+                              </Link>
+                            ))}
+                          </div>
+                          <div className="mt-4 flex gap-2 border-t border-line-soft pt-4">
+                            <Link href="/podcast" className="flex-1 h-10 flex items-center justify-center rounded-full border border-brand-700/40 text-[11.5px] font-bold text-heading transition-colors hover:bg-brand-50">
+                              پادکست هلسا — به‌زودی
+                            </Link>
+                            <Link href="/videocast" className="flex-1 h-10 flex items-center justify-center rounded-full border border-brand-700/40 text-[11.5px] font-bold text-heading transition-colors hover:bg-brand-50">
+                              ویدیاکست
+                            </Link>
+                          </div>
                         </div>
                       ) : (
                         <div className="space-y-1">
@@ -506,14 +542,14 @@ function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
                 {/* پیشرفت ارسال رایگان (CRO/AOV) — آستانهٔ واقعی ۲ میلیون تومان */}
                 <div>
                   <p className="text-[11px] font-bold text-muted">
-                    {subtotal >= 2_000_000
+                    {subtotal >= SITE.freeShippingThreshold
                       ? "ارسال رایگان این سفارش فعال شد 🎉"
-                      : `${formatToman(2_000_000 - subtotal)} دیگر تا ارسال رایگان`}
+                      : `${formatToman(SITE.freeShippingThreshold - subtotal)} دیگر تا ارسال رایگان`}
                   </p>
                   <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-line" aria-hidden>
                     <div
                       className="h-full rounded-full bg-brand-600 transition-all duration-500"
-                      style={{ width: `${Math.min(100, Math.round((subtotal / 2_000_000) * 100))}%` }}
+                      style={{ width: `${Math.min(100, Math.round((subtotal / SITE.freeShippingThreshold) * 100))}%` }}
                     />
                   </div>
                 </div>
@@ -609,19 +645,22 @@ function MobileMenu({ open, onClose, onSearch }: { open: boolean; onClose: () =>
                 </Link>
               </div>
 
-              {/* سلامت و رسانه (فاز UX — دسترسی مستقیم موبایل) */}
+              {/* سلامت و رسانه — کاشی‌های بصری هم‌کیفیت با محصولات/هدایا (درخواست کاربر) */}
               <div className="pb-4 mb-3 border-b border-line-soft">
                 <p className="mb-2.5 text-[11px] font-black text-muted">مرکز سلامت و رسانهٔ هلسا</p>
-                <div className="grid grid-cols-2 gap-x-3 gap-y-1">
-                  {[
-                    { label: "مرکز سلامت", href: "/health-center" },
-                    { label: "سلامت روان", href: "/health-center/mental-health" },
-                    { label: "راهنمای محصولات", href: "/guides" },
-                    { label: "مجلهٔ هلسا", href: "/blog" },
-                  ].map((l) => (
-                    <Link key={l.href} href={l.href} onClick={onClose} className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-[12.5px] font-bold text-heading transition-colors hover:bg-surface2 hover:text-brand-600">
-                      <span className="size-1 rounded-full bg-gold-500/80" aria-hidden /> {l.label}
-                    </Link>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {HEALTH_TILES.map((t, i) => (
+                    <motion.div key={t.href} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.02 * i, duration: 0.22 }}>
+                      <Link href={t.href} onClick={onClose} className="group relative block overflow-hidden rounded-xl border border-line/60 aspect-[4/3]">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={tileImg(t.image)} alt={t.label} loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-[1.05]" />
+                        <span className="absolute inset-0 bg-gradient-to-t from-brand-950/85 to-transparent" aria-hidden />
+                        <span className="absolute bottom-1.5 start-2.5 end-2 leading-4">
+                          <span className="block text-[11px] font-black text-inverse">{t.label}</span>
+                          <span className="block text-[9.5px] font-bold text-inverse/75">{t.desc}</span>
+                        </span>
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
               </div>

@@ -116,7 +116,7 @@ export default function ContactClient() {
         {/* hours + messengers + map */}
         <Reveal delay={0.1} className="lg:col-span-2 space-y-5">
           <div className="rounded-2xl border border-line/70 bg-surface p-7">
-            <h2 className="text-sm font-black text-heading flex items-center gap-2"><Clock className="size-4 text-gold-600" aria-hidden /> ساعات پاسخگویی</h2>
+            <h2 className="text-sm font-black text-heading flex items-center gap-2"><Clock className="size-4 text-gold-700" aria-hidden /> ساعات پاسخگویی</h2>
             <ul className="mt-4 space-y-2.5 text-xs text-body">
               {SITE.workHours.map((w) => (
                 <li key={w.day} className="flex justify-between rounded-xl bg-surface2 border border-line-soft px-4 py-2.5">

@@ -67,13 +67,13 @@ export function NewsletterSection() {
         <div className="relative overflow-hidden rounded-[1.75rem] border border-gold-300/70 bg-gradient-to-l from-gold-50 via-surface to-brand-50/50 p-8 shadow-lift md:p-12">
           <div className="relative mx-auto max-w-2xl text-center">
             <p className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-surface px-3.5 py-1.5 text-[11px] font-bold text-brand-700 shadow-soft">
-              <Gift className="size-3.5 text-gold-600" aria-hidden /> هدیهٔ اولین خرید
+              <Gift className="size-3.5 text-gold-700" aria-hidden /> هدیهٔ اولین خرید
             </p>
             <h2 className="mt-5 text-xl font-black leading-[1.7] text-heading md:text-[26px]">
               ۲۰۰ هزار تومان هدیهٔ اولین خرید
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-[13px] leading-7 text-muted">
-              عضو خبرنامهٔ هلسا شوید و کد تخفیف اختصاصی اولین خریدتان را همین حالا دریافت کنید — به‌علاوهٔ خبر برداشت تازه و پیشنهادهای ویژهٔ اعضا.
+              عضو خبرنامهٔ هلسا شوید و کد تخفیف اختصاصی اولین خریدتان (۲۰۰ هزار تومان، برای خریدهای از ۱ میلیون تومان) را همین حالا دریافت کنید — به‌علاوهٔ خبر برداشت تازه و پیشنهادهای ویژهٔ اعضا.
             </p>
 
             {state === "done" ? (

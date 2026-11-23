@@ -3,7 +3,7 @@ import { InstagramIcon, LinkedinIcon, YoutubeIcon } from "@/components/ui/icons"
 import { SITE } from "@/config/site";
 import { getInstagramFeed, getInstagramStories } from "@/services/instagram";
 import { SmartImage } from "@/components/ui/SmartImage";
-import { Reveal, SectionHead } from "@/components/ui/primitives";
+import { SectionHead } from "@/components/ui/primitives";
 import { Stories } from "@/components/home/Stories";
 import { CarouselRow } from "@/components/ui/CarouselRow";
 import { faDigits } from "@/lib/format";
@@ -27,36 +27,29 @@ export async function InstagramSection() {
     { href: SITE.instagramUrl, label: "اینستاگرام", handle: SITE.instagram, Icon: InstagramIcon, external: true },
     { href: tg, label: "تلگرام", handle: `@${SITE.messengers.telegram}`, Icon: Send, external: true },
     { href: wa, label: "واتس‌اپ", handle: faDigits(SITE.messengers.whatsapp), Icon: MessageCircle, external: true },
-    { href: "https://linkedin.com/company/helsa", label: "لینکدین", handle: "Helsa", Icon: LinkedinIcon, external: true },
-    { href: "https://youtube.com/@HelsaNuts", label: "یوتیوب", handle: "@HelsaNuts", Icon: YoutubeIcon, external: true },
+    // linkedin/youtube hidden until the owner provides verified handles (brief 3.4)
   ];
 
   return (
     <section className="bg-surface2/70 border-y border-line/60 pt-16 md:pt-20 pb-8 md:pb-10" aria-label="هلسا در شبکه‌های اجتماعی">
       <div className="container-x">
-        <Reveal>
-          <SectionHead
-            eyebrow="هلسا در شبکه‌های اجتماعی"
-            title="اینستاگرام هلسا را دنبال کنید"
-            desc={`تازه‌های فروشگاه، پشت‌صحنهٔ تولید و ایده‌های پذیرایی — ${SITE.instagram}`}
-          />
-        </Reveal>
+        <SectionHead
+          eyebrow="هلسا در شبکه‌های اجتماعی"
+          title="اینستاگرام هلسا را دنبال کنید"
+          desc={`تازه‌های فروشگاه، پشت‌صحنهٔ تولید و ایده‌های پذیرایی — ${SITE.instagram}`}
+        />
 
         {/* نوار استوری‌ها */}
-        {stories.length > 0 && (
-          <Reveal>
-            <Stories stories={stories} className="mt-10" />
-          </Reveal>
-        )}
+        {stories.length > 0 && <Stories stories={stories} className="mt-10" />}
 
         {/* نوار کشویی افقی (بازخورد کاربر): پست‌ها کنار-هم با فلش/سوایپ */}
         {posts.length > 0 && (
         <CarouselRow ariaLabel="پست‌های اینستاگرام هلسا — نوار کشویی" className="mt-8">
-          {posts.map((post, i) => {
+          {posts.map((post) => {
             const href = post.permalink ?? (post.productSlug ? `/products/${post.productSlug}` : SITE.instagramUrl);
             const external = href.startsWith("http");
             return (
-              <Reveal key={post.id} delay={i * 40} className="w-[42vw] min-[400px]:w-[40vw] sm:w-[224px] lg:w-[248px] shrink-0 snap-start">
+              <div key={post.id} className="w-[42vw] min-[400px]:w-[40vw] sm:w-[224px] lg:w-[248px] shrink-0 snap-start">
                 <a
                   href={href}
                   {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -86,22 +79,20 @@ export async function InstagramSection() {
                     </span>
                   </span>
                 </a>
-              </Reveal>
+              </div>
             );
           })}
         </CarouselRow>
         )}
 
         {/* نوار دنبال‌کردن شبکه‌های اجتماعی */}
-        <Reveal delay={120}>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             {socials.map(({ href, label, handle, Icon, external }) => (
               <a
                 key={label}
                 href={href}
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="inline-flex items-center gap-2.5 rounded-full border border-line bg-surface px-5 py-2.5 text-xs font-bold text-heading transition-all hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-soft"
-                aria-label={`${label} هلسا — ${handle}`}
               >
                 <span className="grid size-8 place-items-center rounded-full bg-brand-700 text-inverse"><Icon className="size-4" aria-hidden /></span>
                 <span className="flex flex-col items-start leading-5">
@@ -110,22 +101,19 @@ export async function InstagramSection() {
                 </span>
               </a>
             ))}
-          </div>
-        </Reveal>
+        </div>
 
         {/* لینک صفحهٔ کامل اینستاگرام هلسا */}
         {posts.length >= 8 && (
-          <Reveal delay={160}>
-            <div className="mt-3 text-center">
+          <div className="mt-3 text-center">
               <a
                 href="/instagram"
                 className="inline-flex items-center gap-2 text-xs font-black text-brand-700 transition-colors hover:text-brand-600"
               >
                 مشاهدهٔ همهٔ پست‌ها و استوری‌ها
                 <ArrowLeft className="size-4" aria-hidden />
-              </a>
-            </div>
-          </Reveal>
+            </a>
+          </div>
         )}
       </div>
     </section>

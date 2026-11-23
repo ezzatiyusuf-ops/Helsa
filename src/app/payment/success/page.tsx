@@ -33,7 +33,7 @@ function PaymentSuccessPageInner() {
           <span className="inline-flex size-16 rounded-full bg-brand-700 text-inverse items-center justify-center">
             <CheckCircle2 className="size-8" aria-hidden />
           </span>
-          <p className="mt-4 text-[11px] font-bold tracking-[0.2em] text-gold-600">{state === "success" ? "پرداخت با موفقیت انجام شد" : "سفارش شما ثبت شد"}</p>
+          <p className="mt-4 text-[11px] font-bold tracking-[0.2em] text-gold-700">{state === "success" ? "پرداخت با موفقیت انجام شد" : "سفارش شما ثبت شد"}</p>
           <h1 className="mt-2 text-2xl font-black text-heading">
             {state === "success" ? "پرداخت با موفقیت انجام شد" : (state === "pending" ? "سفارش شما با موفقیت ثبت شد" : "سفارش شما با موفقیت ثبت شد")}
           </h1>

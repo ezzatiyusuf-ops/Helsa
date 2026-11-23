@@ -1,62 +1,46 @@
-# امنیت هلسا — SECURITY.md
+# امنیت (SECURITY)
 
-> وضعیت: هاردنینگ فاز ۴ + استرس‌تست فاز ۵ (۱۴/۱۴ PASS با `scripts/stress-test-auth.py`).
+> وضعیت امنیتی تست‌شدهٔ هلسا پس از سخت‌سازی (سپتامبر ۲۰۲۶). منبع کد: همین ریپو؛ همهٔ ادعاها با تست واقعی (qa-security.cjs، 18 تست سبز) پشتیبانی می‌شوند.
 
-## ۱. مدل احراز هویت
+## نشست و احراز هویت
 
-| لایه | مکانیزم |
-| --- | --- |
-| نشست | JWT `jose` HS256 در کوکی `helsa_session` — `HttpOnly` + `SameSite=Lax` + `Secure` در production، عمر ۷ روز |
-| ساختار توکن | `SessionPayload { sub: "customer:{id}", name, email, phone?, provider, role }` — **همیشه** `customerIdFromSession(session)` برای استخراج id |
-| رمز عبور | `scryptSync` داخلی با فرمت `scrypt$salt$hex` (src/lib/auth-service.ts، server-only) |
-| OTP | شماره تلفن + کد یک‌بارمصرف؛ در dev با `ALLOW_DEV_OTP_HINT=1` کد در پاسخ برمی‌گردد |
-| ادمین | `requireAdminApi()` + `adminErrorResponse()` (src/lib/admin.ts) — نقش `role` داخل توکن امضاشده؛ توکن جعلی/دستکاری‌شده رد می‌شود |
+- کوکی نشست `helsa_session`: **HttpOnly + SameSite=Lax + Secure** (در production) — امضا با jose HS256 و `AUTH_SECRET`.
+- لاگین با رمز/OTP/Google/Apple (امضای client-secret اپل **سمت سرور**: `src/app/api/auth/apple/client-secret.ts`).
+- محدودیت نرخ (rate-limit) روی مسیرهای حساس: لاگین، OTP، ثبت سفارش، identity.
+- نقش ادمین فقط از `ADMIN_EMAILS` سمت سرور — هرگز از مرورگر پذیرفته نمی‌شود.
 
-**اصل طلایی:** هرگز به `sub` خام اعتماد نکن؛ نقش و id فقط از توکن verify شده.
+## مرز اعتماق و اعتبارسنجی
 
-## ۲. دفاع‌های پیاده‌سازی‌شده (src/lib/security.ts)
+- **Zod در مرز اعتماق**: همهٔ API routes ورودی را با schema اعتبارسنجی می‌کنند (`orders`، `identity`، `auth`، `admin/*`).
+- **قیمت/موجودی/تخفیف سمت سرور محاسبه می‌شود** — payload قیمت کلاینت بازقیمت‌گذاری می‌شود؛ قیمت ارسالی مرورگر هرگز مبنای ثبت نیست.
+- **موجودی تراکنشی**: decrement با گارد موجودی در تراکنش SQL — تست استرس ۱۰ خریدار هم‌زمان: بدون oversell (15/15).
+- استوک/نقش/قیمت از مرورگر پذیرفته نمی‌شود؛ endpoints ادمین با نشست+نقش گارد می‌شوند.
 
-- `assertSameOrigin` / `csrfRejectedResponse` — بررسی Origin برای متدهای تغییردهنده
-- `clientKey` — کلید نرخ‌محور بر پایه IP + مسیر
-- `rateLimit` / `rateLimitedResponse` — پنجره لغزان در حافظه (لاگین، OTP، ثبت‌نام)
-- `genericAuthMessage` — پیام‌های عمومی («امکان ایجاد حساب با این اطلاعات وجود ندارد») بدون افشای وجود/عدم وجود حساب
+## CSRF و Same-Origin
 
-## ۳. هدرهای امنیتی (next.config.ts)
+- `assertSameOrigin(req)` روی APIهای حساس (سفارش، پرداخت، ادمین) — درخواست خارج از مبدا رد (403).
+- کوکی‌ها SameSite=Lax؛ اکشن‌های تغییردهنده POST/JSON هستند.
 
-- `X-Frame-Options: SAMEORIGIN`، `X-Content-Type-Options: nosniff`، `Referrer-Policy`
-- CSP (پیش‌فرض سخت‌گیرانه؛ `'unsafe-eval'` فقط در dev)
-- `Permissions-Policy` محدود
+## پرداخت
 
-## ۴. اصل قیمت سرور-محور
+- درگاه واقعی فقط با کلید سرور؛ روش پرداخت پیکربندی‌نشده → **503** (نه شبیه‌سازی).
+- `PAYMENTS_SANDBOX` فقط dev؛ شبیه‌ساز در production غیرفعال.
+- احراز هویت سفارش (کد ملی + موبایل تأییدشده، `IDENTITY_REQUIRED=1` پیش‌فرض) با توکن انقضادار.
+- Idempotency سفارش: `idempotencyKey` → دابل‌کلیک/ریتری سفارش تکراری نمی‌سازد.
 
-کلاینت هیچ‌گاه قیمت نهایی را تعیین نمی‌کند:
+## اسرار
 
-- سفارش عادی: کلیدهای سبد `p-{id}` / `t-{id}` / `gift-quote-{id}` / `custom-quote-{id}` — سرور قیمت/موجودی/کوپن/ارسال را از DB محاسبه می‌کند
-- سفارش عمده: فقط `{ productId, quantity }` — قیمت عمده، تخفیف پلکانی، MOQ و حداقل مبلغ همه سمت سرور
+- اسکن راز هاردکد در `src/`: **صفر مورد** (الگوهای secret/password/token با مقدار ≥16 نویسه).
+- `DATABASE_URL` فقط env؛ به باندل کلاینت نشت ندارد (فقط `NEXT_PUBLIC_*` در کلاینت).
+- `.env` در `.gitignore`؛ نمونه‌ها بدون مقدار واقعی.
 
-## ۵. نتیجه استرس‌تست (فاز ۵)
+## هدرها و CSP
 
-`python3 scripts/stress-test-auth.py` (سرور باید تازه restart شده باشد):
+- CSP از `next.config.ts` (اسکریپت‌ها به خود دامنه + GTM در صورت `NEXT_PUBLIC_GTM_ID`)، به‌همراه هدرهای امنیتی استاندارد. جزییات دقیق هدرها با `curl -I` روی استقرار قابل راستی‌آزمایی است.
 
-| چک | نتیجه |
-| --- | --- |
-| ۶۰ ثبت‌نام موازی | بدون 5xx، بدون duplicate |
-| تلفن/ایمیل تکراری | 409 با پیام عمومی |
-| بروت‌فورس (۳۰ پسورد غلط) | ۲۱×429 + ۹×401، بدون leak اطلاعات |
-| OTP flood | 400/429 بدون کرش |
-| JWT جعلی / دستکاری‌شده / ادمین‌سازی دستی | همه unauthenticated |
-| توکن ادمین جعلی روی /api/admin/wholesale | 401 |
-| سلامت سرویس بعد از حمله | 200 |
+## شناخته‌شده و باز (honest)
 
-## ۶. مسیرهای خصوصی
-
-`/admin`، `/account`، `/wholesale/dashboard`، `/checkout`، `/payment` — همگی گارد سشنی/نقشی دارند و در `robots.txt` بلاک هستند.
-
-## ۷. برای استقرار production
-
-1. `NEXT_PUBLIC_SITE_URL` واقعی را تنظیم کنید (برای canonical/sitemap/CSP)
-2. `SESSION_SECRET` قوی و یکتا از environment
-3. `ALLOW_DEV_OTP_HINT` را حذف کنید
-4. rate-limit در حافظه است — برای چند نمونه، Redis یا درگاه LB را جایگزین کنید
-5. TLS termination + HSTS در reverse proxy
-6. لاگ‌های `/api/health` و خطاهای 5xx را مانیتور کنید
+- rate-limit **درون‌حافظه‌ای** است (per-isolate) — برای لایهٔ پرترافیک تولید، ارتقا به Durable Objects/KV پیشنهاد می‌شود.
+- بج‌های Enamad/Samandehi/درگاه فقط با کد/لینک واقعی مشتری فعال می‌شوند — نسخهٔ فعلی placeholder ندارد و بج فیک نمی‌زند.
+- OTP بدون `SMS_PROVIDER` ارسال نمی‌شود (چالش ساخته می‌شود + هشدار لاگ) — سرویس پیامکی منتظر انتخاب مشتری است.
+- تیک‌های امنیتی qa-security.cjs: 18/18 سبز در آخرین اجرا.

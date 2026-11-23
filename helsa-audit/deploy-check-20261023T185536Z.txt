@@ -1,0 +1,213 @@
+════════════════════════════════════════════════════════════════
+ HELSA — دروازهٔ انتشار · http://127.0.0.1:3000
+ زمان (UTC): 20261023T185536Z · حالت: محلی
+════════════════════════════════════════════════════════════════
+
+── ۱) سرویس و دیتابیس ──
+  ✓ صفحهٔ خانه: 200
+  ✓ api/health: دیتابیس متصل (configured=True reachable=True)
+
+── ۲) ایندکس‌پذیری (تلهٔ بیلد) ──
+  ✓ خانه: robots=«index, follow»
+  ✓ فهرست محصولات: robots=«index, follow»
+  ✓ PDP /products/rose-petal-jam: robots=«index, follow»
+
+── ۳) robots.txt و نقشهٔ سایت ──
+  ✓ robots.txt خط Sitemap دارد
+  ✓ Sitemap → https://helsairanian.ir/sitemap.xml
+  ✓ robots.txt مسیرهای خصوصی را می‌بندد
+  ✓ sitemap: 35 آدرس (ریشه + نقشه‌های فرزند)
+
+── ۴) سرآیندهای امنیتی ──
+  ✓ سرآیند HSTS
+  ✓ سرآیند nosniff
+  ✓ سرآیند ضد iframe
+  ✓ سرآیند referrer
+  ✓ Content-Security-Policy
+  ✓ Permissions-Policy
+
+── ۵) صفحات ضروری ──
+  ✓ /terms → 200
+  ✓ /privacy → 200
+  ✓ /refund → 200
+  ✓ /shipping → 200
+  ✓ /contact → 200
+  ✓ /faq → 200
+  ✓ /products → 200
+  ✓ /cart → 200
+
+── ۶) App Links اندروید ──
+  ▲ assetlinks.json → ۴۰۴ (ANDROID_APP_SHA256 تنظیم نشده؛ رفتار صادقانه، نه خطا)
+
+── ۷) ممیزی‌های خودکار روی همین دامنه ──
+  ✓ SEO — نتیجه: 2 سالم · 18 هشدار · 0 ناموفق
+── سالم ──
+  ✓ sitemap: 35 آدرس در 1 نقشه
+  ✓ robots.txt Sitemap → https://helsairanian.ir/sitemap.xml
+
+── هشدار ──
+  ▲ /: در sitemap نیست
+  ▲ /products: og:image ندارد
+  ▲ /campaigns: og:type ندارد
+  ▲ /gifts: og:type ندارد
+  ▲ /gifts/corporate: طول description 182
+  ▲ /gifts/corporate: og:type ندارد
+  ▲ /founder: og:type ندارد
+  ▲ /faq: طول title 71 («سوالات متداول هلسا | پاسخ به پرسش‌های خر…»)
+  ▲ /refund: طول description 39
+  ▲ /terms: طول description 46
+  ▲ /wholesale: طول description 190
+  ▲ /podcast: noindex روی صفحهٔ عمومی
+  ▲ /podcast: در sitemap نیست
+  ▲ /videocast: noindex روی صفحهٔ عمومی
+  ▲ /videocast: در sitemap نیست
+  ▲ /compare: در sitemap نیست
+  ▲ /register: طول description 46
+  ▲ /account: طول description 36
+
+نتیجه: 2 سالم · 18 هشدار · 0 ناموفق
+  ✓ دسترس‌پذیری محتوا/UI — بدون خطای اجرا
+  کد  h1 JSONLD  img  متا  مسیر
+──────────────────────────────────────────────────────────────────────────────
+ 200   1      3   31  142  / 
+ 200   1      5   14  138  /products 
+ 200   1      5    9   97  /products?cat=dates 
+ 200   1      5   14  138  /products?sort=price-asc 
+ 200   1      6   19   95  /products/handmade-date-chocolate 
+ 200   1      6   20   84  /products/lahijan-black-tea 
+ 200   1      6   13  114  /products/date-bar 
+ 200   1      3    2  132  /rooziteh 
+ 200   1      3    2  142  /rooziteh/apply 
+ 200   1      3    8  132  /mazeh 
+ 200   1      5   25  157  /mazeh-trays 
+ 200   1      3    2  119  /mazeh-trays/build 
+ 200   1      5    5  175  /gifts 
+ 200   1      3    6   81  /gifts/personal 
+ 200   1      5   10  182  /gifts/corporate 
+ 200   1      4    2  190  /wholesale 
+ 200   1      4    9  127  /campaigns 
+ 200   1      3    2   79  /offers 
+ 200   1      3   22   83  /blog 
+ 200   1      4   15  133  /health-center 
+ 200   1      3    9  135  /guides 
+ 200   1      3    8  130  /about 
+ 200   1      3    2  110  /contact 
+ 200   1      4    2  112  /faq 
+ 200   1      3    2   53  /shipping 
+ 200   1      3    2   39  /refund 
+ 200   1      3    2   46  /terms 
+ 200   1      3    2   66  /privacy 
+ 200   1      3    2   73  /cart 
+ 200   1      3    2  100  /checkout 
+ 200   1      3    2   61  /login 
+ 200   1      3    2   46  /register 
+ 200   1      3    2   51  /forgot-password 
+ 200   1      3    2   79  /wishlist 
+ 200   1      3   28   57  /search?q=خرما 
+ 200   1      3    2  107  /track 
+ 200   1      3    2  142  /payment/card 
+ 200   —     —     —     —   /sitemap.xml
+ 200   —     —     —     —   /robots.txt
+ 200   —     —     —     —   /manifest.webmanifest
+ 404   1      3    2  142  /این-مسیر-نیست (۴۰۴ مورد انتظار)
+──────────────────────────────────────────────────────────────────────────────
+
+✓ همهٔ مسیرهای بازرسی‌شده سالم‌اند.
+  ✓ کنتراست — نتیجه: 0 جفت زیر حد AA
+
+── تم روشن ──
+  ✓   heading روی canvas    = 16.23:1  (حد AA متن معمولی ۴٫۵)
+  ✓      body روی canvas    = 10.66:1  (حد AA متن معمولی ۴٫۵)
+  ✓     muted روی canvas    =  5.31:1  (حد AA متن معمولی ۴٫۵)
+  ✓     faint روی canvas    =  4.83:1  (حد AA متن معمولی ۴٫۵)
+  ✓   heading روی surface   = 16.49:1  (حد AA متن معمولی ۴٫۵)
+  ✓      body روی surface   = 10.83:1  (حد AA متن معمولی ۴٫۵)
+  ✓     muted روی surface   =  5.39:1  (حد AA متن معمولی ۴٫۵)
+  ✓     faint روی surface   =  4.91:1  (حد AA متن معمولی ۴٫۵)
+  ✓     muted روی surface2  =  5.04:1  (حد AA متن معمولی ۴٫۵)
+  ✓      body روی surface2  = 10.12:1  (حد AA متن معمولی ۴٫۵)
+  ✓   inverse روی brand-950 = 16.24:1  (حد AA متن معمولی ۴٫۵)
+  ✓  gold-400 روی brand-950 =  7.80:1  (حد AA متن معمولی ۴٫۵)
+  ✓ accent-600 روی canvas    =  4.90:1  (حد AA متن معمولی ۴٫۵)
+  ✓ accent-600 روی surface   =  4.98:1  (حد AA متن معمولی ۴٫۵)
+  ✓ accent-600 روی surface2  =  4.66:1  (حد AA متن معمولی ۴٫۵)
+  ✓ accent-700 روی canvas    =  6.06:1  (حد AA متن معمولی ۴٫۵)
+
+── تم تیره ──
+  ✓   heading روی canvas    = 16.22:1  (حد AA متن معمولی ۴٫۵)
+  ✓      body روی canvas    = 11.60:1  (حد AA متن معمولی ۴٫۵)
+  ✓     muted روی canvas    =  7.57:1  (حد AA متن معمولی ۴٫۵)
+  ✓     faint روی canvas    =  6.07:1  (حد AA متن معمولی ۴٫۵)
+  ✓   heading روی surface   = 13.84:1  (حد AA متن معمولی ۴٫۵)
+  ✓      body روی surface   =  9.89:1  (حد AA متن معمولی ۴٫۵)
+  ✓     muted روی surface   =  6.46:1  (حد AA متن معمولی ۴٫۵)
+  ✓     faint روی surface   =  5.18:1  (حد AA متن معمولی ۴٫۵)
+  ✓     muted روی surface2  =  6.98:1  (حد AA متن معمولی ۴٫۵)
+  ✓      body روی surface2  = 10.70:1  (حد AA متن معمولی ۴٫۵)
+  ✓   inverse روی brand-950 = 14.64:1  (حد AA متن معمولی ۴٫۵)
+  ✓  gold-400 روی brand-950 =  8.56:1  (حد AA متن معمولی ۴٫۵)
+  ✓ accent-600 روی canvas    =  7.93:1  (حد AA متن معمولی ۴٫۵)
+  ✓ accent-600 روی surface   =  6.77:1  (حد AA متن معمولی ۴٫۵)
+  ✓ accent-600 روی surface2  =  7.32:1  (حد AA متن معمولی ۴٫۵)
+  ✓ accent-700 روی canvas    =  9.57:1  (حد AA متن معمولی ۴٫۵)
+
+نتیجه: 0 جفت زیر حد AA
+  ✓ حقوقی — نتیجه: 11 موضوع حاضر · 1 شکاف · 0 ادعای پرخطر
+── موضوع‌های حاضر ──
+  ✓ شرایط پرداخت (درگاه و کارت‌به‌کارت) — /terms
+  ✓ تأیید رسید ≠ پرداخت (فرایند بررسی رسید) — /terms
+  ✓ حق انصراف / مهلت مرجوعی — /terms//refund
+  ✓ روند بازگشت وجه و زمان‌بندی — /refund
+  ✓ رسیدگی به شکایات (کانال + مهلت) — /terms
+  ✓ هزینه و زمان ارسال — /shipping
+  ✓ حریم خصوصی: پرداخت و کوکی — /privacy
+  ✓ حریم خصوصی: حقوق کاربر و درخواست داده — /privacy
+  ✓ روزیته: قاعدهٔ انتشار پس از بررسی — /terms
+  ✓ روزیته: مسئولیت صحت اطلاعات تولیدکننده — /terms
+  ✓ ایمنی غذا و برچسب‌گذاری — /terms
+
+── شکاف‌ها (نیازمند متن حقوقی/دادهٔ مالک) ──
+  ✗ شناسه/هویت فروشنده (نام حقوقی، شماره ثبت یا شناسه ملی) — /terms
+
+✓ هیچ ادعای پرخطر بدون پشتوانه (نماد اعتماد/مجوز/معافیت مالیاتی) در صفحات حقوقی نیست
+
+نتیجه: 11 موضوع حاضر · 1 شکاف · 0 ادعای پرخطر
+  ✓ axe-core — 0 نقض axe در 13 صفحه
+── نتیجه به تفکیک صفحه ──
+  ✓ خانه         /                          0 نقض
+  ✓ محصولات      /products                  0 نقض
+  ✓ PDP          /products/mazafati-dates   0 نقض
+  ✓ سبد          /cart                      0 نقض
+  ✓ پرداخت       /checkout                  0 نقض
+  ✓ ورود         /login                     0 نقض
+  ✓ ثبت‌نام      /register                  0 نقض
+  ✓ روزیته       /rooziteh                  0 نقض
+  ✓ سینی مزه     /mazeh-trays               0 نقض
+  ✓ درباره       /about                     0 نقض
+  ✓ تماس         /contact                   0 نقض
+  ✓ سوالات متداول /faq                       0 نقض
+  ✓ وبلاگ        /blog                      0 نقض
+
+نتیجه: 0 نقض axe در 13 صفحه · skip link: «پرش به محتوای اصلی» → #main
+  ✓ PWA — نتیجه: 11 سالم · 0 هشدار · 0 ناموفق
+
+── یافته‌های سالم ──
+  ✓ manifest لینک شده: /manifest.webmanifest
+  ✓ manifest: 3 آیکون · display=standalone · lang=fa-IR
+  ✓ آیکون /icons/icon-192.png = 192x192 (any)
+  ✓ آیکون /icons/icon-512.png = 512x512 (any)
+  ✓ آیکون /icons/icon-512-maskable.png = 512x512 (maskable)
+  ✓ theme-color = #0b5f3b (هم‌خوان با manifest)
+  ✓ apple-touch-icon = /apple-icon.png?a70593429d25cf5a
+  ✓ service worker فعال · scope=http://127.0.0.1:3000/ · state=activated
+  ✓ قطع شبکه: ناوبری به صفحهٔ کش‌نشده → صفحهٔ آفلاین نمایش داده شد
+  ✓ هیچ مسیر حساسی (account/admin/checkout/payment/api) در کش نیست
+  ✓ کش‌ها: helsa-v3-precache=4 · helsa-v3-runtime=45
+
+نتیجه: 11 سالم · 0 هشدار · 0 ناموفق
+
+════════════════════════════════════════════════════════════════
+ PASS=29 · WARN=1 · FAIL=0
+ 🟢 GO — می‌توانید لانچ کنید (هشدارها را هم بخوانید)
+ گزارش: helsa-audit/deploy-check-20261023T185536Z.txt
+════════════════════════════════════════════════════════════════

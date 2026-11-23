@@ -206,7 +206,7 @@ export function ProductsExplorer({
         </label>
         <label className="flex items-center gap-2 text-xs font-bold text-body cursor-pointer">
           <input type="checkbox" checked={wholesale} onChange={(e) => setWholesale(e.target.checked)} className="size-4 accent-brand-600" aria-label="موجود برای خرید عمده" />
-          <Building2 className="size-3.5 text-gold-600" aria-hidden /> موجود برای خرید عمده
+          <Building2 className="size-3.5 text-gold-700" aria-hidden /> موجود برای خرید عمده
         </label>
         {activeFilters > 0 && (
           <button onClick={clearAll} className="text-[11px] font-bold text-accent-600 inline-flex items-center gap-1">
@@ -338,11 +338,13 @@ export function ProductsExplorer({
         <p className="mt-5 flex flex-wrap items-baseline gap-x-2 text-[12px] font-bold text-muted" role="status">
           {q ? <span className="text-heading">نتایج جست‌وجو: «{q}» · </span> : null}
           {faDigits(list.length)} محصول
+          {totalPages > 1 && <span>· صفحهٔ {faDigits(safePage)} از {faDigits(totalPages)}</span>}
           <span>· مرتب‌شده بر اساس {SORTS.find((x) => x.id === sort)?.label ?? "منتخب هلسا"}</span>
         </p>
+        <h2 className="sr-only">فهرست محصولات</h2>
         <div ref={gridRef} id="product-grid" className="mt-4 grid grid-cols-2 gap-3 min-[400px]:gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
-          {visible.map((p) => (
-            <ProductCard key={p.id} product={p} today={todaySet.has(p.slug)} />
+          {visible.map((p, i) => (
+            <ProductCard key={p.id} product={p} today={todaySet.has(p.slug)} priority={i < 4} />
           ))}
         </div>
 

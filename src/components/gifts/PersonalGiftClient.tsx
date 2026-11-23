@@ -84,7 +84,7 @@ export function PersonalGiftClient({ pack }: { pack: GiftPackage }) {
       </div>
 
       <div>
-        <p className="text-[11px] font-bold tracking-[0.2em] text-gold-600">هدیه شخصی هلسا</p>
+        <p className="text-[11px] font-bold tracking-[0.2em] text-gold-700">هدیه شخصی هلسا</p>
         <h2 className="mt-3 text-2xl md:text-[34px] font-black text-heading leading-[1.45]">{pack.name}</h2>
         <p className="mt-4 text-sm leading-8 text-muted">{pack.description}</p>
 
@@ -136,7 +136,7 @@ export function PersonalGiftClient({ pack }: { pack: GiftPackage }) {
             </Button>
           </div>
           <p className="text-[11px] text-muted leading-6 flex items-start gap-2">
-            <Gift className="size-3.5 mt-0.5 text-gold-600 shrink-0" aria-hidden />
+            <Gift className="size-3.5 mt-0.5 text-gold-700 shrink-0" aria-hidden />
             قیمت نهایی پس از تأیید سرور به سبد افزوده می‌شود؛ مبلغ کلاینت مبنای سفارش نیست.
           </p>
         </div>

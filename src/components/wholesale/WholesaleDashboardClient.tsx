@@ -149,7 +149,7 @@ export function WholesaleDashboardClient({
       {/* order summary */}
       <aside className="lg:sticky lg:top-24 space-y-4" aria-label="خلاصه سفارش عمده">
         <div className="rounded-2xl border border-line/70 bg-surface p-5">
-          <p className="text-[11px] font-bold tracking-[0.18em] text-gold-600">سبد عمده</p>
+          <p className="text-[11px] font-bold tracking-[0.18em] text-gold-700">سبد عمده</p>
           {lines.length === 0 ? (
             <p className="mt-3 text-[11px] text-muted">هنوز کالایی انتخاب نشده است</p>
           ) : (
@@ -185,7 +185,7 @@ export function WholesaleDashboardClient({
 
         {/* orders history */}
         <div className="rounded-2xl border border-line/70 bg-surface p-5">
-          <p className="text-[11px] font-bold tracking-[0.18em] text-gold-600">سفارش‌های عمده</p>
+          <p className="text-[11px] font-bold tracking-[0.18em] text-gold-700">سفارش‌های عمده</p>
           {orders.length === 0 ? (
             <p className="mt-3 text-[11px] text-muted">هنوز سفارش عمده‌ای ثبت نکرده‌اید</p>
           ) : (

@@ -13,6 +13,20 @@ import { trackEvent } from "@/lib/analytics";
  * نتیجه به صفحهٔ همان هدیه می‌رود؛ جایی که شخصی‌سازی واقعی (بسته‌بندی، نام گیرنده،
  * پیام، قیمت‌گذاری سمت سرور و افزودن ساختاری به سبد) پیاده‌سازی شده است.
  */
+/** گام‌های فرم — کامپوننت ایستا در سطح ماژول (بدون ساخت مجدد در هر رندر) */
+function Step({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
+  return (
+    <section aria-label={`مرحلهٔ ${n}: ${title}`} className="mt-8">
+      <h2 className="flex items-center gap-2 text-[15px] font-black text-heading">
+        <span className="grid size-7 place-items-center rounded-full bg-brand-700 text-[12px] font-black text-inverse">{n}</span>
+        {title}
+      </h2>
+      <div className="mt-4">{children}</div>
+    </section>
+  );
+}
+
+
 export default function GiftsCustomizePage() {
   const [gifts, setGifts] = useState<GiftPackage[] | null>(null);
   const [failed, setFailed] = useState(false);
@@ -44,19 +58,10 @@ export default function GiftsCustomizePage() {
       active ? "bg-brand-700 text-inverse shadow-soft" : "border border-line bg-surface text-body hover:border-brand-300"
     }`;
 
-  const Step = ({ n, title, children }: { n: number; title: string; children: React.ReactNode }) => (
-    <section aria-label={`مرحلهٔ ${n}: ${title}`} className="mt-8">
-      <h2 className="flex items-center gap-2 text-[15px] font-black text-heading">
-        <span className="grid size-7 place-items-center rounded-full bg-brand-700 text-[12px] font-black text-inverse">{n}</span>
-        {title}
-      </h2>
-      <div className="mt-4">{children}</div>
-    </section>
-  );
 
   return (
     <div className="container-x max-w-3xl pb-20 pt-12 md:pt-16">
-      <span className="text-[11px] font-bold tracking-[0.2em] text-gold-600">هدیه اختصاصی هلسا</span>
+      <span className="text-[11px] font-bold tracking-[0.2em] text-gold-700">هدیه اختصاصی هلسا</span>
       <h1 className="mt-3 text-2xl font-black leading-[1.6] text-heading md:text-[30px]">ساخت هدیه اختصاصی</h1>
       <p className="mt-3 text-[13px] leading-7 text-muted">
         سه سؤال کوتاه — هدیه برای کسی است، برای چه مناسبتی و با چه بودجه‌ای؟ هلسا از میان بسته‌های واقعی، نزدیک‌ترین انتخاب را پیشنهاد می‌دهد و در صفحهٔ همان هدیه، بسته‌بندی، نام گیرنده و پیامتان را اضافه می‌کنید.
@@ -123,7 +128,7 @@ export default function GiftsCustomizePage() {
           {step >= 3 && result?.primary && (
             <section className="mt-10" aria-label="پیشنهاد هلسا برای شما">
               <h2 className="flex items-center gap-2 text-[15px] font-black text-heading">
-                <Sparkles className="size-4 text-gold-600" aria-hidden /> پیشنهاد هلسا برای شما
+                <Sparkles className="size-4 text-gold-700" aria-hidden /> پیشنهاد هلسا برای شما
               </h2>
               <div className="mt-4 rounded-2xl border border-brand-300 bg-surface p-5 shadow-soft">
                 <div className="flex flex-wrap items-center gap-5">

@@ -102,7 +102,7 @@ export default async function CorporateGiftDetailPage({ params }: { params: Prom
 
         <Reveal delay={0.08}>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold tracking-[0.2em] text-gold-600">هدیه سازمانی هلسا</span>
+            <span className="text-[11px] font-bold tracking-[0.2em] text-gold-700">هدیه سازمانی هلسا</span>
             {pack.isFeatured && <Badge tone="gold">پیشنهاد هلسا</Badge>}
           </div>
           <h1 className="mt-3 text-2xl md:text-[32px] font-black text-heading leading-[1.45]">{pack.name}</h1>
@@ -204,7 +204,7 @@ export default async function CorporateGiftDetailPage({ params }: { params: Prom
       {/* CTA */}
       <section className="container-x pb-16 text-center" aria-label="دعوت به استعلام">
         <Reveal>
-          <p className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] text-gold-600"><Building2 className="size-4" aria-hidden /> هلسا ایرانیان</p>
+          <p className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] text-gold-700"><Building2 className="size-4" aria-hidden /> هلسا ایرانیان</p>
           <h2 className="mt-4 text-2xl md:text-3xl font-black text-heading">آماده سفارش سازمانی هستید؟</h2>
           <p className="mt-3 text-sm text-muted">فرم استعلام را پر کنید؛ کارشناس هلسا پیش‌فاکتور رسمی را برای شما آماده می‌کند.</p>
           <div className="mt-6"><LinkButton href={`/gifts/corporate/inquiry?package=${pack.slug}`} size="lg">درخواست استعلام سازمانی</LinkButton></div>

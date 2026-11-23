@@ -3,11 +3,12 @@
 سناریو: خرید هم‌زمان ۱۰ مشتری روی موجودی محدود → بدون oversell/منفی؛ لغو → بازگردانی.
 """
 import json
+import os
 import threading
 import urllib.request
 import uuid
 
-BASE = "http://localhost:3000"
+BASE = os.environ.get("HELSA_BASE", "http://localhost:3000")
 PASS = 0
 FAIL = 0
 LOCK = threading.Lock()
@@ -53,7 +54,7 @@ def cookie_of(headers):
 
 
 def admin_login():
-    s, h, d = req("POST", "/api/auth/login", {"identifier": "owner@helsa.dev", "password": "Owner#Helsa1"}, ip="10.31.9.9")
+    s, h, d = req("POST", "/api/auth/login", {"identifier": "owner@helsa.dev", "password": "Owner#2026"}, ip="10.31.9.9")
     assert s == 200, f"admin login {s}"
     return cookie_of(h)
 

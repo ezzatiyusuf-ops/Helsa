@@ -2,6 +2,7 @@ import { getCategories, getProducts } from "@/services/catalog";
 import type { Metadata } from "next";
 import { HomepageLite } from "@/components/home/HomepageLite";
 import { InstagramSection } from "@/components/home/InstagramSection";
+import { PodcastSection } from "@/components/home/PodcastSection";
 
 export const revalidate = 60;
 
@@ -13,6 +14,7 @@ export default async function HomePage() {
   return (
     <>
       <HomepageLite products={products} categories={categories} />
+      <PodcastSection />
       <InstagramSection />
     </>
   );

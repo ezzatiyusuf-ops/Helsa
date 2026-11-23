@@ -43,6 +43,8 @@ export const products = pgTable("products", {
   description: text("description").notNull().default(""),
   price: integer("price").notNull(), // Toman, integer presentation unit
   oldPrice: integer("old_price"),
+  /** real discount start (brief 2.4) — strikethrough renders only when set & reached */
+  discountStartsAt: timestamp("discount_starts_at"),
   costPrice: integer("cost_price"),
   discount: integer("discount").notNull().default(0),
   currency: varchar("currency", { length: 12 }).notNull().default("TOMAN"),
@@ -230,6 +232,8 @@ export const coupons = pgTable("coupons", {
   usageLimit: integer("usage_limit").notNull().default(100), usedCount: integer("used_count").notNull().default(0),
   productIds: jsonb("product_ids").$type<number[]>().notNull().default([]), categorySlugs: jsonb("category_slugs").$type<string[]>().notNull().default([]),
   active: boolean("active").notNull().default(true), label: text("label").notNull().default(""),
+  // F-07: کوپن «فقط اولین خرید» — با سفارش قبلی مشتری (حساب یا موبایل) راستی‌آزمایی می‌شود
+  firstOrderOnly: boolean("first_order_only").notNull().default(false),
 });
 
 export const campaigns = pgTable("campaigns", {

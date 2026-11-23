@@ -12,6 +12,15 @@ export interface CampaignDates {
   active?: boolean;
 }
 
+/** ساعت «الان» از دید سرور — اولویت با هدر date است (قطعی در SSR)؛ فالبک ساعت سیستم. */
+export function campaignNow(dateHeader: string | null): Date {
+  if (dateHeader) {
+    const d = new Date(dateHeader);
+    if (!Number.isNaN(d.getTime())) return d;
+  }
+  return new Date();
+}
+
 export function getCampaignStatus(campaign: CampaignDates, now: Date = new Date()): CampaignStatus {
   if (campaign.active === false) return "ended";
   const start = new Date(campaign.startDate).getTime();

@@ -47,3 +47,10 @@ export function normalizeFa(input: string): string {
     .trim()
     .toLowerCase();
 }
+
+/** Current Jalali date as "YYYY/MM/DD" with English digits — batch expiry checks. */
+export function todayJalali(): string {
+  const parts = new Intl.DateTimeFormat("en-US-u-ca-persian", { year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
+  return `${get("year")}/${get("month").padStart(2, "0")}/${get("day").padStart(2, "0")}`;
+}

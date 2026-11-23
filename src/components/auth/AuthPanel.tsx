@@ -9,6 +9,7 @@ import { useToast } from "@/components/ui/Toast";
 import { HelsaLogo } from "@/components/ui/primitives";
 import { trackEvent } from "@/lib/analytics";
 import { toEnglishDigits } from "@/lib/nid";
+import { SmartImage } from "@/components/ui/SmartImage";
 
 const OTP_LENGTH = 6;
 const RESEND_AFTER_SEC = 60;
@@ -278,7 +279,10 @@ export function AuthPanel({ mode, socialEnabled = { google: false, apple: false 
 
   // auto-submit once all six digits are in
   useEffect(() => {
-    if (method === "otp-verify" && !busy && !verified && digits.every((d) => d !== "")) void verifyOtp();
+    if (method === "otp-verify" && !busy && !verified && digits.every((d) => d !== "")) {
+      const t = window.setTimeout(() => void verifyOtp(), 0);
+      return () => window.clearTimeout(t);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [digits]);
 
@@ -378,8 +382,8 @@ export function AuthPanel({ mode, socialEnabled = { google: false, apple: false 
   return (
     <div className="grid lg:grid-cols-2 rounded-2xl overflow-hidden border border-line/70 bg-surface shadow-soft">
       <div className="relative hidden lg:block">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/hero-helsa.jpg" alt="" aria-hidden className="absolute inset-0 size-full object-cover" />
+        { }
+        <SmartImage src="/images/hero-helsa.jpg" alt="" sizes="(min-width:1024px) 40vw, 100vw" className="absolute inset-0 size-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-brand-950/25 to-transparent" aria-hidden />
         <div className="absolute bottom-0 p-10">
           <p className="text-2xl font-black text-inverse leading-snug">{mode === "login" ? "پذیرایی هلسا، از خانهٔ شما آغاز می‌شود" : "به خانواده هلسا بپیوندید"}</p>
@@ -566,7 +570,7 @@ export function AuthPanel({ mode, socialEnabled = { google: false, apple: false 
                     حساب دارید؟ <Link href={`/login${nextQuery}`} className="font-bold text-brand-link hover:text-heading">وارد شوید</Link>
                   </p>
                   <div className="flex items-start gap-2 rounded-xl border border-gold-500/30 bg-gold-500/10 px-3 py-2.5 text-[11px] leading-5 text-heading">
-                    <Gift className="size-4 shrink-0 mt-0.5 text-gold-600" aria-hidden />
+                    <Gift className="size-4 shrink-0 mt-0.5 text-gold-700" aria-hidden />
                     <span>
                       هدیهٔ اولین خرید: با عضویت در <Link href="/products" className="font-bold text-brand-link">خبرنامهٔ هلسا</Link>، کد تخفیف ۲۰۰ هزار تومانی دریافت می‌کنید (کد واقعی و یک‌بارمصرف، با حداقل خرید ۱ میلیون تومان).
                     </span>

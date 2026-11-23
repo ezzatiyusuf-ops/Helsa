@@ -16,10 +16,10 @@ export function HelsaLogo({ className = "h-10", light = false }: { className?: s
   const mark = (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/brand/helsa-logo.png"
-      alt="هلسا ایرانیان — محصولات ارگانیک"
-      width={423}
-      height={388}
+      src="/brand/helsa-logo-160.png"
+      alt="هلسا ایرانیان — لوگوی فروشگاه هلسا"
+      width={174}
+      height={160}
       className="h-full w-auto object-contain"
       decoding="async"
       fetchPriority="high"
@@ -186,7 +186,7 @@ export function SectionHead({
   return (
     <div className={`${align === "center" ? "text-center mx-auto" : "text-start"} max-w-2xl mb-14 md:mb-20`}>
       {eyebrow && (
-        <span className={`inline-block text-[11px] font-bold tracking-[0.2em] mb-4 ${light ? "text-gold-400" : "text-gold-600"}`}>
+        <span className={`inline-block text-[11px] font-bold tracking-[0.2em] mb-4 ${light ? "text-gold-400" : "text-gold-700"}`}>
           {eyebrow}
         </span>
       )}

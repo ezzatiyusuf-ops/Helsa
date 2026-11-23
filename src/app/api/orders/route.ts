@@ -10,6 +10,7 @@ import { identityRequired, verifyIdentityToken } from "@/lib/identity";
 import { resolveProvider } from "@/lib/payments";
 import { assertSameOrigin, clientKey, csrfRejectedResponse, rateLimit, rateLimitedResponse } from "@/lib/security";
 import { customerIdFromSession, readSession } from "@/lib/session";
+import { SHIPPING } from "@/config/shipping";
 
 const itemSchema = z.object({
   key: z.string().min(2),
@@ -164,6 +165,17 @@ export async function POST(req: Request) {
         const today = new Date().toISOString().slice(0, 10);
         if (!coupon || !coupon.active || today < coupon.startDate || today > coupon.endDate || coupon.usedCount >= coupon.usageLimit) throw new Error("کد تخفیف معتبر نیست یا ظرفیت آن تمام شده است");
         if (subtotal < coupon.minimumPurchase) throw new Error("حداقل مبلغ خرید برای این کد تأمین نشده است");
+        // F-07: کوپن‌های «فقط اولین خرید» — سابقهٔ سفارش با همین موبایل (مهمان یا حساب)
+        // بررسی می‌شود؛ سفارش‌های لغوشده مسیر بازگشت به «اولین خرید» را باز می‌کنند.
+        if (coupon.firstOrderOnly) {
+          const prior = await tx.select({ id: orders.id }).from(orders).where(
+            and(
+              sql`${orders.customer}->>'mobile' = ${data.customer.mobile}`,
+              sql`${orders.status} <> 'cancelled'`,
+            ),
+          ).limit(1);
+          if (prior.length) throw new Error("این کد تخفیف فقط برای اولین خرید قابل استفاده است.");
+        }
         const eligible = resolved.filter((item) => (!coupon.productIds.length || (item.productId && coupon.productIds.includes(item.productId))) && (!coupon.categorySlugs.length || (item.category && coupon.categorySlugs.includes(item.category))));
         const eligibleSubtotal = eligible.reduce((sum, item) => sum + item.subtotal, 0);
         if (eligibleSubtotal <= 0) throw new Error("این کد برای اقلام سبد شما قابل استفاده نیست");
@@ -174,7 +186,7 @@ export async function POST(req: Request) {
 
       const method = (await tx.select().from(shippingMethods).where(and(eq(shippingMethods.code, data.shippingMethod), eq(shippingMethods.isActive, true))).limit(1))[0];
       if (!method) throw new Error("روش ارسال انتخاب‌شده در دسترس نیست");
-      const shipping = subtotal - discount >= 2_000_000 ? 0 : method.price;
+      const shipping = subtotal - discount >= SHIPPING.freeThreshold ? 0 : method.price; // central config (brief 2.2)
       const total = subtotal - discount + shipping;
 
       // واجدین بودن روش پرداخت — سرور مرجع است (نه UI)

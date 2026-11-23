@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { ArrowLeft, CalendarDays, Gift, Sparkles, Wand2, Store } from "lucide-react";
 import { getCampaigns, getProducts } from "@/services/catalog";
-import { getCampaignStatus, campaignStatusLabel, campaignDaysRemaining, campaignEndIso, type CampaignStatus } from "@/lib/campaign-status";
+import { getCampaignStatus, campaignStatusLabel, campaignDaysRemaining, campaignEndIso, campaignNow, type CampaignStatus } from "@/lib/campaign-status";
 import type { Campaign } from "@/types";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Reveal, Countdown, SectionHead, LinkButton } from "@/components/ui/primitives";
@@ -46,7 +46,7 @@ export default async function CampaignsPage() {
   const [campaigns, products] = await Promise.all([getCampaigns(), getProducts()]);
   // ساعت درخواست برای رندر سمت سرور (الگوی موجود پروژه)
   const headerList = await headers();
-  const now = new Date(headerList.get("date") ?? Date.now());
+  const now = campaignNow(headerList.get("date"));
 
   const withStatus = campaigns.map((c) => ({ c, status: getCampaignStatus(c, now) }));
   const active = withStatus.filter((x) => x.status === "active");
@@ -93,7 +93,7 @@ export default async function CampaignsPage() {
                   </span>
                 </div>
                 <div className="flex flex-col justify-center p-6 md:p-9">
-                  <p className="inline-flex items-center gap-1.5 text-[11px] font-bold text-gold-600">
+                  <p className="inline-flex items-center gap-1.5 text-[11px] font-bold text-gold-700">
                     <Sparkles className="size-3.5" aria-hidden /> جشنوارهٔ ویژهٔ هلسا
                   </p>
                   <h2 className="mt-2.5 text-xl font-black leading-9 text-heading md:text-2xl">{spotlight.title}</h2>
@@ -125,7 +125,7 @@ export default async function CampaignsPage() {
           /* حالت خالی: بدون جشنوارهٔ فعال — بدون اختراع تاریخ آینده */
           <Reveal>
             <section className="rounded-[1.75rem] border border-line/70 bg-surface2/60 p-10 text-center" aria-label="جشنوارهٔ فعال">
-              <Sparkles className="mx-auto size-8 text-gold-600" aria-hidden />
+              <Sparkles className="mx-auto size-8 text-gold-700" aria-hidden />
               <h2 className="mt-4 text-lg font-black text-heading">در حال آماده‌سازی جشنوارهٔ بعدی هلسا هستیم</h2>
               <p className="mx-auto mt-2.5 max-w-md text-[12.5px] leading-7 text-muted">
                 جشنواره‌های هلسا با تاریخ شروع و پایان واقعی اعلام می‌شوند؛ تا آن زمان، ویترین کامل هلسا در دسترس شماست.

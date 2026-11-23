@@ -16,7 +16,7 @@ const _ts = Date.now() % 10_000_000;
 const USER = {
   name: "سارا", family: "تستی",
   phone: `0912${String(3_000_000 + _ts).slice(-7)}`, email: `ui-${_ts}@helsa-test.ir`,
-  password: "Sara#1385",
+  password: process.env.QA_TEST_PASSWORD ?? "Sara#1385-test-only",
 };
 
 let pass = 0, fail = 0;

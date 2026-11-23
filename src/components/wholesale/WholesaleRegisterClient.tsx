@@ -40,7 +40,7 @@ export function WholesaleRegisterClient({ authenticated }: { authenticated: bool
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-      if (res.ok && data.ok) trackEvent("corporate_lead", { form: "wholesale_register" });
+      if (res.ok && data.ok) trackEvent("wholesale_form_submitted", { form: "wholesale_register" });
       if (!res.ok || !data.ok) {
         toast.push(data.message || "ثبت‌نام ممکن نشد", "error");
         return;
@@ -87,7 +87,7 @@ export function WholesaleRegisterClient({ authenticated }: { authenticated: bool
     <div className="container-x py-12 md:py-16 max-w-3xl mx-auto">
       <div className="rounded-2xl border border-line/70 bg-surface p-6 md:p-8">
         <h2 className="text-base font-black text-heading flex items-center gap-2">
-          <Building2 className="size-4 text-gold-600" aria-hidden /> ثبت‌نام خرید عمده
+          <Building2 className="size-4 text-gold-700" aria-hidden /> ثبت‌نام خرید عمده
         </h2>
         {!authenticated && (
           <p className="mt-2 text-[11px] leading-6 text-muted">

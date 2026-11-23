@@ -7,6 +7,12 @@ import { Reveal } from "@/components/ui/primitives";
 import { ShareButtons } from "@/components/blog/ShareButtons";
 import { ReadingProgress, Toc, AuthorCard } from "@/components/blog/ReadingEnhancements";
 import { faDigits, faDate } from "@/lib/format";
+
+/** Health-related categories get the educational disclaimer (brief 3.2). */
+const HEALTH_CATEGORIES = ["سبک زندگی سالم", "تغذیه", "خواص دمنوش‌ها", "سلامت روان", "خواص خرما", "طب سنتی", "سلامت و تغذیه"];
+function isHealthPost(category: string): boolean {
+  return HEALTH_CATEGORIES.some((c) => category?.includes(c));
+}
 import { siteUrl } from "@/lib/seo";
 import { SmartImage } from "@/components/ui/SmartImage";
 
@@ -71,7 +77,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </nav>
             <h1 className="mt-4 text-2xl md:text-4xl font-black text-inverse leading-snug">{post.title}</h1>
             <p className="mt-4 text-[11px] text-inverse/70 flex items-center gap-4">
-              <span>{faDate(post.date)}</span>
+              <span>به‌روزرسانی: {faDate(post.date)}</span>
               <span className="flex items-center gap-1"><Clock3 className="size-3.5" aria-hidden /> {faDigits(post.readMinutes)} دقیقه مطالعه</span>
             </p>
           </div>
@@ -109,6 +115,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </Link>
           </div>
           <AuthorCard name={post.author?.name ?? "تیم تحریریهٔ هلسا"} role={post.author?.role ?? "مجلهٔ هلسا"} href={post.author?.href} />
+          {isHealthPost(post.category) && (
+            <p role="note" className="mt-6 rounded-2xl border border-line/70 bg-surface2/70 px-5 py-4 text-[11.5px] leading-6 text-muted">
+              این نوشتار صرفاً جنبهٔ آموزشی دارد و جایگزین توصیهٔ پزشک یا متخصص تغذیه نیست. برای تشخیص، درمان یا تغییر رژیم غذایی با پزشک خود مشورت کنید.
+            </p>
+          )}
             </div>
             <aside className="hidden lg:block">
               <div className="sticky top-28">

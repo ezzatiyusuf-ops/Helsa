@@ -102,7 +102,7 @@ export function AccountDashboard({ tab, orderId }: { tab: Tab; orderId?: string 
     <div className="container-x py-12">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-8">
         <div>
-          <p className="text-[11px] font-bold tracking-[0.2em] text-gold-600">حساب کاربری من</p>
+          <p className="text-[11px] font-bold tracking-[0.2em] text-gold-700">حساب کاربری من</p>
           <h1 className="mt-2 text-3xl font-black text-heading">سلام، <span className="text-brand-700">{user.name}</span></h1>
         </div>
         <button

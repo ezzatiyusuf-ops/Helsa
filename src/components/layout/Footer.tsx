@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Mail, Phone, MapPin, MessageCircle, Leaf, ShieldCheck, Truck, BadgeCheck, MapPinned } from "lucide-react";
 import { InstagramIcon, TelegramIcon } from "@/components/ui/icons";
 import { TrustBadges } from "@/components/ui/TrustBadges";
+import { CERTIFICATES, hasCertificates } from "@/config/certificates";
+import { SOCIAL_CHANNELS } from "@/config/site";
 import { SITE } from "@/config/site";
 import { HelsaLogo } from "@/components/ui/primitives";
 
@@ -59,7 +61,7 @@ export function Footer() {
         <div className="container-x flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5 py-3.5 text-[10.5px] text-inverse/65">
           <span className="inline-flex items-center gap-1.5"><Leaf className="size-3.5 text-gold-400/80" aria-hidden /> طبیعی و بدون افزودنی غیرضروری</span>
           <span className="inline-flex items-center gap-1.5"><MapPinned className="size-3.5 text-gold-400/80" aria-hidden /> تولید و بسته‌بندی در ایران</span>
-          <span className="inline-flex items-center gap-1.5"><BadgeCheck className="size-3.5 text-gold-400/80" aria-hidden /> تأمین‌کنندهٔ تأییدشده</span>
+          <span className="inline-flex items-center gap-1.5"><BadgeCheck className="size-3.5 text-gold-400/80" aria-hidden /> تأمین‌کننده‌های منتخب هلسا</span>
           <span className="inline-flex items-center gap-1.5"><ShieldCheck className="size-3.5 text-gold-400/80" aria-hidden /> پرداخت امن درگاه بانکی</span>
           <span className="inline-flex items-center gap-1.5"><Truck className="size-3.5 text-gold-400/80" aria-hidden /> ارسال سریع با ضمانت تازگی</span>
         </div>
@@ -72,15 +74,11 @@ export function Footer() {
             {SITE.businessName}؛ خرما، شکلات دست‌ساز خرما، آجیل، خشکبار و محصولات طبیعی با استانداردی در شأن سفره ایرانی.
           </p>
           <div className="mt-6 flex items-center gap-2">
-            <a href={SITE.instagramUrl} target="_blank" rel="noreferrer" aria-label="اینستاگرام هلسا" className="size-9 rounded-full border border-cream-50/15 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors">
-              <InstagramIcon className="size-4" />
-            </a>
-            <a href={`https://t.me/${SITE.messengers.telegram}`} target="_blank" rel="noreferrer" aria-label="تلگرام هلسا" className="size-9 rounded-full border border-cream-50/15 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors">
-              <TelegramIcon className="size-4" />
-            </a>
-            <a href={wa} target="_blank" rel="noreferrer" aria-label="واتس‌اپ هلسا" className="size-9 rounded-full border border-cream-50/15 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors">
-              <MessageCircle className="size-4" aria-hidden />
-            </a>
+            {SOCIAL_CHANNELS.filter((c) => c.href).map((c) => (
+              <a key={c.id} href={c.href} target="_blank" rel="noreferrer" aria-label={`${c.label} هلسا`} className="size-9 rounded-full border border-cream-50/15 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors">
+                <c.Icon className="size-4" aria-hidden />
+              </a>
+            ))}
             <a href={`mailto:${SITE.email}`} aria-label="ایمیل هلسا" className="size-9 rounded-full border border-cream-50/15 flex items-center justify-center hover:border-gold-400 hover:text-gold-400 transition-colors">
               <Mail className="size-4" aria-hidden />
             </a>
@@ -99,6 +97,18 @@ export function Footer() {
             </ul>
           </div>
         ))}
+
+        {hasCertificates && (
+          <div className="col-span-2 md:col-span-5">
+            <h2 className="text-xs font-black tracking-[0.15em] text-gold-400 mb-4">مجوزها و گواهی‌ها</h2>
+            <div className="flex flex-wrap items-center gap-3 text-[11px] text-inverse/75">
+              {CERTIFICATES.healthLicenseNo && <span className="rounded-lg border border-cream-50/15 px-3 py-2">پروانهٔ بهداشت: {CERTIFICATES.healthLicenseNo}</span>}
+              {CERTIFICATES.enamadUrl && <a href={CERTIFICATES.enamadUrl} target="_blank" rel="noreferrer" className="rounded-lg border border-cream-50/15 px-3 py-2 hover:border-gold-400 hover:text-gold-400 transition-colors">نشان اینماد</a>}
+              {CERTIFICATES.samandehiUrl && <a href={CERTIFICATES.samandehiUrl} target="_blank" rel="noreferrer" className="rounded-lg border border-cream-50/15 px-3 py-2 hover:border-gold-400 hover:text-gold-400 transition-colors">نشان ساماندهی</a>}
+              {CERTIFICATES.labReportUrl && <a href={CERTIFICATES.labReportUrl} target="_blank" rel="noreferrer" className="rounded-lg border border-cream-50/15 px-3 py-2 hover:border-gold-400 hover:text-gold-400 transition-colors">{CERTIFICATES.labReportLabel || "گزارش آزمایشگاه"}</a>}
+            </div>
+          </div>
+        )}
 
         <div className="col-span-2 md:col-span-1">
           <h2 className="text-xs font-black tracking-[0.15em] text-gold-400 mb-5">تماس با ما</h2>

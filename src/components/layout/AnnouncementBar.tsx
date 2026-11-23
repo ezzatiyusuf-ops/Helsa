@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { freeShippingPhrase } from "@/config/shipping";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -9,8 +10,8 @@ import { AnimatePresence, motion } from "framer-motion";
  * هر اسلاید کلیک‌پذیر است. هاور = توقف چرخش.
  */
 const SLIDES = [
-  { icon: "🎁", text: "اولین خرید شما؟ ۲۰۰ هزار تومان هدیه خرید دریافت کنید", href: "/#newsletter" },
-  { icon: "🚚", text: "ارسال رایگان در محدودهٔ و بالای ۲ میلیون تومان", href: "/shipping" },
+  { icon: "🎁", text: "اولین خرید شما؟ ۲۰۰ هزار تومان هدیه خرید (حداقل خرید ۱ میلیون)", href: "/#newsletter" },
+  { icon: "🚚", text: freeShippingPhrase, href: "/shipping" },
   { icon: "⭐", text: "محصولات ویژه این هفته با تخفیف محدود", href: "/offers" },
   { icon: "💚", text: "خرید با اطمینان؛ تضمین کیفیت طبق شرایط هلسا", href: "/refund" },
 ];

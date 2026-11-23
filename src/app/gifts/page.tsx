@@ -71,7 +71,7 @@ export default async function GiftsPage({
       {/* ————— §7/8 هیرو ————— */}
       <section className="container-x pt-14 md:pt-20 pb-4" aria-label="هدیه هلسا">
         <div className="max-w-2xl">
-          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-600">هدیه هلسا</span>
+          <span className="text-[11px] font-bold tracking-[0.2em] text-gold-700">هدیه هلسا</span>
           <h1 className="mt-4 text-3xl font-black leading-[1.5] text-heading md:text-[44px]">
             هدیه‌ای که فقط هدیه نیست؛
             <br />
@@ -88,10 +88,10 @@ export default async function GiftsPage({
             </LinkButton>
           </div>
           <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-[11px] font-bold text-muted">
-            <li className="flex items-center gap-1.5"><Gift className="size-3.5 text-gold-600" aria-hidden /> انتخاب متناسب با مناسبت</li>
-            <li className="flex items-center gap-1.5"><PenLine className="size-3.5 text-gold-600" aria-hidden /> امکان شخصی‌سازی</li>
-            <li className="flex items-center gap-1.5"><PackageCheck className="size-3.5 text-gold-600" aria-hidden /> بسته‌بندی هدیه</li>
-            <li className="flex items-center gap-1.5"><Building2 className="size-3.5 text-gold-600" aria-hidden /> سفارش سازمانی</li>
+            <li className="flex items-center gap-1.5"><Gift className="size-3.5 text-gold-700" aria-hidden /> انتخاب متناسب با مناسبت</li>
+            <li className="flex items-center gap-1.5"><PenLine className="size-3.5 text-gold-700" aria-hidden /> امکان شخصی‌سازی</li>
+            <li className="flex items-center gap-1.5"><PackageCheck className="size-3.5 text-gold-700" aria-hidden /> بسته‌بندی هدیه</li>
+            <li className="flex items-center gap-1.5"><Building2 className="size-3.5 text-gold-700" aria-hidden /> سفارش سازمانی</li>
           </ul>
         </div>
       </section>
@@ -192,7 +192,7 @@ export default async function GiftsPage({
         <Reveal>
           <div className="rounded-[1.5rem] border border-line/70 bg-surface2/60 p-6 md:p-8">
             <h2 className="flex items-center gap-2 text-[15px] font-black text-heading">
-              <Clock3 className="size-4.5 text-gold-600" aria-hidden /> قبل از سفارش بدانید
+              <Clock3 className="size-4.5 text-gold-700" aria-hidden /> قبل از سفارش بدانید
             </h2>
             <ul className="mt-5 grid gap-4 text-[12px] leading-6 text-muted sm:grid-cols-2 lg:grid-cols-3">
               <li className="flex gap-2.5"><BadgeCheck className="size-4 shrink-0 text-brand-600" aria-hidden /> قیمت نهایی هدیهٔ شخصی همراه با بسته‌بندی و پیام، از سرور محاسبه می‌شود.</li>

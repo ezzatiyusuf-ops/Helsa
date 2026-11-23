@@ -1,0 +1,117 @@
+# Blueprint استقرار روی Render — HELSA
+#
+# استفاده: این فایل در ریشهٔ مخزن است؛ در Render → New → Blueprint انتخابش کنید.
+# مقادیر `sync: false` را هنگام ساخت سرویس، دستی در داشبورد وارد می‌کنید.
+# هیچ رازی در این فایل نوشته نشده است.
+#
+# ⚠️ نکتهٔ حیاتی — env در زمان **بیلد**:
+# Render متغیرهای همین بخش را در مرحلهٔ build هم تزریق می‌کند. این برای هلسا اجباری است:
+#   · ALLOW_INDEXING=1  → بدون آن، robots روی همهٔ صفحات (حتی PDP) با noindex **پخته** می‌شود
+#   · NEXT_PUBLIC_SITE_URL → canonical / og:url / sitemap از آن ساخته می‌شوند
+#   · NEXT_PUBLIC_* هرگز بعد از بیلد قابل تغییر نیستند (در باندل inline می‌شوند)
+# برای اینکه این تله دوباره رخ ندهد، `scripts/preflight-env.mjs` **پیش از build** اجرا
+# می‌شود و اگر این مقادیر نباشند، بیلد با خطا متوقف می‌شود (نه انتشار خاموشِ سایتِ noindex).
+
+services:
+  - type: web
+    name: helsa-web
+    runtime: node
+    plan: starter
+    region: frankfurt
+    branch: main
+    # گارد محیط + بیلد؛ ترتیب مهم است: پیش‌پرواز قبل از next build
+    buildCommand: npm ci && node scripts/preflight-env.mjs --production && npm run build
+    startCommand: npm run start -- -H 0.0.0.0 -p $PORT
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      # ── الزامی (در بیلد هم لازم) ─────────────────────────
+      - key: DATABASE_URL          # Render Postgres داخلی یا هر PG مدیریت‌شده
+        fromDatabase:
+          name: helsa-db
+          property: connectionString
+      - key: AUTH_SECRET           # openssl rand -base64 48 — حداقل ۳۲ نویسه
+        generateValue: true
+      - key: NEXT_PUBLIC_SITE_URL  # در بیلد inline می‌شود؛ بعد از بیلد تغییرش بی‌اثر است
+        value: https://helsairanian.ir
+      - key: ALLOW_INDEXING        # بدون این، robots = noindex روی کل سایت + sitemap خالی
+        value: "1"
+      - key: NODE_ENV
+        value: production
+      - key: NODE_OPTIONS          # جلوگیری از OOM در بیلد (سندباکس/پلن‌های کم‌حافظه)
+        value: "--max-old-space-size=1200"
+      - key: FORCE_SECURE_COOKIES
+        value: "1"
+      # ── کارت‌به‌کارت (الزامی برای مسیر پرداخت) ─────────────
+      - key: CARD_TRANSFER_NUMBER  # ۶۲۱۹۸۶۱۹۲۰۲۹۸۰۱۴ — ۱۶ رقم، بدون فاصله
+        sync: false
+      - key: CARD_TRANSFER_HOLDER  # یوسف عزتی آذر
+        sync: false
+      - key: CARD_TRANSFER_BANK    # بلو بانک
+        sync: false
+      - key: CARD_TRANSFER_ENABLED
+        value: "1"
+      # ── ادمین ───────────────────────────────────────────
+      - key: ADMIN_EMAILS
+        sync: false
+      # ── اختیاری (خالی = قابلیت خاموش) ─────────────────────
+      - key: PAYMENTS_SANDBOX
+        value: "1"
+      - key: IDENTITY_PROVIDER
+        value: simulation
+      - key: SMS_PROVIDER
+        sync: false
+      - key: SMS_API_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+      - key: NEXT_PUBLIC_GTM_ID
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: APPLE_CLIENT_ID
+        sync: false
+      - key: APPLE_CLIENT_SECRET
+        sync: false
+      # ── نشان‌های اعتماد (فقط کد رسمی؛ خالی = چیزی رندر نمی‌شود) ──
+      - key: ENAMAD_ID
+        sync: false
+      - key: SAMANDEHI_ID
+        sync: false
+      - key: SAMANDEHI_P
+        sync: false
+      # ── اپ اندروید (App Links) ────────────────────────────
+      - key: ANDROID_APP_SHA256    # اثر انگشت SHA-256 امضا؛ خالی → assetlinks.json = 404
+        sync: false
+      - key: ANDROID_APP_PACKAGE
+        value: ir.helsairanian.app
+      # ── درگاه بانکی (اختیاری) ─────────────────────────────
+      - key: GATEWAY_PROVIDER
+        sync: false
+      - key: GATEWAY_API_KEY
+        sync: false
+      - key: SNAP_PAY_API_KEY
+        sync: false
+      - key: DIGIPAY_CLIENT_ID
+        sync: false
+      - key: DIGIPAY_CLIENT_SECRET
+        sync: false
+
+databases:
+  - name: helsa-db
+    databaseName: helsa_db
+    user: helsa
+    plan: basic-256mb
+    region: frankfurt

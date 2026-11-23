@@ -1,3 +1,4 @@
+import { SHIPPING } from "./shipping";
 /**
  * HELSA — shipping & payment configuration (Iran).
  * تمام مقادیر REAL هستند: یک درگاه فقط وقتی ارائه می‌شود که متغیرهایش
@@ -188,11 +189,11 @@ export interface ShippingMethod {
 
 export const SHIPPING_METHODS: ShippingMethod[] = [
   { id: "standard", label: "ارسال عادی", eta: "۲ تا ۴ روز کاری", fee: 85_000, enabled: true },
-  { id: "express", label: "ارسال سریع", eta: "همان روز (تهران)", fee: 120_000, enabled: true },
+  { id: "express", label: "ارسال سریع", eta: "طبق هماهنگی سفارش", fee: 120_000, enabled: true },
   { id: "pickup", label: "تحویل حضوری", eta: "هماهنگی تلفنی", fee: 0, enabled: true },
 ];
 
-export const SHIPPING_FREE_THRESHOLD = 2_000_000;
+export const SHIPPING_FREE_THRESHOLD = SHIPPING.freeThreshold; // single source (brief 2.2)
 export const SHIPPING_REGIONS = ["تهران", "البرز", "اصفهان", "فارس", "خراسان رضوی", "گیلان", "مازندران", "کرمان", "خوزستان", "هرمزگان", "بوشهر", "یزد", "قم", "سایر"];
 
 export const ORDER_STATUSES = [

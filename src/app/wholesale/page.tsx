@@ -142,7 +142,7 @@ export default function WholesalePage() {
             return (
               <Reveal key={b.title} delay={(i % 3) * 0.05}>
                 <div className="h-full rounded-2xl border border-line/70 bg-surface p-6">
-                  <Icon className="size-5 text-gold-600" aria-hidden />
+                  <Icon className="size-5 text-gold-700" aria-hidden />
                   <h3 className="mt-3 text-sm font-black text-heading">{b.title}</h3>
                   <p className="mt-2 text-xs leading-6 text-muted">{b.desc}</p>
                 </div>

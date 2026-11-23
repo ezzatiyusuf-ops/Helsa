@@ -1,10 +1,13 @@
 "use client";
+
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Users, Check } from "lucide-react";
 import type { MazehTray } from "@/types";
 import { TrayCard } from "@/components/mazeh/TrayCard";
 import { faDigits } from "@/lib/format";
 import { trackEvent } from "@/lib/analytics";
+import { SmartImage } from "@/components/ui/SmartImage";
 
 type TrayCat = {
   id: string;
@@ -210,11 +213,10 @@ export function TrayExplorer({
               } bg-surface`}
             >
               <span className="relative block aspect-[16/10] overflow-hidden bg-surface2">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <SmartImage
                   src={c.image}
                   alt={`تصویر ${c.label} — ${c.desc}`}
-                  loading="lazy"
+                  sizes="(min-width:1024px) 20vw, 50vw"
                   className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
                 {selected && (
@@ -223,7 +225,7 @@ export function TrayExplorer({
                   </span>
                 )}
                 <span className="absolute bottom-2 start-2 inline-flex items-center gap-1 rounded-full bg-surface/90 px-2.5 py-1 text-[10px] font-bold text-body">
-                  <Users className="size-3 text-gold-600" aria-hidden />
+                  <Users className="size-3 text-gold-700" aria-hidden />
                   {faDigits(n)} سینی
                 </span>
               </span>
@@ -250,12 +252,12 @@ export function TrayExplorer({
           <p className="mt-2 text-xs leading-6 text-muted">
             می‌توانید سینی اختصاصی خود را با تعداد مهمان و بودجه دلخواه بسازید — دقیقاً همان‌طور که می‌خواهید.
           </p>
-          <a
+          <Link
             href="/mazeh-trays/build"
             className="mt-5 inline-flex h-11 items-center rounded-full bg-brand-700 px-6 text-[12.5px] font-bold text-inverse transition-colors hover:bg-brand-800"
           >
             ساخت سینی من
-          </a>
+          </Link>
         </div>
       ) : (
         <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
